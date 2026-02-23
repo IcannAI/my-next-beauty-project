@@ -2,17 +2,26 @@
 
 ```yaml
 - generic [active] [ref=e1]:
-  - generic [ref=e3]:
-    - heading "登入" [level=1] [ref=e4]
-    - generic [ref=e5]:
-      - generic [ref=e6]:
-        - generic [ref=e7]: 電子郵件
-        - textbox [ref=e8]
-      - generic [ref=e9]:
-        - generic [ref=e10]: 密碼
-        - textbox [ref=e11]
-      - button "登入" [ref=e12]
-  - button "Open Next.js Dev Tools" [ref=e18] [cursor=pointer]:
-    - img [ref=e19]
-  - alert [ref=e22]
+  - generic [ref=e2]:
+    - heading "我的訂單" [level=1] [ref=e3]
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - checkbox [ref=e6]
+        - generic [ref=e7]:
+          - paragraph [ref=e8]: 商品 A
+          - paragraph [ref=e9]: NT$ 1,200 • 2025/2/1
+        - generic [ref=e10]: COMPLETED
+      - generic [ref=e11]:
+        - checkbox [ref=e12]
+        - generic [ref=e13]:
+          - paragraph [ref=e14]: 商品 B
+          - paragraph [ref=e15]: NT$ 850 • 2025/2/5
+        - generic [ref=e16]: COMPLETED
+      - generic [ref=e17]:
+        - checkbox [ref=e18]
+        - generic [ref=e19]:
+          - paragraph [ref=e20]: 商品 C
+          - paragraph [ref=e21]: NT$ 2,000 • 2025/2/10
+        - generic [ref=e22]: COMPLETED
+  - alert [ref=e23]
 ```

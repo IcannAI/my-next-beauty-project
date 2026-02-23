@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  name           String?
+  password       String?
+  role           String          @default("USER")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  orders         Order[]
+  notifications  Notification[]
+  refundRequests RefundRequest[]
+  kolProfile     KolProfile?
+}
+
+model Order {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  status        String         @default("PENDING")
+  totalAmount   Float
+  productId     String
+  createdAt     DateTime       @default(now())
+  refundRequest RefundRequest?
+  liveStreamId  String?
+  liveStream    LiveStream?    @relation(fields: [liveStreamId], references: [id])
+}
+
+model KolProfile {
+  id           String       @id @default(cuid())
+  userId       String       @unique
+  user         User         @relation(fields: [userId], references: [id])
+  bio          String?
+  commissionRate Float      @default(0.1) // 10% 預設分潤
+  liveStreams  LiveStream[]
+  createdAt    DateTime     @default(now())
+}
+
+model LiveStream {
+  id               String    @id @default(cuid())
+  kolProfileId     String
+  kolProfile       KolProfile @relation(fields: [kolProfileId], references: [id])
+  title            String
+  status           String    @default("SCHEDULED") // SCHEDULED|LIVE|ENDED
+  startedAt        DateTime?
+  endedAt          DateTime?
+  settlementStatus String    @default("PENDING") // PENDING|PROCESSING|SETTLED|FAILED
+  settlementRunAt  DateTime? // 冪等性：最後執行時間
+  totalRevenue     Float     @default(0)
+  kolEarnings      Float     @default(0)
+  orders           Order[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+
+model RefundRequest {
+  id                   String   @id @default(cuid())
+  orderId              String   @unique
+  order                Order    @relation(fields: [orderId], references: [id])
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id])
+  reason               String
+  status               String   @default("PENDING")
+  evidenceUrls         String[] @default([])
+  feedbackSubmitted    Boolean  @default(false)
+  feedbackReminderSent Boolean  @default(false)
+  feedbackRating       Int?
+  feedbackComment      String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -43,6 +43,7 @@
     "@playwright/test": "^1.48.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.24",
     "@types/node": "^20",
     "@types/node-fetch": "^2.6.13",

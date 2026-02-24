@@ -23,7 +23,12 @@ export async function GET(request: NextRequest) {
       take: 20,
     });
 
-    return NextResponse.json(users);
+    const usersWithUrl = users.map(user => ({
+      ...user,
+      url: `/kol/${user.id}`
+    }));
+
+    return NextResponse.json(usersWithUrl);
   } catch (err) {
     const error = err as Error;
     rootSpan?.setTag('error.type', error.name);

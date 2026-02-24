@@ -11,7 +11,7 @@ test.describe('直播結束後延遲分潤結算 E2E 測試', () => {
     await page.click('button:has-text("開始直播")');
 
     await page.waitForSelector('[data-live-id]');
-    liveId = await page.getAttribute('[data-live-id]', 'data-live-id')!;
+    liveId = await page.getAttribute('[data-live-id]', 'data-live-id') ?? '';
 
     const viewerPage = await context.newPage();
     await loginAs(viewerPage, process.env.USER_EMAIL!, process.env.USER_PASSWORD!);

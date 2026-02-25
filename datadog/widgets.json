@@ -1,0 +1,48 @@
+[
+  {
+    "definition": {
+      "title": "Latency vs No Result Rate Correlation",
+      "type": "scatterplot",
+      "requests": {
+        "x": {
+          "q": "avg:search.latency{*} by {host}",
+          "aggregator": "avg"
+        },
+        "y": {
+          "q": "avg:search.no_result_rate{*} by {host}",
+          "aggregator": "avg"
+        }
+      },
+      "xaxis": {
+        "label": "Average Latency (ms)",
+        "scale": "linear"
+      },
+      "yaxis": {
+        "label": "No Result Rate",
+        "scale": "linear"
+      }
+    }
+  },
+  {
+    "definition": {
+      "title": "Search Category Breakdown Analysis",
+      "type": "query_table",
+      "requests": [
+        {
+          "queries": [
+            {
+              "data_source": "metrics",
+              "name": "total_search",
+              "query": "sum:search.total{*} by {category}"
+            },
+            {
+              "data_source": "metrics",
+              "name": "avg_latency",
+              "query": "avg:search.latency{*} by {category}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

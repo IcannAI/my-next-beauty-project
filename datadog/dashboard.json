@@ -1,0 +1,117 @@
+{
+  "title": "Search Insights Dashboard",
+  "description": "Monitor search performance and user intent.",
+  "widgets": [
+    {
+      "definition": {
+        "title": "Top 50 Search Keywords",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "logs",
+                "name": "query_count",
+                "query": "source:search @search.type:query",
+                "indexes": ["main"],
+                "group_by": [
+                  {
+                    "facet": "@search.keyword",
+                    "limit": 50,
+                    "sort": {
+                      "aggregation": "count",
+                      "order": "desc"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "layout": { "x": 0, "y": 0, "width": 6, "height": 4 }
+    },
+    {
+      "definition": {
+        "title": "Top 50 No Result Keywords",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "logs",
+                "name": "no_results_count",
+                "query": "source:search @search.type:no_results",
+                "indexes": ["main"],
+                "group_by": [
+                  {
+                    "facet": "@search.keyword",
+                    "limit": 50,
+                    "sort": {
+                      "aggregation": "count",
+                      "order": "desc"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "layout": { "x": 6, "y": 0, "width": 6, "height": 4 }
+    },
+    {
+      "definition": {
+        "title": "Search Latency Trend (P50/P95)",
+        "type": "timeseries",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "metrics",
+                "name": "latency_p50",
+                "query": "p50:search.latency{*}"
+              },
+              {
+                "data_source": "metrics",
+                "name": "latency_p95",
+                "query": "p95:search.latency{*}"
+              }
+            ],
+            "display_type": "line"
+          }
+        ]
+      },
+      "layout": { "x": 0, "y": 4, "width": 8, "height": 4 }
+    },
+    {
+      "definition": {
+        "title": "Search Type Distribution",
+        "type": "pie",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "logs",
+                "name": "type_dist",
+                "query": "source:search",
+                "indexes": ["main"],
+                "group_by": [
+                  {
+                    "facet": "@search.category",
+                    "limit": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "layout": { "x": 8, "y": 4, "width": 4, "height": 4 }
+    }
+  ],
+  "template_variables": [],
+  "layout_type": "free",
+  "is_read_only": false,
+  "notify_list": []
+}

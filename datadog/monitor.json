@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Search No Result Rate High",
+    "type": "query alert",
+    "query": "sum(last_5m):sum:search.no_results{*} / sum:search.total{*} > 0.3",
+    "message": "The search no-result rate has exceeded 30% in the last 5 minutes. @pagerduty",
+    "tags": ["service:search", "team:core"],
+    "options": {
+      "thresholds": {
+        "critical": 0.3,
+        "warning": 0.2
+      },
+      "notify_audit": false,
+      "include_tags": true,
+      "new_group_delay": 60
+    }
+  },
+  {
+    "name": "Search Latency P95 High",
+    "type": "query alert",
+    "query": "avg(last_5m):p95:search.latency{*} > 1500",
+    "message": "The search P95 latency has exceeded 1500ms in the last 5 minutes. @pagerduty",
+    "tags": ["service:search", "team:core"],
+    "options": {
+      "thresholds": {
+        "critical": 1500,
+        "warning": 1200
+      },
+      "notify_audit": false,
+      "include_tags": true,
+      "new_group_delay": 60
+    }
+  }
+]

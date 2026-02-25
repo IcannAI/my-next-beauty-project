@@ -75,6 +75,25 @@ export function LiveChatClient({
     }
   }, [input, liveStreamId, currentUserName]);
 
+  const buyProduct = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/live/${liveStreamId}/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: 'live-special-01',
+          totalAmount: 1999,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Order failed');
+      alert('下單成功！已發送通知。');
+    } catch (err) {
+      console.error('Order error:', err);
+      alert('下單失敗，請稍後再試。');
+    }
+  }, [liveStreamId]);
+
   return (
     <div className="flex flex-col h-full bg-gray-900 border-l border-gray-800">
       {/* 標頭 */}
@@ -112,6 +131,30 @@ export function LiveChatClient({
           </div>
         ))}
         <div ref={messagesEndRef} />
+      </div>
+
+      {/* 推薦商品 / 立即購買 */}
+      <div className="px-6 py-4 bg-rose-500/5 border-t border-gray-800">
+        <div className="flex items-center justify-between gap-4 bg-gray-800/40 p-4 rounded-3xl border border-rose-500/20 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-500/20">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Limited Offer</p>
+              <p className="text-xs font-bold text-white">直播限定美妝組</p>
+              <p className="text-[10px] font-bold text-gray-500 mt-0.5">$1,999 TWD</p>
+            </div>
+          </div>
+          <button
+            onClick={buyProduct}
+            className="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest px-5 py-3 rounded-2xl transition-all shadow-lg shadow-rose-500/20 active:scale-95"
+          >
+            立即下單
+          </button>
+        </div>
       </div>
 
       {/* 輸入區 */}

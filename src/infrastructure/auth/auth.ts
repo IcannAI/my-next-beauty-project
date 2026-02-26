@@ -9,9 +9,12 @@ export async function getCurrentUser(request?: any): Promise<{ id: string, email
     return null;
   }
 
-  return {
+  const user = {
     id: (session.user as any).id,
     email: session.user.email,
     name: session.user.name,
   };
+
+  console.log('[Auth] getCurrentUser returning ID:', user.id);
+  return user;
 }

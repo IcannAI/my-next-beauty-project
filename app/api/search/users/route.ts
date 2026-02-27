@@ -15,23 +15,19 @@ export async function GET(request: NextRequest) {
   try {
     const [kols, lives, users, products] = await Promise.all([
       prisma.kolProfile.findMany({
-        where: { user: { name: { contains: q, mode: 'insensitive' } } },
+        where: q ? { user: { name: { contains: q, mode: 'insensitive' } } } : {},
         include: { user: true },
-        take: 10,
       }),
       prisma.liveStream.findMany({
-        where: { title: { contains: q, mode: 'insensitive' } },
+        where: q ? { title: { contains: q, mode: 'insensitive' } } : {},
         include: { kolProfile: { include: { user: true } } },
-        take: 10,
       }),
       prisma.user.findMany({
-        where: { name: { contains: q, mode: 'insensitive' } },
-        take: 10,
+        where: q ? { name: { contains: q, mode: 'insensitive' } } : {},
       }),
       prisma.product.findMany({
-        where: { name: { contains: q, mode: 'insensitive' } },
+        where: q ? { name: { contains: q, mode: 'insensitive' } } : {},
         include: { kolProfile: { include: { user: true } } },
-        take: 10,
       }),
     ]);
 

@@ -45,11 +45,6 @@ function SearchPageContent() {
 
   const fetchSearch = useMemo(
     () => debounce(async (q: string) => {
-      if (!q.trim()) {
-        setData({ kols: [], lives: [], articles: [], users: [], products: [] })
-        return
-      }
-
       setLoading(true)
       try {
         const res = await fetch(`/api/search/users?q=${encodeURIComponent(q)}`)

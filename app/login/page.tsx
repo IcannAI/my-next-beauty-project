@@ -1,13 +1,27 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const urlError = searchParams.get('error')
+
+  useEffect(() => {
+    if (urlError === 'CredentialsSignin') {
+      setError('電子郵件或密碼錯誤')
+    } else if (urlError === 'CallbackRouteError') {
+      setError('登入時發生錯誤，請重試')
+    } else if (urlError) {
+      setError('登入失敗，請檢查您的電子郵件與密碼')
+    }
+  }, [urlError])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,12 +31,17 @@ export default function LoginPage() {
       email,
       password,
       redirect: false,
+      callbackUrl,
     })
 
     if (result?.error) {
-      setError('登入失敗，請檢查您的電子郵件與密碼')
+      if (result.error === 'CredentialsSignin') {
+        setError('電子郵件或密碼錯誤')
+      } else {
+        setError('登入失敗，請檢查您的電子郵件與密碼')
+      }
     } else {
-      router.push('/orders')
+      router.push(callbackUrl)
       router.refresh()
     }
   }
@@ -53,5 +72,17 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">載入中...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }

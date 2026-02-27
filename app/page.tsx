@@ -22,7 +22,6 @@ export default async function Home() {
   });
 
   const products = await prisma.product.findMany({
-    take: 6,
     include: {
       kolProfile: {
         include: {

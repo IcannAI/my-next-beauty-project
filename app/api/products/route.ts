@@ -6,12 +6,12 @@ export async function GET(request: NextRequest) {
 
   try {
     const products = await prisma.product.findMany({
-      where: {
+      where: q ? {
         OR: [
           { name: { contains: q, mode: 'insensitive' } },
           { description: { contains: q, mode: 'insensitive' } },
         ],
-      },
+      } : {},
       include: {
         kolProfile: {
           include: {
@@ -19,7 +19,9 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      take: 20,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return NextResponse.json({ products });

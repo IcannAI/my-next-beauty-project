@@ -5,7 +5,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut } from 'lucide-react';
+import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut, Bell, DollarSign, Users, ExternalLink } from 'lucide-react';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -19,14 +19,18 @@ export default function Navbar() {
 
   const loggedInItems = session ? [
     { label: '我的訂單', href: '/orders', icon: ShoppingBag },
+    { label: '通知', href: '/notifications', icon: Bell },
   ] : [];
 
   const kolItems = (user?.role === 'KOL' || user?.role === 'ADMIN') ? [
     { label: '直播管理', href: '/dashboard/live', icon: LayoutDashboard },
+    { label: '分潤紀錄', href: '/dashboard/settlement', icon: DollarSign },
   ] : [];
 
   const adminItems = user?.role === 'ADMIN' ? [
+    { label: '用戶管理', href: '/admin/users', icon: Users },
     { label: '後台審核', href: '/admin/refund', icon: Settings },
+    { label: 'Datadog', href: 'https://app.datadoghq.com', icon: ExternalLink, external: true },
   ] : [];
 
   const allItems = [...publicItems, ...loggedInItems, ...kolItems, ...adminItems];
@@ -45,13 +49,14 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <div className="hidden md:flex md:items-center md:gap-1">
-              {allItems.map((item) => (
+            <div className="hidden lg:flex lg:items-center lg:gap-1">
+              {allItems.map((item: any) => (
                 <Link
                   key={item.href}
                   href={item.href}
+                  target={item.external ? "_blank" : undefined}
                   className={cn(
-                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all",
+                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap",
                     pathname === item.href
                       ? "bg-white/10 text-rose-500"
                       : "text-gray-400 hover:bg-white/5 hover:text-white"
@@ -59,6 +64,7 @@ export default function Navbar() {
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
+                  {item.external && <ExternalLink className="h-3 w-3 opacity-50" />}
                 </Link>
               ))}
             </div>

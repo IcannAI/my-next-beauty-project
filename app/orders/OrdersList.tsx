@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
 import { ShoppingBag } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
   DialogContent,
@@ -20,9 +21,10 @@ type OrderWithRefund = {
   status: string
   createdAt: Date
   refundRequest: any | null
+  user?: { email: string }
 }
 
-export function OrdersList({ orders }: { orders: OrderWithRefund[] }) {
+export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isAdmin: boolean }) {
   const [selected, setSelected] = useState<string[]>([])
   const [reason, setReason] = useState('')
   const [open, setOpen] = useState(false)
@@ -59,26 +61,30 @@ export function OrdersList({ orders }: { orders: OrderWithRefund[] }) {
     return (
       <div className="text-center py-32 bg-white dark:bg-gray-800 rounded-3xl border-2 border-dashed dark:border-gray-700">
         <ShoppingBag className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-        <p className="text-xl font-bold text-gray-400 dark:text-gray-500 tracking-tight">還沒有任何訂單</p>
+        <p className="text-xl font-bold text-gray-400 dark:text-gray-500 tracking-tight">
+          {isAdmin ? '目前系統尚無訂單紀錄' : '還沒有任何訂單'}
+        </p>
       </div>
     )
   }
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 sticky top-4 z-10">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">已選擇 {selected.length} 筆</p>
-          <p className="text-2xl font-black text-rose-500 dark:text-rose-400">NT$ {selectedTotal.toLocaleString()}</p>
+      {!isAdmin && (
+        <div className="flex justify-between items-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 sticky top-4 z-10">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">已選擇 {selected.length} 筆</p>
+            <p className="text-2xl font-black text-rose-500 dark:text-rose-400">NT$ {selectedTotal.toLocaleString()}</p>
+          </div>
+          <Button 
+            disabled={selected.length === 0}
+            onClick={() => setOpen(true)}
+            className="rounded-full px-8 py-6 h-auto bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
+          >
+            批量申請退款
+          </Button>
         </div>
-        <Button 
-          disabled={selected.length === 0}
-          onClick={() => setOpen(true)}
-          className="rounded-full px-8 py-6 h-auto bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
-        >
-          批量申請退款
-        </Button>
-      </div>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[450px] rounded-3xl border-none p-8 dark:bg-gray-800">
@@ -125,17 +131,26 @@ export function OrdersList({ orders }: { orders: OrderWithRefund[] }) {
               ${selected.includes(o.id) ? 'border-rose-500 bg-rose-50/20 shadow-xl shadow-rose-100/20 dark:shadow-none' : 'border-transparent hover:border-gray-100 dark:hover:border-gray-700 shadow-md shadow-gray-100/50 dark:shadow-none'}
             `}
           >
-            <Checkbox 
-              checked={selected.includes(o.id)}
-              onCheckedChange={() => toggle(o.id)}
-              disabled={o.status !== 'COMPLETED' || !!o.refundRequest}
-              className="w-6 h-6 border-2 border-gray-200 dark:border-gray-700 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500"
-            />
+            {!isAdmin && (
+              <Checkbox 
+                checked={selected.includes(o.id)}
+                onCheckedChange={() => toggle(o.id)}
+                disabled={o.status !== 'COMPLETED' || !!o.refundRequest}
+                className="w-6 h-6 border-2 border-gray-200 dark:border-gray-700 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500"
+              />
+            )}
             
             <div className="flex-1 min-w-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <h3 className="font-black text-gray-900 dark:text-white text-lg tracking-tight">訂單 #{o.id.slice(-8)}</h3>
+                  <div className="flex items-center gap-3">
+                    <h3 className="font-black text-gray-900 dark:text-white text-lg tracking-tight">訂單 #{o.id.slice(-8)}</h3>
+                    {isAdmin && o.user && (
+                      <Badge variant="outline" className="text-[10px] font-black uppercase text-gray-500 border-gray-200">
+                        {o.user.email}
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm font-bold text-gray-400 dark:text-gray-500">
                     {new Date(o.createdAt).toLocaleString('zh-TW')}
                   </p>

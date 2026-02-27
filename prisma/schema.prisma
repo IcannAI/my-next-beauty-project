@@ -13,6 +13,7 @@ model User {
   name           String?
   password       String?
   role           String          @default("USER")
+  banned         Boolean         @default(false)
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   orders         Order[]

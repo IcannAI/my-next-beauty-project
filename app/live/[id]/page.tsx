@@ -30,6 +30,7 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
   }
 
   const isOwner = user.id === liveStream.kolProfile.userId;
+  const isAdmin = user.role === 'ADMIN';
 
   return (
     <main className="flex h-screen bg-gray-950 text-white overflow-hidden">
@@ -83,7 +84,7 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
               <p className="text-xl font-black tracking-tighter italic text-rose-500">248</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Shares</p>
             </div>
-            {isOwner && (
+            {(isOwner || isAdmin) && (
               <div className="ml-4">
                 <EndLiveButton liveId={id} />
               </div>

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '../../components/ui/button'
-import { Checkbox } from '../../components/ui/checkbox'
-import { Textarea } from '../../components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Textarea } from '@/components/ui/textarea'
 import { ShoppingBag } from 'lucide-react'
 import {
   Dialog,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '../../components/ui/dialog'
+} from '@/components/ui/dialog'
 
 type OrderWithRefund = {
   id: string

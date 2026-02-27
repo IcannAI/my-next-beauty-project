@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
+import { requireAdmin } from '@/infrastructure/auth/rbac';
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const guard = await requireAdmin();
+  if (guard) return guard;
+
   try {
     const { id } = await params;
     const { action } = await request.json();

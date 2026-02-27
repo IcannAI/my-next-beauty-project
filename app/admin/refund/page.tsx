@@ -1,7 +1,14 @@
 import { prisma } from '@/infrastructure/db/prisma';
 import RefundItem from './RefundItem';
+import { getCurrentUser } from '@/infrastructure/auth/auth';
+import { redirect } from 'next/navigation';
 
 export default async function AdminRefundPage() {
+  const user = await getCurrentUser();
+  if (!user || user.role !== 'ADMIN') {
+    redirect('/');
+  }
+
   const refunds = await prisma.refundRequest.findMany({
     include: {
       order: true,

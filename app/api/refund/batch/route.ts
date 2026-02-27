@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
+import { requireUser } from '@/infrastructure/auth/rbac';
 
 export async function POST(request: NextRequest) {
+  const guard = await requireUser();
+  if (guard) return guard;
+
   const user = await getCurrentUser(request);
   if (!user) return NextResponse.json({ error: '請先登入' }, { status: 401 });
 

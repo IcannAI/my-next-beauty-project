@@ -2,7 +2,7 @@ import { prisma } from '@/infrastructure/db/prisma';
 import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '../../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Video, Heart, Users, BarChart3 } from 'lucide-react';
 
 export default async function KolProfilePage({ params }: { params: Promise<{ id: string }> }) {

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
+import { requireKOL } from '@/infrastructure/auth/rbac';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const guard = await requireKOL();
+  if (guard) return guard;
+
   const user = await getCurrentUser();
   const { id } = await params;
 

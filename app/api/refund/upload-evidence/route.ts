@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadEvidenceFile } from '@/infrastructure/storage/s3-client';
+import { requireUser } from '@/infrastructure/auth/rbac';
 
 export async function POST(request: NextRequest) {
+  const guard = await requireUser();
+  if (guard) return guard;
+
   try {
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];

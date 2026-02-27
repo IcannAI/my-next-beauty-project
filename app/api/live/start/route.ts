@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
+import { requireKOL } from '@/infrastructure/auth/rbac';
 
 export async function POST(request: NextRequest) {
-  const user = await getCurrentUser();
+  const guard = await requireKOL();
+  if (guard) return guard;
 
-  if (!user) {
-    return new NextResponse('Unauthorized', { status: 401 });
-  }
+  const user = await getCurrentUser();
+  if (!user) return new NextResponse('Unauthorized', { status: 401 });
 
   const { title } = await request.json();
 

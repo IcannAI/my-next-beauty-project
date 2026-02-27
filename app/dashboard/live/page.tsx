@@ -1,9 +1,9 @@
-import { prisma } from '../../../src/infrastructure/db/prisma';
-import { getCurrentUser } from '../../../src/infrastructure/auth/auth';
+import { prisma } from '@/infrastructure/db/prisma';
+import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '../../../components/ui/button';
-import { Badge } from '../../../src/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Video, Calendar, DollarSign, ChevronRight } from 'lucide-react';
 
 export default async function LiveDashboardPage() {
@@ -11,6 +11,10 @@ export default async function LiveDashboardPage() {
 
   if (!user) {
     redirect('/login');
+  }
+
+  if (user.role !== 'KOL' && user.role !== 'ADMIN') {
+    redirect('/');
   }
 
   const kolProfile = await prisma.kolProfile.findUnique({

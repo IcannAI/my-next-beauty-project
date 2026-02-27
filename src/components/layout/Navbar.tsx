@@ -91,12 +91,14 @@ export default function Navbar() {
               </div>
             ) : (
               <Button
+                asChild
                 size="sm"
-                onClick={() => signIn()}
                 className="rounded-full bg-rose-500 font-bold text-white hover:bg-rose-600"
               >
-                <LogIn className="mr-2 h-4 w-4" />
-                登入
+                <Link href="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  登入
+                </Link>
               </Button>
             )}
           </div>

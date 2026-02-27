@@ -13,22 +13,45 @@ export async function GET(request: NextRequest) {
   });
 
   try {
-    const users = await prisma.user.findMany({
-      where: {
-        OR: [
-          { name: { contains: q, mode: 'insensitive' } },
-          { kolProfile: { bio: { contains: q, mode: 'insensitive' } } },
-        ],
-      },
-      take: 20,
-    });
+    const [kols, lives, users] = await Promise.all([
+      prisma.kolProfile.findMany({
+        where: { user: { name: { contains: q, mode: 'insensitive' } } },
+        include: { user: true },
+        take: 10,
+      }),
+      prisma.liveStream.findMany({
+        where: { title: { contains: q, mode: 'insensitive' } },
+        include: { kolProfile: { include: { user: true } } },
+        take: 10,
+      }),
+      prisma.user.findMany({
+        where: { name: { contains: q, mode: 'insensitive' } },
+        take: 10,
+      }),
+    ]);
 
-    const usersWithUrl = users.map(user => ({
-      ...user,
-      url: `/kol/${user.id}`
-    }));
+    const results = {
+      kols: kols.map(k => ({
+        id: k.id,
+        name: k.user.name,
+        bio: k.bio,
+        userId: k.userId,
+      })),
+      lives: lives.map(l => ({
+        id: l.id,
+        title: l.title,
+        status: l.status,
+        kolName: l.kolProfile.user.name,
+      })),
+      articles: [], // Placeholder for future expansion
+      users: users.map(u => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+      })),
+    };
 
-    return NextResponse.json(usersWithUrl);
+    return NextResponse.json(results);
   } catch (err) {
     const error = err as Error;
     rootSpan?.setTag('error.type', error.name);

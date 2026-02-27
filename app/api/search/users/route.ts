@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   });
 
   try {
-    const [kols, lives, users] = await Promise.all([
+    const [kols, lives, users, products] = await Promise.all([
       prisma.kolProfile.findMany({
         where: { user: { name: { contains: q, mode: 'insensitive' } } },
         include: { user: true },
@@ -26,6 +26,11 @@ export async function GET(request: NextRequest) {
       }),
       prisma.user.findMany({
         where: { name: { contains: q, mode: 'insensitive' } },
+        take: 10,
+      }),
+      prisma.product.findMany({
+        where: { name: { contains: q, mode: 'insensitive' } },
+        include: { kolProfile: { include: { user: true } } },
         take: 10,
       }),
     ]);
@@ -48,6 +53,13 @@ export async function GET(request: NextRequest) {
         id: u.id,
         name: u.name,
         email: u.email,
+      })),
+      products: products.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        kolName: p.kolProfile.user.name,
+        imageUrl: p.imageUrl,
       })),
     };
 

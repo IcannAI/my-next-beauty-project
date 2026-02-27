@@ -21,6 +21,20 @@ export default async function Home() {
     },
   });
 
+  const products = await prisma.product.findMany({
+    take: 6,
+    include: {
+      kolProfile: {
+        include: {
+          user: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero Section */}
@@ -113,6 +127,74 @@ export default async function Home() {
           </div>
         )}
       </section>
+
+      {/* Beauty Products Section */}
+      <section className="bg-white dark:bg-gray-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mb-12 flex items-end justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
+            <div>
+              <h2 className="text-3xl font-black italic tracking-tighter text-gray-900 dark:text-white">
+                熱門 <span className="text-rose-500">美妝產品</span>
+              </h2>
+              <p className="mt-2 font-bold text-gray-500 uppercase tracking-widest text-xs">Curated items by top KOLs</p>
+            </div>
+            <Link href="/search?tab=product" className="group flex items-center gap-2 text-sm font-black uppercase tracking-widest text-gray-400 hover:text-rose-500 transition-colors">
+              查看更多 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <Card key={product.id} className="group overflow-hidden rounded-[2.5rem] border-none bg-gray-50 shadow-lg shadow-gray-100 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-100 dark:bg-gray-800 dark:shadow-none">
+                <CardHeader className="p-0 aspect-square bg-white relative overflow-hidden dark:bg-gray-700">
+                  {product.imageUrl ? (
+                    <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <ShoppingBag className="h-16 w-16 text-gray-200 dark:text-gray-600" />
+                    </div>
+                  )}
+                  <div className="absolute top-6 left-6">
+                    <Badge className="bg-rose-500 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest border-none shadow-lg shadow-rose-200">
+                      Best Seller
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-8">
+                  <div className="mb-4">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">by {product.kolProfile.user.name}</p>
+                    <CardTitle className="text-2xl font-black tracking-tight line-clamp-1 group-hover:text-rose-500 transition-colors">
+                      {product.name}
+                    </CardTitle>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-black text-rose-500 uppercase italic">NT$</span>
+                    <span className="text-3xl font-black text-rose-500 italic tracking-tighter">{product.price.toLocaleString()}</span>
+                  </div>
+                </CardContent>
+                <CardFooter className="px-8 pb-8 pt-0">
+                  <div className="flex w-full gap-3">
+                    <Button variant="outline" className="flex-1 rounded-2xl border-2 py-6 font-bold dark:border-gray-700" asChild>
+                      <Link href={`/products/${product.id}`}>詳情</Link>
+                    </Button>
+                    <Button className="flex-1 rounded-2xl bg-rose-500 py-6 font-black uppercase tracking-widest text-white hover:bg-rose-600 transition-all duration-500 shadow-lg shadow-rose-100" asChild>
+                      <Link href={`/products/${product.id}`}>立即購買</Link>
+                    </Button>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
+
+const ShoppingBag = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+    <path d="M3 6h18" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </svg>
+);

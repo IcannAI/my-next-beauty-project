@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Video, User, ArrowRight, PlayCircle } from 'lucide-react';
+import StarRating from '@/components/reviews/StarRating';
 
 export default async function Home() {
   const liveStreams = await prisma.liveStream.findMany({
@@ -165,6 +166,12 @@ export default async function Home() {
                     <CardTitle className="text-2xl font-black tracking-tight line-clamp-1 group-hover:text-rose-500 transition-colors">
                       {product.name}
                     </CardTitle>
+                    {product.avgRating > 0 && (
+                      <div className="flex items-center gap-1 mt-2">
+                        <StarRating rating={product.avgRating} readonly size="sm" />
+                        <span className="text-xs font-bold text-gray-400">({product.reviewCount})</span>
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs font-black text-rose-500 uppercase italic">NT$</span>

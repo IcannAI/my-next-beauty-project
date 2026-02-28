@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react'
 import { trackSearchWithTrace } from '../../lib/datadog-events'
 import FollowButton from '@/components/follow/FollowButton'
 import FavoriteButton from '@/components/favorite/FavoriteButton'
+import StarRating from '@/components/reviews/StarRating'
 
 
 type SearchData = {
@@ -23,7 +24,7 @@ type SearchData = {
   lives: Array<{ id: string; title: string; status: string; kolName: string }>
   articles: Array<any>
   users: Array<{ id: string; name: string; email: string }>
-  products: Array<{ id: string; name: string; price: number; kolName: string; imageUrl: string | null }>
+  products: Array<{ id: string; name: string; price: number; kolName: string; imageUrl: string | null; avgRating: number; reviewCount: number }>
 }
 
 function SearchPageContent() {
@@ -219,6 +220,12 @@ function SearchPageContent() {
                       <div className="flex-1 min-w-0">
                         <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">by {product.kolName}</p>
                         <h3 className="text-2xl font-black text-gray-900 tracking-tight italic uppercase" dangerouslySetInnerHTML={{ __html: highlight(product.name) }} />
+                        {product.avgRating > 0 && (
+                          <div className="flex items-center gap-1 mt-1">
+                            <StarRating rating={product.avgRating} readonly size="sm" />
+                            <span className="text-xs font-bold text-gray-400">({product.reviewCount})</span>
+                          </div>
+                        )}
                         <div className="mt-2 flex items-baseline gap-1">
                           <span className="text-[10px] font-black text-rose-500 uppercase italic">NT$</span>
                           <span className="text-xl font-black text-rose-500 italic tracking-tighter">{product.price.toLocaleString()}</span>

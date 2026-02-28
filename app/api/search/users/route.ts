@@ -56,6 +56,8 @@ export async function GET(request: NextRequest) {
         price: p.price,
         kolName: p.kolProfile.user.name,
         imageUrl: p.imageUrl,
+        avgRating: p.avgRating,
+        reviewCount: p.reviewCount,
       })),
     };
 

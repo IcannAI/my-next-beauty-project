@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { notFound } from 'next/navigation';
@@ -7,23 +9,70 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ShoppingBag, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-react';
 import FavoriteButton from '@/components/favorite/FavoriteButton';
+import StarRating from '@/components/reviews/StarRating';
+import ReviewSkeleton from '@/components/reviews/ReviewSkeleton';
+
+const ReviewSection = dynamic(
+  () => import('@/components/reviews/ReviewSection'),
+  { loading: () => <ReviewSkeleton /> }
+);
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const currentUser = await getCurrentUser();
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: {
-      kolProfile: {
-        include: {
-          user: true,
-        },
-      },
-    },
-  });
 
-  if (!product) {
-    notFound();
+  const [product, initialReviews, reviewTotal] = await Promise.all([
+    prisma.product.findUnique({
+      where: { id },
+      include: {
+        kolProfile: { include: { user: true } },
+      },
+    }),
+    prisma.review.findMany({
+      where: { productId: id },
+      include: { user: { select: { id: true, name: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+    }),
+    prisma.review.count({ where: { productId: id } }),
+  ]);
+
+  if (!product) notFound();
+
+  // 取得評分資格
+  let eligibility = {
+    eligible: false,
+    hasReviewed: false,
+    existingReview: null as { rating: number; comment: string | null } | null,
+    reason: 'not_logged_in',
+  };
+
+  if (currentUser) {
+    const isOwner = product.kolProfile.userId === currentUser.id;
+    if (isOwner) {
+      eligibility = { eligible: false, hasReviewed: false, existingReview: null, reason: 'own_product' };
+    } else {
+      const [order, existing] = await Promise.all([
+        prisma.order.findFirst({
+          where: {
+            userId: currentUser.id,
+            productId: id,
+            status: { in: ['COMPLETED', 'DELIVERED', 'PENDING'] },
+          },
+        }),
+        prisma.review.findUnique({
+          where: { userId_productId: { userId: currentUser.id, productId: id } },
+        }),
+      ]);
+      eligibility = {
+        eligible: !!order,
+        hasReviewed: !!existing,
+        existingReview: existing
+          ? { rating: existing.rating, comment: existing.comment }
+          : null,
+        reason: order ? '' : 'no_purchase',
+      };
+    }
   }
 
   const favorite = currentUser
@@ -41,7 +90,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           返回商城
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        {/* 產品資訊 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
           {/* Left: Product Image */}
           <div className="space-y-6">
             <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-[3rem] overflow-hidden flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-2xl shadow-gray-200/50">
@@ -67,6 +117,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               <h1 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter italic uppercase">
                 {product.name}
               </h1>
+              <div className="flex items-center gap-3 mb-4">
+                <StarRating rating={product.avgRating} readonly size="md" />
+                <span className="text-sm font-bold text-gray-400">
+                  ({product.reviewCount} 則評論)
+                </span>
+              </div>
               <div className="flex items-baseline gap-2">
                 <span className="text-sm font-black text-rose-500 uppercase italic">NT$</span>
                 <span className="text-5xl font-black text-rose-500 italic tracking-tighter">
@@ -131,6 +187,22 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
             </div>
           </div>
+        </div>
+
+        {/* 評分區塊 */}
+        <div className="max-w-3xl">
+          <Suspense fallback={<ReviewSkeleton />}>
+            <ReviewSection
+              productId={id}
+              initialReviews={initialReviews}
+              totalCount={reviewTotal}
+              avgRating={product.avgRating}
+              reviewCount={product.reviewCount}
+              eligibility={eligibility}
+              currentUserId={currentUser?.id}
+              isLoggedIn={!!currentUser}
+            />
+          </Suspense>
         </div>
       </div>
     </main>

@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
-import { requireUser } from '@/infrastructure/auth/rbac';
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/../auth.config";
+import { getCurrentUser } from '@/infrastructure/auth/auth';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
-  const guard = await requireUser();
-  if (guard) return guard;
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const session = await getServerSession(authOptions);
-  const followerId = (session?.user as any).id;
+  const followerId = currentUser.id;
   const { userId: followingId } = await params;
 
   if (followerId === followingId) {
@@ -44,11 +43,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
-  const guard = await requireUser();
-  if (guard) return guard;
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const session = await getServerSession(authOptions);
-  const followerId = (session?.user as any).id;
+  const followerId = currentUser.id;
   const { userId: followingId } = await params;
 
   try {
@@ -63,7 +63,6 @@ export async function DELETE(
 
     return NextResponse.json({ following: false });
   } catch {
-    // If not found, return following: false anyway
     return NextResponse.json({ following: false });
   }
 }
@@ -73,12 +72,12 @@ export async function GET(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
       return NextResponse.json({ following: false });
     }
 
-    const followerId = (session.user as any).id;
+    const followerId = currentUser.id;
     const { userId: followingId } = await params;
 
     const follow = await prisma.follow.findUnique({

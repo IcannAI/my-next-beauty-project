@@ -8,12 +8,13 @@ export default async function KolProfilePage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const currentUser = await getCurrentUser();
 
-  const profile = await prisma.kolProfile.findUnique({
+  const profile = await prisma.kolProfile.findFirst({
     where: { userId: id },
     include: {
       user: true,
       liveStreams: {
         orderBy: { createdAt: 'desc' },
+        take: 5,
       },
     },
   });

@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/db/prisma';
-import { requireUser } from '@/infrastructure/auth/rbac';
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/../auth.config";
+import { getCurrentUser } from '@/infrastructure/auth/auth';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ productId: string }> }
 ) {
-  const guard = await requireUser();
-  if (guard) return guard;
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const session = await getServerSession(authOptions);
-  const userId = (session?.user as any).id;
+  const userId = currentUser.id;
   const { productId } = await params;
 
   try {
@@ -40,11 +39,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ productId: string }> }
 ) {
-  const guard = await requireUser();
-  if (guard) return guard;
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const session = await getServerSession(authOptions);
-  const userId = (session?.user as any).id;
+  const userId = currentUser.id;
   const { productId } = await params;
 
   try {
@@ -59,7 +59,6 @@ export async function DELETE(
 
     return NextResponse.json({ favorited: false });
   } catch {
-    // If not found, return favorited: false anyway
     return NextResponse.json({ favorited: false });
   }
 }
@@ -69,12 +68,12 @@ export async function GET(
   { params }: { params: Promise<{ productId: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
       return NextResponse.json({ favorited: false });
     }
 
-    const userId = (session.user as any).id;
+    const userId = currentUser.id;
     const { productId } = await params;
 
     const favorite = await prisma.favorite.findUnique({

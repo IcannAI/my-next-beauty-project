@@ -37,15 +37,6 @@ export default function KolProfileView({
   initialFollowing, 
   isLoggedIn 
 }: KolProfileViewProps) {
-  const { toast } = useToast()
-
-  const handleComingSoon = () => {
-    toast({
-      title: '功能即將推出',
-      description: '我們正在努力開發此功能，敬請期待！',
-    })
-  }
-
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-500">
       <div className="max-w-4xl mx-auto px-6 py-16">
@@ -72,13 +63,6 @@ export default function KolProfileView({
                   initialFollowing={initialFollowing}
                   isLoggedIn={isLoggedIn}
                 />
-                <Button 
-                  variant="outline" 
-                  onClick={handleComingSoon}
-                  className="rounded-full px-8 py-6 h-auto border-2 font-bold dark:border-gray-800 dark:text-gray-300"
-                >
-                  私訊
-                </Button>
               </div>
             </div>
             

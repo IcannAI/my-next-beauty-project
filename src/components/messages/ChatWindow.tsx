@@ -18,6 +18,7 @@ interface Props {
   conversationId: string;
   initialMessages: Message[];
   currentUserId: string;
+  currentUserName: string;
   otherUser: { id: string; name: string | null; email: string };
 }
 
@@ -25,11 +26,15 @@ export default function ChatWindow({
   conversationId,
   initialMessages,
   currentUserId,
+  currentUserName,
   otherUser,
 }: Props) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [loading] = useState(false);
+  const [typingUser, setTypingUser] = useState<string | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -41,10 +46,20 @@ export default function ChatWindow({
         return [...prev, data];
       });
     });
+
+    channel.bind('typing', (data: { userId: string; name: string }) => {
+      if (data.userId !== currentUserId) {
+        setTypingUser(data.name);
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = setTimeout(() => setTypingUser(null), 2000);
+      }
+    });
+
     return () => {
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
       pusherClient.unsubscribe(`conversation-${conversationId}`);
     };
-  }, [conversationId]);
+  }, [conversationId, currentUserId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -82,6 +97,17 @@ export default function ChatWindow({
     }
   };
 
+  const handleInputChange = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    try {
+      await fetch(`/api/conversations/${conversationId}/typing`, {
+        method: 'POST',
+      });
+    } catch {
+      // 忽略錯誤
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -108,11 +134,10 @@ export default function ChatWindow({
           return (
             <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-xs lg:max-w-md flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}>
-                <div className={`px-4 py-2 rounded-2xl text-sm ${
-                  isMine
-                    ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
-                    : 'bg-white text-gray-900 shadow-sm border border-gray-100'
-                }`}>
+                <div className={`px-4 py-2 rounded-2xl text-sm ${isMine
+                  ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
+                  : 'bg-white text-gray-900 shadow-sm border border-gray-100'
+                  }`}>
                   {msg.content}
                 </div>
                 <span className="text-xs text-gray-400">
@@ -124,10 +149,25 @@ export default function ChatWindow({
         })}
         <div ref={messagesEndRef} />
       </div>
+
+      {typingUser && (
+        <div className="flex justify-start px-4 py-2">
+          <div className="bg-white rounded-2xl px-4 py-1 shadow-sm border border-gray-100 flex items-center gap-2">
+            <span className="text-xs text-gray-500">{typingUser} 正在輸入</span>
+            <span className="flex gap-1">
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* 輸入區 */}
       <div className="px-4 py-3 border-t border-gray-200 bg-white flex gap-3 items-end">
         <textarea
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="輸入訊息... (Enter 發送)"
           rows={1}

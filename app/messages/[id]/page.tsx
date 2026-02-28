@@ -2,6 +2,8 @@ import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { redirect, notFound } from 'next/navigation';
 import { prisma } from '@/infrastructure/db/prisma';
 import ChatWindow from '@/components/messages/ChatWindow';
+import { Suspense } from 'react';
+import MessageSkeleton from '@/components/messages/MessageSkeleton';
 
 export default async function ConversationPage({
     params,
@@ -48,17 +50,23 @@ export default async function ConversationPage({
 
     return (
         <div className="max-w-2xl mx-auto h-[calc(100vh-64px)] flex flex-col">
-            <ChatWindow
-                conversationId={id}
-                initialMessages={messages}
-                currentUserId={currentUser.id}
-
-                otherUser={{
-                    id: otherUser?.id || '',
-                    name: otherUser?.name || otherUser?.email || '用戶',
-                    email: otherUser?.email || '',
-                }}
-            />
+            <Suspense fallback={
+                <div className="flex-1 overflow-y-auto bg-gray-50 border sm:border-gray-200 sm:rounded-xl">
+                    <MessageSkeleton />
+                </div>
+            }>
+                <ChatWindow
+                    conversationId={id}
+                    initialMessages={messages}
+                    currentUserId={currentUser.id}
+                    currentUserName={currentUser.name || currentUser.email || '我'}
+                    otherUser={{
+                        id: otherUser?.id || '',
+                        name: otherUser?.name || null,
+                        email: otherUser?.email || '',
+                    }}
+                />
+            </Suspense>
         </div>
     );
 }

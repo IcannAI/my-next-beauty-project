@@ -2,6 +2,8 @@ import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/infrastructure/db/prisma';
 import ConversationList from '@/components/messages/ConversationList';
+import { Suspense } from 'react';
+import ConversationSkeleton from '@/components/messages/ConversationSkeleton';
 
 export default async function MessagesPage() {
     const currentUser = await getCurrentUser();
@@ -30,10 +32,12 @@ export default async function MessagesPage() {
                     <p className="text-sm mt-2">去 KOL 頁面點擊「私訊」開始對話</p>
                 </div>
             ) : (
-                <ConversationList
-                    conversations={conversations}
-                    currentUserId={currentUser.id}
-                />
+                <Suspense fallback={<ConversationSkeleton />}>
+                    <ConversationList
+                        conversations={conversations}
+                        currentUserId={currentUser.id}
+                    />
+                </Suspense>
             )}
         </div>
     );

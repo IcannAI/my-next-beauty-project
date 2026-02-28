@@ -14,6 +14,9 @@ import debounce from 'lodash/debounce'
 import { Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { trackSearchWithTrace } from '../../lib/datadog-events'
+import FollowButton from '@/components/follow/FollowButton'
+import FavoriteButton from '@/components/favorite/FavoriteButton'
+
 
 type SearchData = {
   kols: Array<{ id: string; name: string; bio: string | null; userId: string }>
@@ -53,13 +56,13 @@ function SearchPageContent() {
         const results = await res.json()
         setData(results)
 
-        const totalCount = 
-          results.kols.length + 
-          results.lives.length + 
-          results.articles.length + 
+        const totalCount =
+          results.kols.length +
+          results.lives.length +
+          results.articles.length +
           results.users.length +
           (results.products?.length || 0)
-        
+
         trackSearchWithTrace(q, totalCount)
       } catch (err) {
         console.error(err)
@@ -80,13 +83,6 @@ function SearchPageContent() {
     return text.replace(regex, '<span class="bg-rose-100 text-rose-900">$1</span>')
   }
 
-  const handleFollow = () => {
-    if (!isLoggedIn) {
-      alert('請先登入後再進行追蹤')
-    } else {
-      alert('已成功追蹤（測試用）')
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -156,11 +152,11 @@ function SearchPageContent() {
                         <p className="text-gray-500 font-medium line-clamp-1 mt-1" dangerouslySetInnerHTML={{ __html: highlight(kol.bio) }} />
                       </div>
                       <div className="flex items-center gap-3">
-                        {isLoggedIn && (
-                          <Button onClick={handleFollow} variant="outline" className="rounded-full px-6 border-2 font-bold hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100">
-                            追蹤
-                          </Button>
-                        )}
+                        <FollowButton
+                          targetUserId={kol.userId}
+                          initialFollowing={false}
+                          isLoggedIn={isLoggedIn}
+                        />
                         <Link href={`/kol/${kol.userId}`}>
                           <Button className="rounded-full px-8 bg-rose-500 hover:bg-rose-600 text-white font-black shadow-lg shadow-rose-100 transition-all active:scale-95">
                             查看個人頁
@@ -233,6 +229,11 @@ function SearchPageContent() {
                           查看詳情
                         </Button>
                       </Link>
+                      <FavoriteButton
+                        productId={product.id}
+                        initialFavorited={false}
+                        isLoggedIn={isLoggedIn}
+                      />
                     </CardContent>
                   </Card>
                 ))}

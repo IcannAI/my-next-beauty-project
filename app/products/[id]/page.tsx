@@ -1,13 +1,16 @@
 import { prisma } from '@/infrastructure/db/prisma';
+import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ShoppingBag, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-react';
+import FavoriteButton from '@/components/favorite/FavoriteButton';
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const currentUser = await getCurrentUser();
   const product = await prisma.product.findUnique({
     where: { id },
     include: {
@@ -22,6 +25,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   if (!product) {
     notFound();
   }
+
+  const favorite = currentUser
+    ? await prisma.favorite.findUnique({
+      where: { userId_productId: { userId: currentUser.id, productId: id } },
+    })
+    : null;
+  const initialFavorited = !!favorite;
 
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950 pb-20">
@@ -94,10 +104,17 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="mt-12 space-y-6">
-              <Button className="w-full py-10 h-auto bg-rose-500 hover:bg-rose-600 text-white text-2xl font-black italic tracking-tighter rounded-[2rem] shadow-2xl shadow-rose-200 dark:shadow-none transition-all active:scale-95">
-                立即購買
-              </Button>
-              
+              <div className="flex items-center gap-4">
+                <Button className="flex-1 py-10 h-auto bg-rose-500 hover:bg-rose-600 text-white text-2xl font-black italic tracking-tighter rounded-[2rem] shadow-2xl shadow-rose-200 dark:shadow-none transition-all active:scale-95">
+                  立即購買
+                </Button>
+                <FavoriteButton
+                  productId={id}
+                  initialFavorited={initialFavorited}
+                  isLoggedIn={!!currentUser}
+                />
+              </div>
+
               <div className="grid grid-cols-3 gap-4">
                 <div className="flex flex-col items-center text-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-green-500" />

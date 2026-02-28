@@ -5,7 +5,8 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut, Bell, DollarSign, Users, ExternalLink } from 'lucide-react';
+import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut, Bell, DollarSign, Users, ExternalLink, Heart } from 'lucide-react';
+
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -19,8 +20,10 @@ export default function Navbar() {
 
   const loggedInItems = session ? [
     { label: '我的訂單', href: '/orders', icon: ShoppingBag },
+    { label: '我的收藏', href: '/favorites', icon: Heart },
     { label: '通知', href: '/notifications', icon: Bell },
   ] : [];
+
 
   const kolItems = (user?.role === 'KOL' || user?.role === 'ADMIN') ? [
     { label: '直播管理', href: '/dashboard/live', icon: LayoutDashboard },

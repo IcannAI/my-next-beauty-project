@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Video, BarChart3 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import FollowButton from '@/components/follow/FollowButton';
 
 type KolProfileWithData = {
   id: string
@@ -25,7 +26,17 @@ type KolProfileWithData = {
   }>
 }
 
-export default function KolProfileView({ profile }: { profile: KolProfileWithData }) {
+interface KolProfileViewProps {
+  profile: KolProfileWithData;
+  initialFollowing: boolean;
+  isLoggedIn: boolean;
+}
+
+export default function KolProfileView({ 
+  profile, 
+  initialFollowing, 
+  isLoggedIn 
+}: KolProfileViewProps) {
   const { toast } = useToast()
 
   const handleComingSoon = () => {
@@ -56,12 +67,11 @@ export default function KolProfileView({ profile }: { profile: KolProfileWithDat
                 {profile.user.name}
               </h1>
               <div className="flex gap-3 justify-center">
-                <Button 
-                  onClick={handleComingSoon}
-                  className="rounded-full px-10 py-6 h-auto bg-rose-500 hover:bg-rose-600 text-white font-black shadow-xl shadow-rose-200 dark:shadow-none transition-all active:scale-95"
-                >
-                  追蹤
-                </Button>
+                <FollowButton 
+                  targetUserId={profile.userId}
+                  initialFollowing={initialFollowing}
+                  isLoggedIn={isLoggedIn}
+                />
                 <Button 
                   variant="outline" 
                   onClick={handleComingSoon}

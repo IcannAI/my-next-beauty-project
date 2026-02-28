@@ -37,5 +37,21 @@ export default async function KolProfilePage({ params }: { params: Promise<{ id:
     liveStreams: profile.liveStreams.slice(0, 5)
   };
 
-  return <KolProfileView profile={viewProfile as any} />;
+  const follow = currentUser ? await prisma.follow.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId: currentUser.id,
+        followingId: profile.userId,
+      }
+    }
+  }) : null;
+  const initialFollowing = !!follow;
+
+  return (
+    <KolProfileView 
+      profile={viewProfile as any} 
+      initialFollowing={initialFollowing}
+      isLoggedIn={!!currentUser}
+    />
+  );
 }

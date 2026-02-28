@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut, Bell, DollarSign, Users, ExternalLink, Heart, MessageCircle } from 'lucide-react';
 import UnreadBadge from '@/components/messages/UnreadBadge';
+import MessageNotifier from '@/components/messages/MessageNotifier';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -68,7 +69,12 @@ export default function Navbar() {
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
-                  {item.href === '/messages' && session?.user && <UnreadBadge currentUserId={user.id} />}
+                  {item.href === '/messages' && session?.user && (
+                    <>
+                      <MessageNotifier currentUserId={user.id} />
+                      <UnreadBadge currentUserId={user.id} />
+                    </>
+                  )}
                   {item.external && <ExternalLink className="h-3 w-3 opacity-50" />}
                 </Link>
               ))}

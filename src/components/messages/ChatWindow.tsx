@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { pusherClient } from '@/lib/pusher';
+import { formatMessageTime, formatDateGroup, shouldShowDateDivider, shouldShowTime } from '@/lib/messageUtils';
 
 interface Message {
   id: string;
@@ -34,6 +35,12 @@ export default function ChatWindow({
   const [sending, setSending] = useState(false);
   const [loading] = useState(false);
   const [typingUser, setTypingUser] = useState<string | null>(null);
+
+  // 初始化已讀狀態
+  const [readMessageIds, setReadMessageIds] = useState<Set<string>>(
+    new Set(initialMessages.filter(m => m.read).map(m => m.id))
+  );
+
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -55,6 +62,19 @@ export default function ChatWindow({
       }
     });
 
+    channel.bind('messages-read', (data: { readBy: string }) => {
+      if (data.readBy !== currentUserId) {
+        // 對方已讀，標記我發送的所有訊息為已讀
+        setReadMessageIds(prev => {
+          const next = new Set(prev);
+          messages
+            .filter(m => m.senderId === currentUserId)
+            .forEach(m => next.add(m.id));
+          return next;
+        });
+      }
+    });
+
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
       pusherClient.unsubscribe(`conversation-${conversationId}`);
@@ -65,7 +85,7 @@ export default function ChatWindow({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (!input.trim() || sending) return;
     const content = input.trim();
     setInput('');
@@ -92,21 +112,25 @@ export default function ChatWindow({
       );
     } catch {
       setMessages(prev => prev.filter(m => m.id !== tempId));
+      setInput(content);
     } finally {
       setSending(false);
     }
-  };
+  }, [input, conversationId, currentUserId, sending]);
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-    try {
-      await fetch(`/api/conversations/${conversationId}/typing`, {
-        method: 'POST',
-      });
-    } catch {
-      // 忽略錯誤
-    }
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInput(e.target.value);
+      try {
+        fetch(`/api/conversations/${conversationId}/typing`, {
+          method: 'POST',
+        }).catch(() => { });
+      } catch {
+        // 忽略錯誤
+      }
+    },
+    [conversationId]
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -129,20 +153,51 @@ export default function ChatWindow({
         </span>
       </div>
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
-        {messages.map(msg => {
+        {messages.map((msg, index) => {
+          const prev = messages[index - 1];
+          const showDivider = shouldShowDateDivider(msg, prev);
+          const showTime = shouldShowTime(msg, prev);
           const isMine = msg.senderId === currentUserId;
+
           return (
-            <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-xs lg:max-w-md flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}>
-                <div className={`px-4 py-2 rounded-2xl text-sm ${isMine
-                  ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
-                  : 'bg-white text-gray-900 shadow-sm border border-gray-100'
-                  }`}>
-                  {msg.content}
+            <div key={msg.id}>
+              {/* 日期分隔線 */}
+              {showDivider && (
+                <div className="flex items-center gap-3 my-4">
+                  <div className="flex-1 h-px bg-gray-200" />
+                  <span className="text-xs text-gray-400 px-2">
+                    {formatDateGroup(msg.createdAt)}
+                  </span>
+                  <div className="flex-1 h-px bg-gray-200" />
                 </div>
-                <span className="text-xs text-gray-400">
-                  {msg.pending ? '傳送中...' : new Date(msg.createdAt).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
-                </span>
+              )}
+
+              {/* 訊息氣泡 */}
+              <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-1`}>
+                <div className={`max-w-xs lg:max-w-md flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}>
+                  <div className={`px-4 py-2 rounded-2xl text-sm ${isMine
+                      ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
+                      : 'bg-white text-gray-900 shadow-sm border border-gray-100'
+                    }`}>
+                    {msg.content}
+                  </div>
+                  {showTime && (
+                    <span className="text-xs text-gray-400">
+                      {formatMessageTime(msg.createdAt)}
+                      {isMine && (
+                        <span className="ml-1">
+                          {readMessageIds.has(msg.id) ? (
+                            <span className="text-blue-400">✓✓ 已讀</span>
+                          ) : msg.pending ? (
+                            <span>傳送中...</span>
+                          ) : (
+                            <span>✓ 已送達</span>
+                          )}
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           );

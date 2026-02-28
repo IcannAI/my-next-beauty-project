@@ -127,7 +127,11 @@ export async function POST(
             await pusherServer.trigger(
                 `user-${participant.id}`,
                 'new-unread',
-                { conversationId: id }
+                {
+                    conversationId: id,
+                    senderName: currentUser.name || '用戶',
+                    content: message.content,
+                }
             );
         }
     }

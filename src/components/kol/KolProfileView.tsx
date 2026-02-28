@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Video, BarChart3 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import FollowButton from '@/components/follow/FollowButton';
+import MessageButton from '@/components/messages/MessageButton';
 
 type KolProfileWithData = {
   id: string
@@ -32,10 +33,10 @@ interface KolProfileViewProps {
   isLoggedIn: boolean;
 }
 
-export default function KolProfileView({ 
-  profile, 
-  initialFollowing, 
-  isLoggedIn 
+export default function KolProfileView({
+  profile,
+  initialFollowing,
+  isLoggedIn
 }: KolProfileViewProps) {
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-500">
@@ -51,21 +52,25 @@ export default function KolProfileView({
               </AvatarFallback>
             </Avatar>
           </div>
-          
+
           <div className="flex-1 flex flex-col justify-center">
             <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
               <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter italic">
                 {profile.user.name}
               </h1>
               <div className="flex gap-3 justify-center">
-                <FollowButton 
+                <FollowButton
                   targetUserId={profile.userId}
                   initialFollowing={initialFollowing}
                   isLoggedIn={isLoggedIn}
                 />
+                <MessageButton
+                  targetUserId={profile.userId}
+                  isLoggedIn={isLoggedIn}
+                />
               </div>
             </div>
-            
+
             <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
               {profile.bio || "這位作者很低調，尚未填寫簡介。"}
             </p>
@@ -116,7 +121,7 @@ export default function KolProfileView({
               </div>
             ) : (
               profile.liveStreams.map(stream => (
-                <div 
+                <div
                   key={stream.id}
                   className="group flex items-center justify-between p-8 bg-white dark:bg-gray-900 border-2 border-transparent hover:border-rose-500/20 rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-gray-200/50 dark:shadow-none transition-all duration-500"
                 >
@@ -129,12 +134,12 @@ export default function KolProfileView({
                       {new Date(stream.createdAt).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
                   </div>
-                  
+
                   <Badge className={`
                     rounded-full px-6 py-2 text-[10px] font-black tracking-[0.15em] uppercase border-none
-                    ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' : 
-                      stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : 
-                      'bg-orange-50 text-orange-600'}
+                    ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' :
+                      stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' :
+                        'bg-orange-50 text-orange-600'}
                   `}>
                     {stream.status}
                   </Badge>

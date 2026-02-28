@@ -1,63 +1,63 @@
 import { getCurrentUser } from '@/infrastructure/auth/auth';
+import { redirect, notFound } from 'next/navigation';
 import { prisma } from '@/infrastructure/db/prisma';
-import { notFound, redirect } from 'next/navigation';
 import ChatWindow from '@/components/messages/ChatWindow';
 
-export default async function ConversationPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ConversationPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) redirect('/login');
+
     const { id } = await params;
-    const user = await getCurrentUser();
 
-    if (!user) {
-        redirect('/login');
-    }
-
-    // Get conversation and initial messages
-    const conversation = await prisma.conversation.findUnique({
-        where: { id },
+    const conversation = await prisma.conversation.findFirst({
+        where: {
+            id,
+            participants: { some: { id: currentUser.id } }
+        },
         include: {
-            participants: true,
-            messages: {
-                orderBy: { createdAt: 'asc' },
-                take: 50 // Load last 50 messages
-            }
+            participants: { select: { id: true, name: true, email: true } }
         }
     });
 
-    if (!conversation) {
-        notFound();
-    }
+    if (!conversation) notFound();
 
-    // Verify user is part of the conversation
-    const isParticipant = conversation.participants.some(p => p.id === user.id);
-    if (!isParticipant) {
-        notFound();
-    }
+    const messages = await prisma.message.findMany({
+        where: { conversationId: id },
+        include: { sender: { select: { id: true, name: true } } },
+        orderBy: { createdAt: 'asc' },
+        take: 50,
+    });
 
-    const otherUser = conversation.participants.find(p => p.id !== user.id);
-
-    if (!otherUser) {
-        notFound();
-    }
-
-    // Mark all unread messages from the other user as read
+    // 標記已讀
     await prisma.message.updateMany({
         where: {
-            conversationId: conversation.id,
-            senderId: { not: user.id },
-            read: false
+            conversationId: id,
+            senderId: { not: currentUser.id },
+            read: false,
         },
-        data: {
-            read: true
-        }
+        data: { read: true },
     });
 
+    const otherUser = conversation.participants.find(
+        p => p.id !== currentUser.id
+    );
+
     return (
-        <div className="container mx-auto max-w-4xl h-[calc(100vh-4rem)] flex flex-col pt-4 pb-0 px-0 sm:px-4">
+        <div className="max-w-2xl mx-auto h-[calc(100vh-64px)] flex flex-col">
             <ChatWindow
-                conversationId={conversation.id}
-                initialMessages={conversation.messages}
-                currentUserId={user.id}
-                otherUser={{ id: otherUser.id, name: otherUser.name || '未知使用者' }}
+                conversationId={id}
+                initialMessages={messages}
+                currentUserId={currentUser.id}
+
+                otherUser={{
+                    id: otherUser?.id || '',
+                    name: otherUser?.name || otherUser?.email || '用戶',
+                    email: otherUser?.email || '',
+                }}
             />
         </div>
     );

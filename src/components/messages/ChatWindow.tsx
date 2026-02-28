@@ -1,146 +1,146 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { pusherClient } from '@/lib/pusher';
-import { Send, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 
 interface Message {
-    id: string;
-    content: string;
-    senderId: string;
-    createdAt: Date;
+  id: string;
+  content: string;
+  senderId: string;
+  createdAt: Date | string;
+  read: boolean;
+  sender?: { id: string; name: string | null };
+  pending?: boolean;
 }
 
-interface ChatWindowProps {
-    conversationId: string;
-    initialMessages: Message[];
-    currentUserId: string;
-    otherUser: { id: string; name: string };
+interface Props {
+  conversationId: string;
+  initialMessages: Message[];
+  currentUserId: string;
+  otherUser: { id: string; name: string | null; email: string };
 }
 
 export default function ChatWindow({
-    conversationId,
-    initialMessages,
-    currentUserId,
-    otherUser
-}: ChatWindowProps) {
-    const [messages, setMessages] = useState<Message[]>(initialMessages);
-    const [input, setInput] = useState('');
-    const [isSending, setIsSending] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+  conversationId,
+  initialMessages,
+  currentUserId,
+  otherUser,
+}: Props) {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-
-    useEffect(() => {
-        const channelName = `conversation-${conversationId}`;
-        const channel = pusherClient.subscribe(channelName);
-
-        channel.bind('new-message', (data: Message) => {
-            setMessages((prev) => {
-                if (prev.find((m) => m.id === data.id)) return prev;
-                return [...prev, data];
-            });
-        });
-
-        return () => {
-            pusherClient.unsubscribe(channelName);
-        };
-    }, [conversationId]);
-
-    const sendMessage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!input.trim() || isSending) return;
-
-        const content = input.trim();
-        setInput('');
-        setIsSending(true);
-
-        try {
-            const res = await fetch(`/api/conversations/${conversationId}/messages`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content }),
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to send message');
-            }
-        } catch (error) {
-            console.error(error);
-            // Revert input on error
-            setInput(content);
-        } finally {
-            setIsSending(false);
-        }
+  useEffect(() => {
+    const channel = pusherClient.subscribe(`conversation-${conversationId}`);
+    channel.bind('new-message', (data: Message) => {
+      setMessages(prev => {
+        if (prev.find(m => m.id === data.id)) return prev;
+        return [...prev, data];
+      });
+    });
+    return () => {
+      pusherClient.unsubscribe(`conversation-${conversationId}`);
     };
+  }, [conversationId]);
 
-    return (
-        <div className="flex flex-col h-full bg-white dark:bg-gray-950 rounded-xl shadow-sm border overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center gap-4 p-4 border-b bg-gray-50 dark:bg-gray-900">
-                <Link href="/messages" className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-full transition-colors">
-                    <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                </Link>
-                <div className="flex-1">
-                    <h2 className="font-bold text-gray-900 dark:text-gray-100">{otherUser.name}</h2>
-                </div>
-            </div>
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((message) => {
-                    const isMe = message.senderId === currentUserId;
-                    return (
-                        <div
-                            key={message.id}
-                            className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
-                        >
-                            <div
-                                className={`max-w-[75%] rounded-2xl px-4 py-2 ${isMe
-                                        ? 'bg-rose-500 text-white rounded-br-none'
-                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-none'
-                                    }`}
-                            >
-                                <p className="break-words text-sm">{message.content}</p>
-                                <span
-                                    className={`text-[10px] mt-1 block ${isMe ? 'text-rose-100' : 'text-gray-400 dark:text-gray-500'
-                                        }`}
-                                >
-                                    {new Date(message.createdAt).toLocaleTimeString('zh-TW', {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    })}
-                                </span>
-                            </div>
-                        </div>
-                    );
-                })}
-                <div ref={messagesEndRef} />
-            </div>
+  const handleSend = async () => {
+    if (!input.trim() || sending) return;
+    const content = input.trim();
+    setInput('');
+    const tempId = `temp-${Date.now()}`;
+    const tempMessage: Message = {
+      id: tempId,
+      content,
+      senderId: currentUserId,
+      createdAt: new Date(),
+      read: false,
+      pending: true,
+    };
+    setMessages(prev => [...prev, tempMessage]);
+    setSending(true);
+    try {
+      const res = await fetch(`/api/conversations/${conversationId}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      const real = await res.json();
+      setMessages(prev =>
+        prev.map(m => (m.id === tempId ? { ...real, pending: false } : m))
+      );
+    } catch {
+      setMessages(prev => prev.filter(m => m.id !== tempId));
+    } finally {
+      setSending(false);
+    }
+  };
 
-            {/* Input Area */}
-            <div className="p-4 border-t bg-white dark:bg-gray-950">
-                <form onSubmit={sendMessage} className="flex gap-2">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="輸入訊息..."
-                        className="flex-1 border dark:border-gray-800 bg-gray-50 dark:bg-gray-900 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
-                        disabled={isSending}
-                    />
-                    <button
-                        type="submit"
-                        disabled={!input.trim() || isSending}
-                        className="p-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center w-10 h-10"
-                    >
-                        <Send className="w-4 h-4" />
-                    </button>
-                </form>
-            </div>
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-white">
+        <button onClick={() => router.push('/messages')} className="text-gray-500 hover:text-gray-700">
+          ← 返回
+        </button>
+        <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">
+          {otherUser.name?.[0]?.toUpperCase() || '?'}
         </div>
-    );
+        <span className="font-medium text-gray-900">
+          {otherUser.name || otherUser.email}
+        </span>
+      </div>
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+        {messages.map(msg => {
+          const isMine = msg.senderId === currentUserId;
+          return (
+            <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-xs lg:max-w-md flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}>
+                <div className={`px-4 py-2 rounded-2xl text-sm ${
+                  isMine
+                    ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
+                    : 'bg-white text-gray-900 shadow-sm border border-gray-100'
+                }`}>
+                  {msg.content}
+                </div>
+                <span className="text-xs text-gray-400">
+                  {msg.pending ? '傳送中...' : new Date(msg.createdAt).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="px-4 py-3 border-t border-gray-200 bg-white flex gap-3 items-end">
+        <textarea
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="輸入訊息... (Enter 發送)"
+          rows={1}
+          className="flex-1 resize-none rounded-2xl border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 max-h-32"
+        />
+        <button
+          onClick={handleSend}
+          disabled={!input.trim() || sending}
+          className="w-10 h-10 rounded-full bg-rose-500 text-white flex items-center justify-center hover:bg-rose-600 transition-colors disabled:opacity-50"
+        >
+          ➤
+        </button>
+      </div>
+    </div>
+  );
 }

@@ -1,90 +1,40 @@
 import { getCurrentUser } from '@/infrastructure/auth/auth';
-import { prisma } from '@/infrastructure/db/prisma';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { zhTW } from 'date-fns/locale';
+import { prisma } from '@/infrastructure/db/prisma';
+import ConversationList from '@/components/messages/ConversationList';
 
 export default async function MessagesPage() {
-    const user = await getCurrentUser();
-
-    if (!user) {
-        redirect('/login');
-    }
+    const currentUser = await getCurrentUser();
+    if (!currentUser) redirect('/login');
 
     const conversations = await prisma.conversation.findMany({
-        where: {
-            participants: {
-                some: {
-                    id: user.id
-                }
-            }
-        },
+        where: { participants: { some: { id: currentUser.id } } },
         include: {
-            participants: true,
+            participants: { select: { id: true, name: true, email: true } },
             messages: {
-                orderBy: {
-                    createdAt: 'desc'
-                },
-                take: 1
+                orderBy: { createdAt: 'desc' },
+                take: 1,
+                select: { content: true, createdAt: true, read: true, senderId: true }
             }
         },
-        orderBy: {
-            updatedAt: 'desc'
-        }
+        orderBy: { updatedAt: 'desc' }
     });
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <h1 className="text-2xl font-bold mb-6">我的訊息</h1>
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-                {conversations.length === 0 ? (
-                    <div className="p-8 text-center text-gray-500">
-                        目前沒有對話紀錄。
-                    </div>
-                ) : (
-                    <div className="divide-y">
-                        {conversations.map(conversation => {
-                            const otherUser = conversation.participants.find(p => p.id !== user.id);
-                            const lastMessage = conversation.messages[0];
-                            const hasUnread = lastMessage &&
-                                !lastMessage.read &&
-                                lastMessage.senderId !== user.id;
-
-                            return (
-                                <Link
-                                    key={conversation.id}
-                                    href={`/messages/${conversation.id}`}
-                                    className="block p-4 hover:bg-gray-50 transition-colors"
-                                >
-                                    <div className="flex justify-between items-start mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <h3 className={`font-semibold ${hasUnread ? 'text-gray-900' : 'text-gray-700'}`}>
-                                                {otherUser?.name || '未知使用者'}
-                                            </h3>
-                                            {hasUnread && (
-                                                <span className="w-2.5 h-2.5 bg-rose-500 rounded-full inline-block"></span>
-                                            )}
-                                        </div>
-                                        {lastMessage && (
-                                            <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
-                                                {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true, locale: zhTW })}
-                                            </span>
-                                        )}
-                                    </div>
-                                    {lastMessage && (
-                                        <p className={`text-sm truncate ${hasUnread ? 'text-gray-900 font-medium' : 'text-gray-500'}`}>
-                                            {lastMessage.content.length > 50
-                                                ? `${lastMessage.content.substring(0, 50)}...`
-                                                : lastMessage.content}
-                                        </p>
-                                    )}
-                                </Link>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
+        <div className="max-w-2xl mx-auto px-4 py-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">私訊</h1>
+            {conversations.length === 0 ? (
+                <div className="text-center py-16 text-gray-500">
+                    <p className="text-4xl mb-4">💬</p>
+                    <p className="text-lg">還沒有任何對話</p>
+                    <p className="text-sm mt-2">去 KOL 頁面點擊「私訊」開始對話</p>
+                </div>
+            ) : (
+                <ConversationList
+                    conversations={conversations}
+                    currentUserId={currentUser.id}
+                />
+            )}
         </div>
     );
 }

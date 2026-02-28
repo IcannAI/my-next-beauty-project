@@ -1,61 +1,48 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+
+interface MessageButtonProps {
+    targetUserId: string;
+    isLoggedIn: boolean;
+}
 
 export default function MessageButton({
     targetUserId,
-    isLoggedIn
-}: {
-    targetUserId: string;
-    isLoggedIn: boolean;
-}) {
-    const [isLoading, setIsLoading] = useState(false);
+    isLoggedIn,
+}: MessageButtonProps) {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleMessage = async () => {
+    const handleClick = async () => {
         if (!isLoggedIn) {
             router.push('/login');
             return;
         }
-
-        setIsLoading(true);
+        setLoading(true);
         try {
             const res = await fetch('/api/conversations', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ targetUserId })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ targetUserId }),
             });
             const data = await res.json();
-
-            if (res.ok && data.id) {
-                // According to previous conversation, API returns conversation object directly or {id}
-                router.push(`/messages/${data.id}`);
-            } else if (res.ok && data.conversationId) {
-                router.push(`/messages/${data.conversationId}`);
-            } else {
-                console.error('Failed to create conversation', data);
-            }
-        } catch (e) {
-            console.error(e);
+            router.push(`/messages/${data.conversationId || data.id}`);
+        } catch (error) {
+            console.error(error);
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 
     return (
-        <Button
-            onClick={handleMessage}
-            disabled={isLoading}
-            variant="outline"
-            className="border-rose-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600 font-bold rounded-full gap-2 transition-all dark:border-rose-900 dark:hover:bg-rose-900/30"
+        <button
+            onClick={handleClick}
+            disabled={loading}
+            className="px-4 py-2 border border-rose-500 text-rose-500 rounded-full text-sm font-medium hover:bg-rose-50 transition-colors disabled:opacity-50"
         >
-            <MessageCircle className="w-4 h-4" />
-            私訊
-        </Button>
+            {loading ? '載入中...' : '💬 私訊'}
+        </button>
     );
 }

@@ -134,6 +134,7 @@ export default function ReviewSection({
                 productId={productId}
                 initialReviews={initialReviews}
                 totalCount={totalCount}
+                avgRating={currentAvg}
                 currentUserId={currentUserId}
             />
         </div>

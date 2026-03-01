@@ -1,8 +1,17 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import {
+    useState,
+    useEffect,
+    useRef,
+    useTransition,
+    useMemo,
+    useCallback,
+} from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ReviewCard from './ReviewCard';
 import ReviewSkeleton from './ReviewSkeleton';
+import RatingDistribution from './RatingDistribution';
 
 interface Review {
     id: string;
@@ -12,10 +21,17 @@ interface Review {
     user: { id: string; name: string | null };
 }
 
+interface DistributionItem {
+    rating: number;
+    count: number;
+    percent: number;
+}
+
 interface Props {
     productId: string;
     initialReviews: Review[];
     totalCount: number;
+    avgRating: number;
     currentUserId?: string;
 }
 
@@ -23,73 +39,156 @@ export default function ReviewList({
     productId,
     initialReviews,
     totalCount,
+    avgRating,
     currentUserId,
 }: Props) {
-    const [reviews, setReviews] = useState<Review[]>(initialReviews);
-    const [sort, setSort] = useState('latest');
-    const [filterRating, setFilterRating] = useState<number | null>(null);
-    const [page, setPage] = useState(0);
-    const [total, setTotal] = useState(totalCount);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
 
-    const fetchReviews = async (
-        newSort: string,
-        newFilter: number | null,
-        newPage: number
-    ) => {
+    // URL 狀態
+    const sort = searchParams.get('sort') || 'latest';
+    const filterRating = searchParams.get('rating')
+        ? parseInt(searchParams.get('rating')!)
+        : null;
+
+    // 本地狀態
+    const [reviews, setReviews] = useState<Review[]>(initialReviews);
+    const [total, setTotal] = useState(totalCount);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(initialReviews.length < totalCount);
+    const [distribution, setDistribution] = useState<DistributionItem[]>([]);
+    const [currentAvgRating, setCurrentAvgRating] = useState(avgRating);
+
+    // 無限捲動 ref
+    const loadMoreRef = useRef<HTMLDivElement>(null);
+
+    // 取得評分分佈
+    useEffect(() => {
+        fetch(`/api/products/${productId}/reviews/stats`)
+            .then(res => res.json())
+            .then(data => {
+                setDistribution(data.ratingDistribution || []);
+                setCurrentAvgRating(data.avgRating || avgRating);
+            })
+            .catch(() => { });
+    }, [productId, avgRating]);
+
+    // URL 變更時重新取得評論
+    useEffect(() => {
+        setPage(0);
         const params = new URLSearchParams({
-            sort: newSort,
-            page: String(newPage),
-            ...(newFilter ? { rating: String(newFilter) } : {}),
+            sort,
+            page: '0',
+            ...(filterRating ? { rating: String(filterRating) } : {}),
         });
-        const res = await fetch(
-            `/api/products/${productId}/reviews?${params}`
+        fetch(`/api/products/${productId}/reviews?${params}`)
+            .then(res => res.json())
+            .then(data => {
+                setReviews(data.reviews);
+                setTotal(data.total);
+                setHasMore(data.reviews.length < data.total);
+            })
+            .catch(() => { });
+    }, [sort, filterRating, productId]);
+
+    // 載入更多
+    const loadMore = useCallback(async () => {
+        if (isPending || !hasMore) return;
+        const nextPage = page + 1;
+        startTransition(async () => {
+            const params = new URLSearchParams({
+                sort,
+                page: String(nextPage),
+                ...(filterRating ? { rating: String(filterRating) } : {}),
+            });
+            const res = await fetch(
+                `/api/products/${productId}/reviews?${params}`
+            );
+            const data = await res.json();
+            setReviews(prev => [...prev, ...data.reviews]);
+            setPage(nextPage);
+            setHasMore(
+                reviews.length + data.reviews.length < data.total
+            );
+        });
+    }, [isPending, hasMore, page, sort, filterRating, productId, reviews.length]);
+
+    // IntersectionObserver 無限捲動
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasMore && !isPending) {
+                    loadMore();
+                }
+            },
+            { threshold: 0.1 }
         );
-        const data = await res.json();
-        setReviews(data.reviews);
-        setTotal(data.total);
-    };
+        const current = loadMoreRef.current;
+        if (current) observer.observe(current);
+        return () => {
+            if (current) observer.unobserve(current);
+        };
+    }, [hasMore, isPending, loadMore]);
 
-    const handleSortChange = (newSort: string) => {
-        setSort(newSort);
-        setPage(0);
-        startTransition(() => {
-            fetchReviews(newSort, filterRating, 0);
-        });
-    };
+    // URL 更新函式
+    const updateURL = useCallback(
+        (newSort: string, newRating: number | null) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('sort', newSort);
+            if (newRating) {
+                params.set('rating', String(newRating));
+            } else {
+                params.delete('rating');
+            }
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        },
+        [router, pathname, searchParams]
+    );
 
-    const handleFilterChange = (rating: number | null) => {
-        setFilterRating(rating);
-        setPage(0);
-        startTransition(() => {
-            fetchReviews(sort, rating, 0);
-        });
-    };
+    const handleSortChange = useCallback(
+        (newSort: string) => updateURL(newSort, filterRating),
+        [updateURL, filterRating]
+    );
 
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-        startTransition(() => {
-            fetchReviews(sort, filterRating, newPage);
-        });
-    };
+    const handleFilterChange = useCallback(
+        (rating: number | null) => updateURL(sort, rating),
+        [updateURL, sort]
+    );
 
-    const handleDelete = (reviewId: string) => {
+    const handleDelete = useCallback((reviewId: string) => {
         setReviews(prev => prev.filter(r => r.id !== reviewId));
         setTotal(prev => prev - 1);
-    };
+    }, []);
 
-    const totalPages = Math.ceil(total / 10);
+    // 排序按鈕 memo
+    const sortButtons = useMemo(
+        () => [
+            { value: 'latest', label: '最新' },
+            { value: 'highest', label: '最高分' },
+            { value: 'lowest', label: '最低分' },
+        ],
+        []
+    );
 
     return (
         <div>
-            {/* 排序和篩選 */}
+            {/* 評分分佈圖 */}
+            {distribution.length > 0 && (
+                <RatingDistribution
+                    avgRating={currentAvgRating}
+                    totalCount={total}
+                    distribution={distribution}
+                    onFilterChange={handleFilterChange}
+                    activeFilter={filterRating}
+                />
+            )}
+
+            {/* 排序按鈕 */}
             <div className="flex flex-wrap gap-2 mb-4">
                 <div className="flex gap-2">
-                    {[
-                        { value: 'latest', label: '最新' },
-                        { value: 'highest', label: '最高分' },
-                        { value: 'lowest', label: '最低分' },
-                    ].map(option => (
+                    {sortButtons.map(option => (
                         <button
                             key={option.value}
                             onClick={() => handleSortChange(option.value)}
@@ -102,6 +201,8 @@ export default function ReviewList({
                         </button>
                     ))}
                 </div>
+
+                {/* 星級篩選 */}
                 <div className="flex gap-1">
                     <button
                         onClick={() => handleFilterChange(null)}
@@ -127,12 +228,30 @@ export default function ReviewList({
                 </div>
             </div>
 
+            {/* 目前篩選狀態提示 */}
+            {filterRating && (
+                <div className="flex items-center gap-2 mb-3 text-sm text-gray-500">
+                    <span>篩選：{filterRating} 星評論</span>
+                    <button
+                        onClick={() => handleFilterChange(null)}
+                        className="text-rose-500 hover:underline text-xs"
+                    >
+                        清除篩選
+                    </button>
+                </div>
+            )}
+
             {/* 評論列表 */}
-            {isPending ? (
+            {isPending && reviews.length === 0 ? (
                 <ReviewSkeleton />
             ) : reviews.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
-                    <p>還沒有評論</p>
+                    <p className="text-3xl mb-2">💬</p>
+                    <p>
+                        {filterRating
+                            ? `還沒有 ${filterRating} 星評論`
+                            : '還沒有評論，成為第一個評論的人吧！'}
+                    </p>
                 </div>
             ) : (
                 <div className="space-y-3">
@@ -145,29 +264,20 @@ export default function ReviewList({
                             onDelete={handleDelete}
                         />
                     ))}
-                </div>
-            )}
 
-            {/* 分頁 */}
-            {totalPages > 1 && (
-                <div className="flex justify-center gap-2 mt-6">
-                    <button
-                        onClick={() => handlePageChange(page - 1)}
-                        disabled={page === 0}
-                        className="px-3 py-1 rounded-lg text-sm border border-gray-200 disabled:opacity-50 hover:bg-gray-50"
-                    >
-                        上一頁
-                    </button>
-                    <span className="px-3 py-1 text-sm text-gray-600">
-                        {page + 1} / {totalPages}
-                    </span>
-                    <button
-                        onClick={() => handlePageChange(page + 1)}
-                        disabled={page >= totalPages - 1}
-                        className="px-3 py-1 rounded-lg text-sm border border-gray-200 disabled:opacity-50 hover:bg-gray-50"
-                    >
-                        下一頁
-                    </button>
+                    {/* 無限捲動觸發點 */}
+                    <div ref={loadMoreRef} className="py-2">
+                        {isPending && hasMore && (
+                            <div className="flex justify-center py-4">
+                                <div className="w-6 h-6 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
+                            </div>
+                        )}
+                        {!hasMore && reviews.length > 0 && (
+                            <p className="text-center text-xs text-gray-400 py-2">
+                                已顯示全部 {total} 則評論
+                            </p>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

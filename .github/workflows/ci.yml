@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          
+
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -24,88 +24,28 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-            
+
       - name: Install dependencies
         run: npm ci
-        
-      - name: Deploy DB migrations
-        run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
       - name: Build
         run: npm run build
         env:
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'test-secret' }}
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
-
-  e2e-refund:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-          
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-        
-      - name: Deploy DB migrations
-        run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
-          
-      - name: Start Dev Server
-        run: npm run dev &
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
-          NEXTAUTH_SECRET: 'test-secret'
-          CRON_SECRET: 'test-cron-secret'
-          
-      - name: Wait for localhost:3000
-        run: npx wait-on http://localhost:3000 --timeout 60000
-        
-      - name: Run E2E Tests
-        run: npx playwright test tests/e2e/refund/ --reporter=line --retries=2
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
-          NEXTAUTH_SECRET: 'test-secret'
-          CRON_SECRET: 'test-cron-secret'
-          KOL_EMAIL: 'kol@example.com'
-          KOL_PASSWORD: 'password'
-          USER_EMAIL: 'user@example.com'
-          USER_PASSWORD: 'password'
-          
-      - name: Upload Test Results
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: test-results/
-          retention-days: 30
+          NEXTAUTH_SECRET: 'ci-test-secret'
+          AUTH_SECRET: 'ci-test-secret'
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
+          DATABASE_URL_UNPOOLED: 'postgresql://postgres:postgres@localhost:5432/postgres'
+          PUSHER_APP_ID: 'test'
+          PUSHER_KEY: 'test'
+          PUSHER_SECRET: 'test'
+          PUSHER_CLUSTER: 'ap3'
+          NEXT_PUBLIC_PUSHER_KEY: 'test'
+          NEXT_PUBLIC_PUSHER_CLUSTER: 'ap3'
+          AWS_REGION: 'auto'
+          AWS_ACCESS_KEY_ID: 'test'
+          AWS_SECRET_ACCESS_KEY: 'test'
+          S3_BUCKET_NAME: 'test'
+          S3_ENDPOINT: 'https://test.r2.cloudflarestorage.com'

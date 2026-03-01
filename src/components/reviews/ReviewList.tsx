@@ -107,11 +107,12 @@ export default function ReviewList({
                 `/api/products/${productId}/reviews?${params}`
             );
             const data = await res.json();
-            setReviews(prev => [...prev, ...data.reviews]);
+            setReviews(prev => {
+                const updated = [...prev, ...data.reviews];
+                setHasMore(updated.length < data.total);
+                return updated;
+            });
             setPage(nextPage);
-            setHasMore(
-                reviews.length + data.reviews.length < data.total
-            );
         });
     }, [isPending, hasMore, page, sort, filterRating, productId, reviews.length]);
 
@@ -193,8 +194,8 @@ export default function ReviewList({
                             key={option.value}
                             onClick={() => handleSortChange(option.value)}
                             className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${sort === option.value
-                                    ? 'bg-rose-500 text-white'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                ? 'bg-rose-500 text-white'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
                             {option.label}
@@ -207,8 +208,8 @@ export default function ReviewList({
                     <button
                         onClick={() => handleFilterChange(null)}
                         className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${filterRating === null
-                                ? 'bg-rose-500 text-white'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-rose-500 text-white'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                             }`}
                     >
                         全部
@@ -218,8 +219,8 @@ export default function ReviewList({
                             key={r}
                             onClick={() => handleFilterChange(r)}
                             className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${filterRating === r
-                                    ? 'bg-rose-500 text-white'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                ? 'bg-rose-500 text-white'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
                             {r}★

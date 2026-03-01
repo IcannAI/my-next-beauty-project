@@ -1,22 +1,18 @@
 name: CI
-
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -24,28 +20,23 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
       - name: Build
         run: npm run build
         env:
-          NEXTAUTH_SECRET: 'ci-test-secret'
-          AUTH_SECRET: 'ci-test-secret'
-          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
-          DATABASE_URL_UNPOOLED: 'postgresql://postgres:postgres@localhost:5432/postgres'
-          PUSHER_APP_ID: 'test'
-          PUSHER_KEY: 'test'
-          PUSHER_SECRET: 'test'
-          PUSHER_CLUSTER: 'ap3'
-          NEXT_PUBLIC_PUSHER_KEY: 'test'
-          NEXT_PUBLIC_PUSHER_CLUSTER: 'ap3'
-          AWS_REGION: 'auto'
-          AWS_ACCESS_KEY_ID: 'test'
-          AWS_SECRET_ACCESS_KEY: 'test'
-          S3_BUCKET_NAME: 'test'
-          S3_ENDPOINT: 'https://test.r2.cloudflarestorage.com'
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          PUSHER_APP_ID: ${{ secrets.PUSHER_APP_ID }}
+          PUSHER_KEY: ${{ secrets.PUSHER_KEY }}
+          PUSHER_SECRET: ${{ secrets.PUSHER_SECRET }}
+          PUSHER_CLUSTER: ${{ secrets.PUSHER_CLUSTER }}
+          NEXT_PUBLIC_PUSHER_KEY: ${{ secrets.NEXT_PUBLIC_PUSHER_KEY }}
+          NEXT_PUBLIC_PUSHER_CLUSTER: ${{ secrets.NEXT_PUBLIC_PUSHER_CLUSTER }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}

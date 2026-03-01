@@ -29,6 +29,7 @@ export default function Navbar() {
 
   const kolItems = (user?.role === 'KOL' || user?.role === 'ADMIN') ? [
     { label: '直播管理', href: '/dashboard/live', icon: LayoutDashboard },
+    { label: '產品管理', href: '/dashboard/products', icon: ShoppingBag },
     { label: '分潤紀錄', href: '/dashboard/settlement', icon: DollarSign },
   ] : [];
 

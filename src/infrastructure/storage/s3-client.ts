@@ -23,7 +23,7 @@ export async function uploadEvidenceFile(
   }
 
   const key = `evidence/${Date.now()}-${fileName}`;
-  
+
   const command = new PutObjectCommand({
     Bucket: bucketName,
     Key: key,
@@ -34,6 +34,62 @@ export async function uploadEvidenceFile(
   await s3Client.send(command);
 
   // Return the public URL using R2 format
+  return `${endpoint}/${bucketName}/${key}`;
+}
+export async function uploadProductImage(
+  file: Buffer,
+  fileName: string,
+  mimeType: string
+): Promise<string> {
+  if (!bucketName) {
+    throw new Error('S3_BUCKET_NAME is not defined');
+  }
+
+  // 統一輸出 webp，產生唯一檔名
+  const ext = mimeType === 'image/webp' ? 'webp'
+    : mimeType === 'image/png' ? 'png' : 'jpg';
+  const key = `products/${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}.${ext}`;
+
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    Body: file,
+    ContentType: mimeType,
+    // 設定公開讀取
+    Metadata: {
+      'uploaded-by': 'beauty-commerce',
+    },
+  });
+
+  await s3Client.send(command);
+  return `${endpoint}/${bucketName}/${key}`;
+}
+
+export async function uploadKolAvatar(
+  file: Buffer,
+  fileName: string,
+  mimeType: string
+): Promise<string> {
+  if (!bucketName) {
+    throw new Error('S3_BUCKET_NAME is not defined');
+  }
+
+  const ext = mimeType === 'image/webp' ? 'webp'
+    : mimeType === 'image/png' ? 'png' : 'jpg';
+  const key = `avatars/${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}.${ext}`;
+
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    Body: file,
+    ContentType: mimeType,
+  });
+
+  await s3Client.send(command);
   return `${endpoint}/${bucketName}/${key}`;
 }
 

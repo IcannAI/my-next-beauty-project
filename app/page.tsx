@@ -1,4 +1,5 @@
 import { prisma } from '@/infrastructure/db/prisma';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -148,10 +149,16 @@ export default async function Home() {
               <Card key={product.id} className="group overflow-hidden rounded-[2.5rem] border-none bg-gray-50 shadow-lg shadow-gray-100 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-100 dark:bg-gray-800 dark:shadow-none">
                 <CardHeader className="p-0 aspect-square bg-white relative overflow-hidden dark:bg-gray-700">
                   {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center">
-                      <ShoppingBag className="h-16 w-16 text-gray-200 dark:text-gray-600" />
+                    <div className="flex h-full w-full items-center justify-center text-gray-400">
+                      <span className="text-4xl">🛍️</span>
                     </div>
                   )}
                   <div className="absolute top-6 left-6">

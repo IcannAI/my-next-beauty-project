@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
@@ -94,11 +95,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
           {/* Left: Product Image */}
           <div className="space-y-6">
-            <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-[3rem] overflow-hidden flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-2xl shadow-gray-200/50">
+            <div className="relative aspect-square bg-gray-50 dark:bg-gray-900 rounded-[3rem] overflow-hidden flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-2xl shadow-gray-200/50">
               {product.imageUrl ? (
-                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                <Image
+                  src={product.imageUrl}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 700px"
+                />
               ) : (
-                <ShoppingBag className="w-24 h-24 text-gray-200 dark:text-gray-700" />
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <span className="text-5xl">🛍️</span>
+                </div>
               )}
             </div>
           </div>

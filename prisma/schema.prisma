@@ -53,6 +53,7 @@ model KolProfile {
   liveStreams  LiveStream[]
   products     Product[]
   createdAt    DateTime     @default(now())
+  avatarUrl    String?
 }
 
 model Product {

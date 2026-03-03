@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { pusherClient } from '@/lib/pusher';
 import { formatMessageTime, formatDateGroup, shouldShowDateDivider, shouldShowTime } from '@/lib/messageUtils';
+import Avatar from '@/components/shared/Avatar';
 
 interface Message {
   id: string;
@@ -20,7 +21,7 @@ interface Props {
   initialMessages: Message[];
   currentUserId: string;
   currentUserName: string;
-  otherUser: { id: string; name: string | null; email: string };
+  otherUser: { id: string; name: string | null; email: string; avatarUrl?: string | null };
 }
 
 export default function ChatWindow({
@@ -145,9 +146,11 @@ export default function ChatWindow({
         <button onClick={() => router.push('/messages')} className="text-gray-500 hover:text-gray-700">
           ← 返回
         </button>
-        <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">
-          {otherUser.name?.[0]?.toUpperCase() || '?'}
-        </div>
+        <Avatar
+          avatarUrl={otherUser.avatarUrl}
+          name={otherUser.name}
+          size={36}
+        />
         <span className="font-medium text-gray-900">
           {otherUser.name || otherUser.email}
         </span>
@@ -176,8 +179,8 @@ export default function ChatWindow({
               <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-1`}>
                 <div className={`max-w-xs lg:max-w-md flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}>
                   <div className={`px-4 py-2 rounded-2xl text-sm ${isMine
-                      ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
-                      : 'bg-white text-gray-900 shadow-sm border border-gray-100'
+                    ? `bg-rose-500 text-white ${msg.pending ? 'opacity-60' : ''}`
+                    : 'bg-white text-gray-900 shadow-sm border border-gray-100'
                     }`}>
                     {msg.content}
                   </div>

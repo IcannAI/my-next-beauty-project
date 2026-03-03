@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Avatar from '@/components/shared/Avatar'
+import ImageUploader from '@/components/ui/ImageUploader'
 import { Badge } from '@/components/ui/badge'
 import { Video, BarChart3, TrendingUp, DollarSign, Package, AlertCircle } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
@@ -14,9 +15,11 @@ type KolProfileWithData = {
   userId: string
   bio: string | null
   commissionRate: number
+  avatarUrl?: string | null;
   user: {
     name: string | null
     email: string
+    image: string | null
   }
   liveStreams: Array<{
     id: string
@@ -74,31 +77,43 @@ export default function KolProfileEditor({ profile, isAdmin }: { profile: KolPro
         {/* Profile Header Editor */}
         <section className="flex flex-col items-center text-center md:text-left md:flex-row md:items-start gap-10 mb-20 border-2 border-orange-500/20 rounded-[3rem] p-10 bg-white dark:bg-gray-900/50 shadow-2xl shadow-orange-100">
           <div className="relative group">
-            <Avatar className="w-40 h-40 border-4 border-white dark:border-gray-900 shadow-2xl relative">
-              <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.user.name}`} />
-              <AvatarFallback className="text-4xl font-black bg-rose-50 text-rose-500">
-                {profile.user.name?.[0]}
-              </AvatarFallback>
-            </Avatar>
+            <Avatar
+              avatarUrl={profile.user.image}
+              name={profile.user.name}
+              size={160}
+              priority={true}
+            />
+            <div className="mt-4">
+              <ImageUploader
+                onUpload={async (url) => {
+                  router.refresh();
+                }}
+                uploadEndpoint="/api/kol/upload-avatar"
+                currentImageUrl={profile.user.image ?? undefined}
+                aspectRatio="square"
+                maxSizeMB={2}
+                label="更換頭像"
+              />
+            </div>
           </div>
-          
+
           <div className="flex-1 w-full space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter italic">
                 {profile.user.name}
               </h1>
-              <Button 
-                onClick={handleSave} 
+              <Button
+                onClick={handleSave}
                 disabled={isSaving}
                 className="rounded-full px-12 py-6 h-auto bg-rose-500 hover:bg-rose-600 text-white font-black shadow-xl shadow-rose-200 transition-all active:scale-95 disabled:opacity-50"
               >
                 {isSaving ? '儲存中...' : '儲存變更'}
               </Button>
             </div>
-            
+
             <div className="space-y-3">
               <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">個人簡介</label>
-              <Textarea 
+              <Textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 placeholder="寫點什麼來吸引粉絲吧..."
@@ -144,7 +159,7 @@ export default function KolProfileEditor({ profile, isAdmin }: { profile: KolPro
               </div>
             ) : (
               profile.liveStreams.map(stream => (
-                <div 
+                <div
                   key={stream.id}
                   className="group flex items-center justify-between p-8 bg-white dark:bg-gray-900 border-2 border-transparent hover:border-rose-500/20 rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-500"
                 >
@@ -157,12 +172,12 @@ export default function KolProfileEditor({ profile, isAdmin }: { profile: KolPro
                       {new Date(stream.createdAt).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
                   </div>
-                  
+
                   <Badge className={`
                     rounded-full px-6 py-2 text-[10px] font-black tracking-[0.15em] uppercase border-none
-                    ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' : 
-                      stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : 
-                      'bg-orange-50 text-orange-600'}
+                    ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' :
+                      stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' :
+                        'bg-orange-50 text-orange-600'}
                   `}>
                     {stream.status}
                   </Badge>

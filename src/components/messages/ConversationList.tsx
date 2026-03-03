@@ -1,11 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Avatar from '@/components/shared/Avatar';
 
 interface Participant {
   id: string;
   name: string | null;
   email: string;
+  kolProfile?: {
+    avatarUrl: string | null;
+  } | null;
 }
 
 interface LastMessage {
@@ -47,9 +51,11 @@ export default function ConversationList({ conversations, currentUserId }: Props
             onClick={() => router.push(`/messages/${conv.id}`)}
             className="flex items-center gap-4 p-4 hover:bg-rose-50 cursor-pointer transition-colors"
           >
-            <div className="w-12 h-12 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-              {other?.name?.[0]?.toUpperCase() || '?'}
-            </div>
+            <Avatar
+              avatarUrl={other?.kolProfile?.avatarUrl}
+              name={other?.name}
+              size={48}
+            />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className={`font-medium ${unread ? 'text-gray-900' : 'text-gray-700'}`}>

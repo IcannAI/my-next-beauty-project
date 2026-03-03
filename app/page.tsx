@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Avatar from '@/components/shared/Avatar';
 import { Video, User, ArrowRight, PlayCircle } from 'lucide-react';
 import StarRating from '@/components/reviews/StarRating';
 
@@ -13,8 +13,9 @@ export default async function Home() {
     where: { status: 'LIVE' },
     include: {
       kolProfile: {
-        include: {
-          user: true,
+        select: {
+          avatarUrl: true,
+          user: { select: { id: true, name: true } },
         },
       },
     },
@@ -105,10 +106,11 @@ export default async function Home() {
                 </CardHeader>
                 <CardContent className="p-8">
                   <div className="mb-6 flex items-center gap-4">
-                    <Avatar className="h-12 w-12 border-2 border-rose-500/20">
-                      <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${stream.kolProfile.user.name}`} />
-                      <AvatarFallback>{stream.kolProfile.user.name?.[0]}</AvatarFallback>
-                    </Avatar>
+                    <Avatar
+                      avatarUrl={stream.kolProfile.avatarUrl}
+                      name={stream.kolProfile.user.name}
+                      size={48}
+                    />
                     <div className="space-y-1">
                       <p className="text-xs font-black uppercase tracking-widest text-rose-500">KOL Host</p>
                       <p className="font-bold text-gray-900 dark:text-white">{stream.kolProfile.user.name}</p>

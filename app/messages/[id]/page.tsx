@@ -21,7 +21,16 @@ export default async function ConversationPage({
             participants: { some: { id: currentUser.id } }
         },
         include: {
-            participants: { select: { id: true, name: true, email: true } }
+            participants: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    kolProfile: {
+                        select: { avatarUrl: true }
+                    }
+                }
+            }
         }
     });
 
@@ -64,6 +73,7 @@ export default async function ConversationPage({
                         id: otherUser?.id || '',
                         name: otherUser?.name || null,
                         email: otherUser?.email || '',
+                        avatarUrl: (otherUser as any)?.kolProfile?.avatarUrl || null,
                     }}
                 />
             </Suspense>

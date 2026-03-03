@@ -12,7 +12,16 @@ export async function GET(request: NextRequest) {
     const conversations = await prisma.conversation.findMany({
         where: { participants: { some: { id: currentUser.id } } },
         include: {
-            participants: { select: { id: true, name: true, email: true } },
+            participants: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    kolProfile: {
+                        select: { avatarUrl: true }
+                    }
+                }
+            },
             messages: {
                 orderBy: { createdAt: 'desc' },
                 take: 1,

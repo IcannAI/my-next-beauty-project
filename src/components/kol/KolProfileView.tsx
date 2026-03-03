@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Avatar from '@/components/shared/Avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Video, BarChart3 } from 'lucide-react';
@@ -13,9 +13,11 @@ type KolProfileWithData = {
   userId: string
   bio: string | null
   commissionRate: number
+  avatarUrl?: string | null;
   user: {
     name: string | null
     email: string
+    image: string | null
   }
   liveStreams: Array<{
     id: string
@@ -45,12 +47,12 @@ export default function KolProfileView({
         <section className="flex flex-col items-center text-center md:text-left md:flex-row md:items-start gap-10 mb-20">
           <div className="relative group">
             <div className="absolute -inset-1.5 bg-gradient-to-tr from-rose-500 to-orange-400 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-            <Avatar className="w-40 h-40 border-4 border-white dark:border-gray-900 shadow-2xl relative">
-              <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.user.name}`} />
-              <AvatarFallback className="text-4xl font-black bg-rose-500 text-white">
-                {profile.user.name?.[0]}
-              </AvatarFallback>
-            </Avatar>
+            <Avatar
+              avatarUrl={profile.user.image}
+              name={profile.user.name}
+              size={160}
+              priority={true}
+            />
           </div>
 
           <div className="flex-1 flex flex-col justify-center">

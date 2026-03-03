@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
         name: k.user.name,
         bio: k.bio,
         userId: k.userId,
+        avatarUrl: k.avatarUrl,
       })),
       lives: lives.map(l => ({
         id: l.id,

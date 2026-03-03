@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Avatar from '@/components/shared/Avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Search, Users, Video, Newspaper, Loader2, User, Settings, ExternalLink, ShoppingBag } from 'lucide-react'
@@ -20,7 +20,7 @@ import StarRating from '@/components/reviews/StarRating'
 
 
 type SearchData = {
-  kols: Array<{ id: string; name: string; bio: string | null; userId: string }>
+  kols: Array<{ id: string; name: string; bio: string | null; userId: string; avatarUrl: string | null }>
   lives: Array<{ id: string; title: string; status: string; kolName: string }>
   articles: Array<any>
   users: Array<{ id: string; name: string; email: string }>
@@ -144,10 +144,11 @@ function SearchPageContent() {
                 {data.kols.map(kol => (
                   <Card key={kol.id} className="group rounded-[2.5rem] border-none shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden bg-white">
                     <CardContent className="p-8 flex items-center gap-6">
-                      <Avatar className="w-20 h-20 border-2 border-rose-100">
-                        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${kol.name}`} />
-                        <AvatarFallback>{kol.name[0]}</AvatarFallback>
-                      </Avatar>
+                      <Avatar
+                        avatarUrl={kol.avatarUrl}
+                        name={kol.name}
+                        size={80}
+                      />
                       <div className="flex-1 min-w-0">
                         <h3 className="text-2xl font-black text-gray-900 tracking-tight italic" dangerouslySetInnerHTML={{ __html: highlight(kol.name) }} />
                         <p className="text-gray-500 font-medium line-clamp-1 mt-1" dangerouslySetInnerHTML={{ __html: highlight(kol.bio) }} />

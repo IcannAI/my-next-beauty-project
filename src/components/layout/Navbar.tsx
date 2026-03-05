@@ -5,12 +5,11 @@ import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useState, useRef, useEffect } from 'react';
 import {
   Video, Search, ShoppingBag, LayoutDashboard,
   Settings, LogIn, LogOut, Bell, DollarSign,
-  Users, ExternalLink, Heart, MessageCircle, PlayCircle,
-  ChevronDown
+  Users, ExternalLink, Heart, MessageCircle,
+  PlayCircle, ShoppingCart
 } from 'lucide-react';
 import UnreadBadge from '@/components/messages/UnreadBadge';
 import MessageNotifier from '@/components/messages/MessageNotifier';
@@ -27,150 +26,83 @@ export default function Navbar() {
   ];
 
   const loggedInItems = session ? [
-    { label: '我的訂單', href: '/orders', icon: ShoppingBag },
-    { label: '我的收藏', href: '/favorites', icon: Heart },
+    { label: '訂單', href: '/orders', icon: ShoppingBag },
+    { label: '收藏', href: '/favorites', icon: Heart },
     { label: '通知', href: '/notifications', icon: Bell },
     { label: '私訊', href: '/messages', icon: MessageCircle },
   ] : [];
 
   const kolItems = (user?.role === 'KOL' || user?.role === 'ADMIN') ? [
-    { label: '直播管理', href: '/dashboard/live', icon: LayoutDashboard },
-    { label: '產品管理', href: '/dashboard/products', icon: ShoppingBag },
-    { label: '分潤紀錄', href: '/dashboard/settlement', icon: DollarSign },
+    { label: '直播', href: '/dashboard/live', icon: LayoutDashboard },
+    { label: '產品', href: '/dashboard/products', icon: ShoppingBag },
+    { label: '分潤', href: '/dashboard/settlement', icon: DollarSign },
   ] : [];
 
   const adminItems = user?.role === 'ADMIN' ? [
-    { label: '用戶管理', href: '/admin/users', icon: Users },
-    { label: '後台審核', href: '/admin/refund', icon: Settings },
-    {
-      label: 'Datadog',
-      href: 'https://app.datadoghq.com',
-      icon: ExternalLink,
-      external: true,
-    },
+    { label: '用戶', href: '/admin/users', icon: Users },
+    { label: '審核', href: '/admin/refund', icon: Settings },
+    { label: 'DD', href: 'https://app.datadoghq.com', icon: ExternalLink, external: true },
   ] : [];
 
-  const mainItems = [...publicItems, ...loggedInItems];
-
-  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
-  const adminMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (adminMenuRef.current && !adminMenuRef.current.contains(e.target as Node)) {
-        setAdminMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+  const allItems = [...publicItems, ...loggedInItems, ...kolItems, ...adminItems];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between gap-4">
+      <div className="max-w-screen-2xl mx-auto px-4">
+        <div className="flex h-16 items-center gap-3">
           {/* Logo */}
-          <div className="flex items-center gap-4 flex-1 min-w-0 overflow-hidden">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500 shadow-lg shadow-rose-500/20">
-                <Video className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-black italic tracking-tighter text-white">
-                BEAUTY<span className="text-rose-500">LIVE</span>
-              </span>
-            </Link>
-
-            {/* 桌機導航連結 */}
-            <div className="hidden lg:flex lg:items-center lg:gap-0.5 overflow-x-auto scrollbar-none">
-              {mainItems.map((item: any) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap',
-                    pathname === item.href
-                      ? 'bg-white/10 text-rose-500'
-                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                  {item.href === '/messages' && session?.user && (
-                    <div className="relative">
-                      <MessageNotifier currentUserId={user?.id} />
-                      <UnreadBadge currentUserId={user?.id} />
-                    </div>
-                  )}
-                </Link>
-              ))}
-
-              {(kolItems.length > 0 || adminItems.length > 0) && (
-                <div className="relative" ref={adminMenuRef}>
-                  <button
-                    onClick={() => setAdminMenuOpen(v => !v)}
-                    className={cn(
-                      'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap',
-                      (kolItems.some(i => pathname.startsWith(i.href)) ||
-                        adminItems.some(i => pathname.startsWith(i.href)))
-                        ? 'bg-white/10 text-rose-500'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                    )}
-                  >
-                    <Settings className="h-4 w-4" />
-                    後台管理
-                    <ChevronDown className={cn(
-                      'h-3 w-3 transition-transform',
-                      adminMenuOpen && 'rotate-180'
-                    )} />
-                  </button>
-                  {adminMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-gray-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
-                      {[...kolItems, ...adminItems].map((item: any) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          target={item.external ? '_blank' : undefined}
-                          onClick={() => setAdminMenuOpen(false)}
-                          className={cn(
-                            'flex items-center gap-3 px-4 py-3 text-sm font-bold transition-colors',
-                            pathname === item.href
-                              ? 'bg-white/10 text-rose-500'
-                              : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                          )}
-                        >
-                          <item.icon className="h-4 w-4" />
-                          {item.label}
-                          {item.external && <ExternalLink className="h-3 w-3 ml-auto opacity-50" />}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500 shadow-lg shadow-rose-500/20">
+              <Video className="h-5 w-5 text-white" />
             </div>
+            <span className="text-xl font-black italic tracking-tighter text-white hidden sm:block">
+              BEAUTY<span className="text-rose-500">LIVE</span>
+            </span>
+          </Link>
+
+          {/* 桌機導航連結 */}
+          <div className="hidden lg:flex lg:items-center lg:gap-0.5 flex-1 overflow-x-auto scrollbar-none">
+            {allItems.map((item: any) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                className={cn(
+                  'relative flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition-all whitespace-nowrap flex-shrink-0',
+                  pathname === item.href || (!item.external && pathname.startsWith(item.href) && item.href !== '/')
+                    ? 'bg-white/10 text-rose-500'
+                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                )}
+              >
+                <item.icon className="h-3.5 w-3.5 flex-shrink-0" />
+                {item.label}
+                {item.href === '/messages' && session?.user && (
+                  <div className="relative">
+                    <MessageNotifier currentUserId={user?.id} />
+                    <UnreadBadge currentUserId={user?.id} />
+                  </div>
+                )}
+                {item.external && <ExternalLink className="h-3 w-3 opacity-50" />}
+              </Link>
+            ))}
           </div>
 
-          {/* 右側登入/登出 */}
-          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+          {/* 右側 */}
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
             {status === 'loading' ? (
-              <div className="h-9 w-24 animate-pulse rounded-full bg-white/5" />
+              <div className="h-8 w-20 animate-pulse rounded-full bg-white/5" />
             ) : session ? (
-              <div className="flex items-center gap-4">
-                <div className="hidden flex-col items-end md:flex">
-                  <span className="text-xs font-black uppercase tracking-widest text-gray-500">
-                    Welcome
-                  </span>
-                  <span className="text-sm font-bold text-white">
-                    {session.user?.name}
-                  </span>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="hidden xl:block text-sm font-bold text-white">
+                  {session.user?.name}
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => signOut()}
-                  className="rounded-full border border-white/10 font-bold text-gray-400 hover:bg-rose-500 hover:text-white"
+                  className="rounded-full border border-white/10 text-xs font-bold text-gray-400 hover:bg-rose-500 hover:text-white px-3"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut className="h-3.5 w-3.5 mr-1.5" />
                   登出
                 </Button>
               </div>
@@ -178,10 +110,10 @@ export default function Navbar() {
               <Button
                 asChild
                 size="sm"
-                className="rounded-full bg-rose-500 font-bold text-white hover:bg-rose-600"
+                className="rounded-full bg-rose-500 text-xs font-bold text-white hover:bg-rose-600 px-3"
               >
                 <Link href="/login">
-                  <LogIn className="mr-2 h-4 w-4" />
+                  <LogIn className="h-3.5 w-3.5 mr-1.5" />
                   登入
                 </Link>
               </Button>

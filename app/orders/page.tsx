@@ -2,6 +2,8 @@ import { prisma } from '@/infrastructure/db/prisma';
 import { getCurrentUser } from '@/infrastructure/auth/auth';
 import { OrdersList } from './OrdersList';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+import CheckoutSuccess from './CheckoutSuccess';
 
 export default async function OrdersPage() {
   const user = await getCurrentUser();
@@ -37,6 +39,10 @@ export default async function OrdersPage() {
             {isAdmin ? 'System-wide Order Monitoring' : 'Purchase History & Refunds'}
           </p>
         </header>
+
+        <Suspense fallback={null}>
+          <CheckoutSuccess />
+        </Suspense>
 
         <section className="mb-12 p-8 bg-rose-500 rounded-[2.5rem] shadow-2xl shadow-rose-200 dark:shadow-none text-white overflow-hidden relative group">
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>

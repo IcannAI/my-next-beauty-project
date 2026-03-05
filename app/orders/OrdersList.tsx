@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
-import { ShoppingBag } from 'lucide-react'
+import { ShoppingBag, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
@@ -29,6 +29,27 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
   const [reason, setReason] = useState('')
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [confirming, setConfirming] = useState<string | null>(null);
+
+  const handleConfirm = async (orderId: string) => {
+    if (!confirm('確認已收到商品？確認後可申請退款。')) return;
+    setConfirming(orderId);
+    try {
+      const res = await fetch(`/api/orders/${orderId}/confirm`, {
+        method: 'PATCH',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || '操作失敗');
+        return;
+      }
+      window.location.reload();
+    } catch {
+      alert('操作失敗，請重試');
+    } finally {
+      setConfirming(null);
+    }
+  };
 
   const toggle = (id: string) =>
     setSelected(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
@@ -166,13 +187,23 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
                     {o.status}
                   </span>
                   {o.status === 'PENDING' && !isAdmin && (
-                    <p className="text-[10px] text-yellow-600 dark:text-yellow-400 font-bold mt-1">
-                      訂單處理中，完成後可申請退款
-                    </p>
+                    <div className="mt-3 flex items-center gap-2">
+                      <p className="text-[10px] text-yellow-600 dark:text-yellow-400 font-bold">
+                        訂單處理中
+                      </p>
+                      <button
+                        onClick={() => handleConfirm(o.id)}
+                        disabled={confirming === o.id}
+                        className="flex items-center gap-1 px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-[10px] font-black rounded-full transition-colors disabled:opacity-50"
+                      >
+                        <Check className="w-3 h-3" />
+                        {confirming === o.id ? '處理中...' : '確認收貨'}
+                      </button>
+                    </div>
                   )}
                   {o.status === 'COMPLETED' && !o.refundRequest && !isAdmin && (
-                    <p className="text-[10px] text-gray-400 font-bold mt-1">
-                      ✓ 可勾選申請退款
+                    <p className="text-[10px] text-green-600 dark:text-green-400 font-bold mt-1">
+                      ✓ 已完成，可勾選申請退款
                     </p>
                   )}
                 </div>

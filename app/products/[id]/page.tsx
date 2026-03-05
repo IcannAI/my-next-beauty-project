@@ -12,6 +12,7 @@ import { ShoppingBag, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-r
 import FavoriteButton from '@/components/favorite/FavoriteButton';
 import StarRating from '@/components/reviews/StarRating';
 import ReviewSkeleton from '@/components/reviews/ReviewSkeleton';
+import AddToCartButton from '@/components/products/AddToCartButton';
 
 const ReviewSection = dynamic(
   () => import('@/components/reviews/ReviewSection'),
@@ -170,9 +171,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             <div className="mt-12 space-y-6">
               <div className="flex items-center gap-4">
-                <Button className="flex-1 py-10 h-auto bg-rose-500 hover:bg-rose-600 text-white text-2xl font-black italic tracking-tighter rounded-[2rem] shadow-2xl shadow-rose-200 dark:shadow-none transition-all active:scale-95">
-                  立即購買
-                </Button>
+                <AddToCartButton
+                  productId={product.id}
+                  name={product.name}
+                  price={product.price}
+                  imageUrl={product.imageUrl}
+                  stock={product.stock}
+                />
                 <FavoriteButton
                   productId={id}
                   initialFavorited={initialFavorited}

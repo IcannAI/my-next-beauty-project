@@ -4,6 +4,7 @@ import { Providers } from '@/components/Providers'
 import Navbar from '@/components/layout/Navbar'
 import BottomTabBar from '@/components/layout/BottomTabBar'
 import ToastProvider from '@/components/ui/ToastProvider'
+import CartDrawer from '@/components/cart/CartDrawer'
 
 export const metadata: Metadata = {
   title: 'Beauty Social Commerce',
@@ -24,6 +25,7 @@ export default function RootLayout({
               <Navbar />
               <main className="flex-1 pb-16 md:pb-0">
                 {children}
+                <CartDrawer />
               </main>
               <BottomTabBar />
             </div>

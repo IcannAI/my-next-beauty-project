@@ -28,15 +28,79 @@ export default async function LiveDashboardPage() {
   });
 
   if (!kolProfile) {
-    return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center p-6">
-        <div className="text-center space-y-4 bg-white dark:bg-gray-900 p-12 rounded-[2.5rem] shadow-xl">
-          <div className="w-20 h-20 bg-rose-50 dark:bg-rose-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Users className="w-10 h-10 text-rose-500" />
+    if (user.role !== 'ADMIN') {
+      return (
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center p-6">
+          <div className="text-center space-y-4 bg-white dark:bg-gray-900 p-12 rounded-[2.5rem] shadow-xl">
+            <h1 className="text-2xl font-black text-gray-900 dark:text-white">你尚未成為 KOL</h1>
+            <p className="text-gray-500">請先申請成為 KOL 即可開始進行直播帶貨並獲得分潤。</p>
           </div>
-          <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">你尚未成為 KOL</h1>
-          <p className="text-gray-500 max-w-xs mx-auto">請先申請成為 KOL 即可開始進行直播帶貨並獲得分潤。</p>
-          <Button className="rounded-full bg-rose-500 hover:bg-rose-600 text-white px-8">立即申請</Button>
+        </main>
+      );
+    }
+
+    // ADMIN 查詢所有直播
+    const allStreams = await prisma.liveStream.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+      include: {
+        kolProfile: {
+          include: { user: { select: { name: true } } }
+        }
+      }
+    });
+
+    return (
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
+        <div className="max-w-5xl mx-auto">
+          <header className="mb-8">
+            <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter italic">
+              直播管理（全部）
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">管理員檢視所有 KOL 直播</p>
+          </header>
+          <div className="grid gap-4">
+            {allStreams.length === 0 ? (
+              <div className="py-20 text-center bg-white dark:bg-gray-900 rounded-[2.5rem] border-2 border-dashed dark:border-gray-800">
+                <p className="font-bold text-gray-400">目前沒有任何直播記錄</p>
+              </div>
+            ) : (
+              allStreams.map(stream => (
+                <div
+                  key={stream.id}
+                  className="flex items-center justify-between p-6 bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800"
+                >
+                  <div className="space-y-1 flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-black text-gray-900 dark:text-white truncate">
+                        {stream.title}
+                      </h3>
+                      <Badge className={`
+                        rounded-full px-3 py-0.5 text-[9px] font-black uppercase border-none flex-shrink-0
+                        ${stream.status === 'LIVE'
+                          ? 'bg-rose-500 text-white animate-pulse'
+                          : stream.status === 'ENDED'
+                            ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+                            : 'bg-blue-50 text-blue-600'}
+                      `}>
+                        {stream.status}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-400">
+                      KOL：{(stream.kolProfile as any).user.name} ·
+                      收益：NT$ {stream.totalRevenue.toLocaleString()} ·
+                      {new Date(stream.createdAt).toLocaleDateString('zh-TW')}
+                    </p>
+                  </div>
+                  <Link href={`/live/${stream.id}`} className="ml-4 flex-shrink-0">
+                    <Button size="sm" variant="ghost" className="rounded-full">
+                      查看
+                    </Button>
+                  </Link>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </main>
     );
@@ -84,9 +148,9 @@ export default async function LiveDashboardPage() {
                       </h3>
                       <Badge className={`
                         rounded-full px-4 py-1 text-[9px] font-black tracking-widest uppercase border-none
-                        ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' : 
-                          stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : 
-                          'bg-blue-50 text-blue-600'}
+                        ${stream.status === 'LIVE' ? 'bg-rose-500 text-white animate-pulse' :
+                          stream.status === 'ENDED' ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' :
+                            'bg-blue-50 text-blue-600'}
                       `}>
                         {stream.status}
                       </Badge>
@@ -102,7 +166,7 @@ export default async function LiveDashboardPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-6 md:mt-0 flex items-center gap-4">
                     <div className="text-right hidden md:block">
                       <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1 opacity-50">KOL Earnings</p>

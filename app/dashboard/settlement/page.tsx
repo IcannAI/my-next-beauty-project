@@ -13,11 +13,19 @@ export default async function SettlementPage() {
   if (!user) redirect('/login');
 
   const settledStreams = await prisma.liveStream.findMany({
-    where: { 
-      kolProfile: { userId: user.id },
-      settlementStatus: 'SETTLED'
+    where: {
+      ...(user.role === 'ADMIN'
+        ? { settlementStatus: 'SETTLED' }
+        : {
+          kolProfile: { userId: user.id },
+          settlementStatus: 'SETTLED',
+        }
+      ),
     },
-    orderBy: { createdAt: 'desc' }
+    include: user.role === 'ADMIN'
+      ? { kolProfile: { include: { user: { select: { name: true } } } } }
+      : undefined,
+    orderBy: { createdAt: 'desc' },
   });
 
   const totalEarnings = settledStreams.reduce((sum, stream) => sum + stream.kolEarnings, 0);
@@ -32,7 +40,7 @@ export default async function SettlementPage() {
             </h1>
             <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Earnings Overview & Settlement History</p>
           </div>
-          
+
           <div className="bg-white rounded-[2rem] px-10 py-8 shadow-xl border border-rose-100 flex items-center gap-6">
             <div className="p-4 bg-rose-500 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-rose-200">
               <TrendingUp className="w-8 h-8" />
@@ -64,11 +72,16 @@ export default async function SettlementPage() {
                     <h3 className="text-2xl font-black text-gray-900 tracking-tight italic group-hover:text-rose-500 transition-colors uppercase">
                       {stream.title}
                     </h3>
+                    {user.role === 'ADMIN' && (stream as any).kolProfile && (
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        KOL：{(stream as any).kolProfile.user.name}
+                      </p>
+                    )}
                     <Badge className="rounded-full px-4 py-1 text-[9px] font-black tracking-widest uppercase border-none bg-green-500 text-white">
                       Settled
                     </Badge>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-8 text-sm font-bold text-gray-400">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 opacity-50" />

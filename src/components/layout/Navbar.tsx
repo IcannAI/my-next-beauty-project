@@ -58,9 +58,9 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 flex-1 min-w-0 overflow-hidden">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500 shadow-lg shadow-rose-500/20">
                 <Video className="h-5 w-5 text-white" />
@@ -71,7 +71,7 @@ export default function Navbar() {
             </Link>
 
             {/* 桌機導航連結 */}
-            <div className="hidden lg:flex lg:items-center lg:gap-1">
+            <div className="hidden lg:flex lg:items-center lg:gap-0.5 overflow-x-auto scrollbar-none">
               {allItems.map((item: any) => (
                 <Link
                   key={item.href}
@@ -101,7 +101,7 @@ export default function Navbar() {
           </div>
 
           {/* 右側登入/登出 */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
             {status === 'loading' ? (
               <div className="h-9 w-24 animate-pulse rounded-full bg-white/5" />
             ) : session ? (

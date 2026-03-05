@@ -76,7 +76,7 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
             <p className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">已選擇 {selected.length} 筆</p>
             <p className="text-2xl font-black text-rose-500 dark:text-rose-400">NT$ {selectedTotal.toLocaleString()}</p>
           </div>
-          <Button 
+          <Button
             disabled={selected.length === 0}
             onClick={() => setOpen(true)}
             className="rounded-full px-8 py-6 h-auto bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
@@ -111,8 +111,8 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
             <Button variant="outline" onClick={() => setOpen(false)} className="rounded-full px-8 font-bold border-2 dark:border-gray-700 dark:text-gray-300">
               取消
             </Button>
-            <Button 
-              onClick={submit} 
+            <Button
+              onClick={submit}
               disabled={reason.trim().length < 5 || isSubmitting}
               className="rounded-full px-10 bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-100 dark:shadow-none"
             >
@@ -124,22 +124,22 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
 
       <div className="grid gap-6">
         {orders.map(o => (
-          <div 
-            key={o.id} 
+          <div
+            key={o.id}
             className={`
               group flex items-center gap-6 p-6 bg-white dark:bg-gray-800 rounded-3xl border-2 transition-all duration-300
               ${selected.includes(o.id) ? 'border-rose-500 bg-rose-50/20 shadow-xl shadow-rose-100/20 dark:shadow-none' : 'border-transparent hover:border-gray-100 dark:hover:border-gray-700 shadow-md shadow-gray-100/50 dark:shadow-none'}
             `}
           >
             {!isAdmin && (
-              <Checkbox 
+              <Checkbox
                 checked={selected.includes(o.id)}
                 onCheckedChange={() => toggle(o.id)}
                 disabled={o.status !== 'COMPLETED' || !!o.refundRequest}
                 className="w-6 h-6 border-2 border-gray-200 dark:border-gray-700 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500"
               />
             )}
-            
+
             <div className="flex-1 min-w-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
@@ -159,15 +159,25 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
                   <p className="text-xl font-black text-gray-900 dark:text-white tracking-tighter italic">NT$ {o.totalAmount.toLocaleString()}</p>
                   <span className={`
                     inline-block px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase
-                    ${o.status === 'COMPLETED' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
-                      o.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                      'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}
+                    ${o.status === 'COMPLETED' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                      o.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}
                   `}>
                     {o.status}
                   </span>
+                  {o.status === 'PENDING' && !isAdmin && (
+                    <p className="text-[10px] text-yellow-600 dark:text-yellow-400 font-bold mt-1">
+                      訂單處理中，完成後可申請退款
+                    </p>
+                  )}
+                  {o.status === 'COMPLETED' && !o.refundRequest && !isAdmin && (
+                    <p className="text-[10px] text-gray-400 font-bold mt-1">
+                      ✓ 可勾選申請退款
+                    </p>
+                  )}
                 </div>
               </div>
-              
+
               {o.refundRequest && (
                 <div className="mt-4 py-3 px-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700">
                   <p className="text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center gap-2">

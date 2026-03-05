@@ -16,6 +16,7 @@ export default async function OrdersPage() {
     where: isAdmin ? {} : { userId: user.id },
     include: {
       refundRequest: true,
+      product: { select: { name: true } },
       user: isAdmin, // Include user info for admin
     },
     orderBy: {

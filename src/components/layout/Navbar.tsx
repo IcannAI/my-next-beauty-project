@@ -5,10 +5,12 @@ import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useState, useRef, useEffect } from 'react';
 import {
   Video, Search, ShoppingBag, LayoutDashboard,
   Settings, LogIn, LogOut, Bell, DollarSign,
-  Users, ExternalLink, Heart, MessageCircle, PlayCircle
+  Users, ExternalLink, Heart, MessageCircle, PlayCircle,
+  ChevronDown
 } from 'lucide-react';
 import UnreadBadge from '@/components/messages/UnreadBadge';
 import MessageNotifier from '@/components/messages/MessageNotifier';
@@ -48,12 +50,20 @@ export default function Navbar() {
     },
   ] : [];
 
-  const allItems = [
-    ...publicItems,
-    ...loggedInItems,
-    ...kolItems,
-    ...adminItems,
-  ];
+  const mainItems = [...publicItems, ...loggedInItems];
+
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const adminMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (adminMenuRef.current && !adminMenuRef.current.contains(e.target as Node)) {
+        setAdminMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
@@ -72,11 +82,10 @@ export default function Navbar() {
 
             {/* 桌機導航連結 */}
             <div className="hidden lg:flex lg:items-center lg:gap-0.5 overflow-x-auto scrollbar-none">
-              {allItems.map((item: any) => (
+              {mainItems.map((item: any) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  target={item.external ? '_blank' : undefined}
                   className={cn(
                     'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap',
                     pathname === item.href
@@ -92,11 +101,52 @@ export default function Navbar() {
                       <UnreadBadge currentUserId={user?.id} />
                     </div>
                   )}
-                  {item.external && (
-                    <ExternalLink className="h-3 w-3 opacity-50" />
-                  )}
                 </Link>
               ))}
+
+              {(kolItems.length > 0 || adminItems.length > 0) && (
+                <div className="relative" ref={adminMenuRef}>
+                  <button
+                    onClick={() => setAdminMenuOpen(v => !v)}
+                    className={cn(
+                      'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap',
+                      (kolItems.some(i => pathname.startsWith(i.href)) ||
+                        adminItems.some(i => pathname.startsWith(i.href)))
+                        ? 'bg-white/10 text-rose-500'
+                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    )}
+                  >
+                    <Settings className="h-4 w-4" />
+                    後台管理
+                    <ChevronDown className={cn(
+                      'h-3 w-3 transition-transform',
+                      adminMenuOpen && 'rotate-180'
+                    )} />
+                  </button>
+                  {adminMenuOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-gray-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
+                      {[...kolItems, ...adminItems].map((item: any) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          target={item.external ? '_blank' : undefined}
+                          onClick={() => setAdminMenuOpen(false)}
+                          className={cn(
+                            'flex items-center gap-3 px-4 py-3 text-sm font-bold transition-colors',
+                            pathname === item.href
+                              ? 'bg-white/10 text-rose-500'
+                              : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                          )}
+                        >
+                          <item.icon className="h-4 w-4" />
+                          {item.label}
+                          {item.external && <ExternalLink className="h-3 w-3 ml-auto opacity-50" />}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

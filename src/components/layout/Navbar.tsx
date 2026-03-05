@@ -1,11 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Video, Search, ShoppingBag, LayoutDashboard, Settings, LogIn, LogOut, Bell, DollarSign, Users, ExternalLink, Heart, MessageCircle } from 'lucide-react';
+import {
+  Video, Search, ShoppingBag, LayoutDashboard,
+  Settings, LogIn, LogOut, Bell, DollarSign,
+  Users, ExternalLink, Heart, MessageCircle, PlayCircle
+} from 'lucide-react';
 import UnreadBadge from '@/components/messages/UnreadBadge';
 import MessageNotifier from '@/components/messages/MessageNotifier';
 
@@ -17,6 +21,7 @@ export default function Navbar() {
   const publicItems = [
     { label: '首頁', href: '/', icon: Video },
     { label: '搜尋', href: '/search', icon: Search },
+    { label: '直播', href: '/live', icon: PlayCircle },
   ];
 
   const loggedInItems = session ? [
@@ -25,7 +30,6 @@ export default function Navbar() {
     { label: '通知', href: '/notifications', icon: Bell },
     { label: '私訊', href: '/messages', icon: MessageCircle },
   ] : [];
-
 
   const kolItems = (user?.role === 'KOL' || user?.role === 'ADMIN') ? [
     { label: '直播管理', href: '/dashboard/live', icon: LayoutDashboard },
@@ -36,15 +40,26 @@ export default function Navbar() {
   const adminItems = user?.role === 'ADMIN' ? [
     { label: '用戶管理', href: '/admin/users', icon: Users },
     { label: '後台審核', href: '/admin/refund', icon: Settings },
-    { label: 'Datadog', href: 'https://app.datadoghq.com', icon: ExternalLink, external: true },
+    {
+      label: 'Datadog',
+      href: 'https://app.datadoghq.com',
+      icon: ExternalLink,
+      external: true,
+    },
   ] : [];
 
-  const allItems = [...publicItems, ...loggedInItems, ...kolItems, ...adminItems];
+  const allItems = [
+    ...publicItems,
+    ...loggedInItems,
+    ...kolItems,
+    ...adminItems,
+  ];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500 shadow-lg shadow-rose-500/20">
@@ -55,41 +70,49 @@ export default function Navbar() {
               </span>
             </Link>
 
+            {/* 桌機導航連結 */}
             <div className="hidden lg:flex lg:items-center lg:gap-1">
               {allItems.map((item: any) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  target={item.external ? "_blank" : undefined}
+                  target={item.external ? '_blank' : undefined}
                   className={cn(
-                    "relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap",
+                    'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all whitespace-nowrap',
                     pathname === item.href
-                      ? "bg-white/10 text-rose-500"
-                      : "text-gray-400 hover:bg-white/5 hover:text-white"
+                      ? 'bg-white/10 text-rose-500'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
                   )}
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
                   {item.href === '/messages' && session?.user && (
-                    <>
-                      <MessageNotifier currentUserId={user.id} />
-                      <UnreadBadge currentUserId={user.id} />
-                    </>
+                    <div className="relative">
+                      <MessageNotifier currentUserId={user?.id} />
+                      <UnreadBadge currentUserId={user?.id} />
+                    </div>
                   )}
-                  {item.external && <ExternalLink className="h-3 w-3 opacity-50" />}
+                  {item.external && (
+                    <ExternalLink className="h-3 w-3 opacity-50" />
+                  )}
                 </Link>
               ))}
             </div>
           </div>
 
+          {/* 右側登入/登出 */}
           <div className="flex items-center gap-4">
             {status === 'loading' ? (
               <div className="h-9 w-24 animate-pulse rounded-full bg-white/5" />
             ) : session ? (
               <div className="flex items-center gap-4">
                 <div className="hidden flex-col items-end md:flex">
-                  <span className="text-xs font-black uppercase tracking-widest text-gray-500">Welcome</span>
-                  <span className="text-sm font-bold text-white">{session.user?.name}</span>
+                  <span className="text-xs font-black uppercase tracking-widest text-gray-500">
+                    Welcome
+                  </span>
+                  <span className="text-sm font-bold text-white">
+                    {session.user?.name}
+                  </span>
                 </div>
                 <Button
                   variant="ghost"

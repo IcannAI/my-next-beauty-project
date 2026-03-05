@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Providers } from '@/components/Providers'
 import Navbar from '@/components/layout/Navbar'
-
+import BottomTabBar from '@/components/layout/BottomTabBar'
 import ToastProvider from '@/components/ui/ToastProvider'
 
 export const metadata: Metadata = {
@@ -10,7 +10,11 @@ export const metadata: Metadata = {
   description: 'KOL 直播帶貨平台',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="zh-TW" className="dark">
       <body className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen font-sans antialiased">
@@ -18,7 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ToastProvider>
             <div className="relative flex min-h-screen flex-col">
               <Navbar />
-              <main className="flex-1">{children}</main>
+              <main className="flex-1 pb-16 md:pb-0">
+                {children}
+              </main>
+              <BottomTabBar />
             </div>
           </ToastProvider>
         </Providers>

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import UnreadBadge from '@/components/messages/UnreadBadge';
 import MessageNotifier from '@/components/messages/MessageNotifier';
+import ThemeToggle from '@/components/theme/ThemeToggle';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -96,6 +97,7 @@ export default function Navbar() {
                 <span className="hidden xl:block text-sm font-bold text-white">
                   {session.user?.name}
                 </span>
+                <ThemeToggle />
                 <Button
                   variant="ghost"
                   size="sm"
@@ -107,16 +109,19 @@ export default function Navbar() {
                 </Button>
               </div>
             ) : (
-              <Button
-                asChild
-                size="sm"
-                className="rounded-full bg-rose-500 text-xs font-bold text-white hover:bg-rose-600 px-3"
-              >
-                <Link href="/login">
-                  <LogIn className="h-3.5 w-3.5 mr-1.5" />
-                  登入
-                </Link>
-              </Button>
+              <>
+                <ThemeToggle />
+                <Button
+                  asChild
+                  size="sm"
+                  className="rounded-full bg-rose-500 text-xs font-bold text-white hover:bg-rose-600 px-3"
+                >
+                  <Link href="/login">
+                    <LogIn className="h-3.5 w-3.5 mr-1.5" />
+                    登入
+                  </Link>
+                </Button>
+              </>
             )}
           </div>
         </div>

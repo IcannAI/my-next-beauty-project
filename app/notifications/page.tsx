@@ -9,6 +9,26 @@ export default async function NotificationsPage() {
   const user = await getCurrentUser();
   if (!user) redirect('/login');
 
+  let anomalies: any[] = [];
+  if (user.role === 'ADMIN') {
+    try {
+      const { cookies } = await import('next/headers');
+      const cookieStore = await cookies();
+      const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+      const res = await fetch(`${baseUrl}/api/admin/orders/anomaly`, {
+        headers: {
+          cookie: cookieStore.toString(),
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        anomalies = data.anomalies || [];
+      }
+    } catch (err) {
+      console.error('Fetch anomalies error:', err);
+    }
+  }
+
   const notifications = await prisma.notification.findMany({
     where: user.role === 'ADMIN' ? {} : { userId: user.id },
     orderBy: { createdAt: 'desc' },
@@ -51,6 +71,39 @@ export default async function NotificationsPage() {
           </Badge>
         </header>
 
+        {user.role === 'ADMIN' && anomalies.length > 0 && (
+          <div className="bg-red-50 border-2 border-red-200 rounded-[2rem] p-6 space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-red-500 rounded-xl flex items-center justify-center">
+                <span className="text-white text-sm font-black">!</span>
+              </div>
+              <h3 className="font-black text-red-700 uppercase tracking-widest text-sm">
+                異常訂單警示 ({anomalies.length})
+              </h3>
+            </div>
+            {anomalies.map((anomaly, idx) => (
+              <div key={idx} className="bg-white rounded-2xl p-4 border border-red-100">
+                <p className="text-sm font-bold text-red-700">
+                  {anomaly.type === 'duplicate_order'
+                    ? `重複下單：${anomaly.userName} (${anomaly.userEmail}) 對「${anomaly.productName}」下單 ${anomaly.orderCount} 次`
+                    : `大量下單：${anomaly.userName} (${anomaly.userEmail}) ${anomaly.message}`
+                  }
+                </p>
+                {anomaly.orders && (
+                  <div className="mt-2 space-y-1">
+                    {anomaly.orders.map((o: any) => (
+                      <p key={o.id} className="text-xs text-gray-500">
+                        訂單 #{o.id.slice(-8)} · NT$ {o.amount} ·
+                        {new Date(o.createdAt).toLocaleString('zh-TW')}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         <section className="space-y-4">
           {notifications.length === 0 ? (
             <div className="py-32 text-center bg-white rounded-[3rem] shadow-xl border border-gray-100">
@@ -74,7 +127,7 @@ export default async function NotificationsPage() {
                 )}>
                   {getIcon(notif.type)}
                 </div>
-                
+
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center justify-between gap-4">
                     <Badge className={cn("rounded-full px-4 py-1 text-[9px] font-black tracking-widest uppercase border-none", getBadgeStyle(notif.type))}>
@@ -85,7 +138,7 @@ export default async function NotificationsPage() {
                       {new Date(notif.createdAt).toLocaleString('zh-TW')}
                     </div>
                   </div>
-                  
+
                   <h3 className="text-xl font-black text-gray-900 tracking-tight italic group-hover:text-rose-500 transition-colors uppercase">
                     {notif.title}
                   </h3>

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { requireKOL } from '@/infrastructure/auth/rbac';
 import { Badge } from '@/components/ui/badge';
 import { DollarSign, Calendar, Video, ArrowUpRight, TrendingUp } from 'lucide-react';
+import CommissionEditor from './CommissionEditor';
 
 export default async function SettlementPage() {
   const guard = await requireKOL();
@@ -30,6 +31,10 @@ export default async function SettlementPage() {
 
   const totalEarnings = settledStreams.reduce((sum, stream) => sum + stream.kolEarnings, 0);
 
+  const kolProfile = user.role !== 'ADMIN'
+    ? await prisma.kolProfile.findUnique({ where: { userId: user.id } })
+    : null;
+
   return (
     <main className="min-h-screen bg-gray-50/50 p-8">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -49,6 +54,18 @@ export default async function SettlementPage() {
               <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">累積總收益</p>
               <p className="text-3xl font-black text-rose-500 italic tracking-tighter">NT$ {totalEarnings.toLocaleString()}</p>
             </div>
+            {kolProfile && (
+              <div className="flex items-center gap-3 mt-4">
+                <p className="text-xs font-black uppercase tracking-widest text-gray-400">
+                  目前分潤比例
+                </p>
+                <CommissionEditor
+                  kolProfileId={kolProfile.id}
+                  currentRate={kolProfile.commissionRate}
+                  isAdmin={user.role === 'ADMIN'}
+                />
+              </div>
+            )}
           </div>
         </header>
 

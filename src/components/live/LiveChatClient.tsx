@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Pusher from 'pusher-js';
+import { cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -10,38 +12,52 @@ interface ChatMessage {
   timestamp: string;
 }
 
+interface LiveProduct {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl: string | null;
+  stock: number;
+}
+
 interface LiveChatClientProps {
   liveStreamId: string;
   currentUserId: string;
   currentUserName: string;
+  isOwner: boolean;
+  isAdmin: boolean;
+  products: LiveProduct[];
 }
 
 export function LiveChatClient({
-  liveStreamId, currentUserName
+  liveStreamId,
+  currentUserName,
+  isOwner,
+  isAdmin,
+  products,
 }: LiveChatClientProps) {
   const pusherRef = useRef<Pusher | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [connected, setConnected] = useState(false);
+  const [activeProductIdx, setActiveProductIdx] = useState(0);
+  const [ordering, setOrdering] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const activeProduct = products[activeProductIdx] ?? null;
+
   useEffect(() => {
-    // 初始化 Pusher
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
     });
     pusherRef.current = pusher;
-
     const channel = pusher.subscribe(`live-${liveStreamId}`);
-
     pusher.connection.bind('state_change', (states: any) => {
       setConnected(states.current === 'connected');
     });
-
     channel.bind('chat-message', (data: ChatMessage) => {
       setMessages(prev => [...prev.slice(-199), data]);
     });
-
     return () => {
       pusher.unsubscribe(`live-${liveStreamId}`);
       pusher.disconnect();
@@ -54,45 +70,41 @@ export function LiveChatClient({
 
   const sendMessage = useCallback(async () => {
     if (!input.trim()) return;
-
     const currentInput = input.trim();
     setInput('');
-
     try {
       const res = await fetch(`/api/live/${liveStreamId}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: currentInput,
-          userName: currentUserName,
-        }),
+        body: JSON.stringify({ message: currentInput, userName: currentUserName }),
       });
-
       if (!res.ok) throw new Error('Failed to send');
     } catch (err) {
       console.error('Send message error:', err);
-      // 可選：在 UI 顯示錯誤
     }
   }, [input, liveStreamId, currentUserName]);
 
   const buyProduct = useCallback(async () => {
+    if (!activeProduct) return;
+    setOrdering(true);
     try {
       const res = await fetch(`/api/live/${liveStreamId}/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productId: 'live-special-01',
-          totalAmount: 1999,
+          productId: activeProduct.id,
+          totalAmount: activeProduct.price,
         }),
       });
-
       if (!res.ok) throw new Error('Order failed');
-      alert('下單成功！已發送通知。');
+      alert(`下單成功！${activeProduct.name} 已加入訂單。`);
     } catch (err) {
       console.error('Order error:', err);
       alert('下單失敗，請稍後再試。');
+    } finally {
+      setOrdering(false);
     }
-  }, [liveStreamId]);
+  }, [activeProduct, liveStreamId]);
 
   return (
     <div className="flex flex-col h-full bg-gray-900 border-l border-gray-800">
@@ -110,14 +122,14 @@ export function LiveChatClient({
       </div>
 
       {/* 訊息列表 */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.length === 0 && (
           <div className="h-full flex items-center justify-center">
             <p className="text-xs font-bold text-gray-600 uppercase tracking-[0.2em]">Say something...</p>
           </div>
         )}
         {messages.map(msg => (
-          <div key={msg.id} className="group animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div key={msg.id} className="group">
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-black text-rose-500 uppercase tracking-wider italic">
                 {msg.userName}
@@ -133,52 +145,100 @@ export function LiveChatClient({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 推薦商品 / 立即購買 */}
-      <div className="px-6 py-4 bg-rose-500/5 border-t border-gray-800">
-        <div className="flex items-center justify-between gap-4 bg-gray-800/40 p-4 rounded-3xl border border-rose-500/20 shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-500/20">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Limited Offer</p>
-              <p className="text-xs font-bold text-white">直播限定美妝組</p>
-              <p className="text-[10px] font-bold text-gray-500 mt-0.5">$1,999 TWD</p>
-            </div>
+      {/* 促銷商品區塊 */}
+      {products.length > 0 ? (
+        <div className="px-4 py-4 bg-rose-500/5 border-t border-gray-800">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest flex items-center gap-1">
+              <ShoppingBag className="w-3 h-3" />
+              LIMITED OFFER
+            </p>
+            {products.length > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setActiveProductIdx(i => Math.max(0, i - 1))}
+                  disabled={activeProductIdx === 0}
+                  className="p-1 rounded-full hover:bg-gray-700 text-gray-400 disabled:opacity-30 transition-colors"
+                >
+                  <ChevronLeft className="w-3 h-3" />
+                </button>
+                <span className="text-[10px] text-gray-500 font-bold">
+                  {activeProductIdx + 1}/{products.length}
+                </span>
+                <button
+                  onClick={() => setActiveProductIdx(i => Math.min(products.length - 1, i + 1))}
+                  disabled={activeProductIdx === products.length - 1}
+                  className="p-1 rounded-full hover:bg-gray-700 text-gray-400 disabled:opacity-30 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                </button>
+              </div>
+            )}
           </div>
-          <button
-            onClick={buyProduct}
-            className="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest px-5 py-3 rounded-2xl transition-all shadow-lg shadow-rose-500/20 active:scale-95"
-          >
-            立即下單
-          </button>
+
+          {activeProduct && (
+            <div className="flex items-center justify-between gap-3 bg-gray-800/40 p-3 rounded-2xl border border-rose-500/20">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gray-700 rounded-xl overflow-hidden flex-shrink-0">
+                  {activeProduct.imageUrl ? (
+                    <img
+                      src={activeProduct.imageUrl}
+                      alt={activeProduct.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-lg">🛍️</div>
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-white truncate max-w-[120px]">
+                    {activeProduct.name}
+                  </p>
+                  <p className="text-[10px] font-black text-rose-400 mt-0.5">
+                    NT$ {activeProduct.price.toLocaleString()}
+                  </p>
+                  <p className="text-[9px] text-gray-500">
+                    剩餘 {activeProduct.stock} 件
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={buyProduct}
+                disabled={ordering || activeProduct.stock <= 0}
+                className="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-rose-500/20 active:scale-95 disabled:opacity-50 flex-shrink-0"
+              >
+                {ordering ? '處理中...' : activeProduct.stock <= 0 ? '已售完' : '立即下單'}
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      ) : (
+        <div className="px-4 py-4 bg-rose-500/5 border-t border-gray-800">
+          <div className="flex items-center justify-between gap-4 bg-gray-800/40 p-4 rounded-2xl border border-rose-500/20 opacity-50">
+            <p className="text-xs text-gray-500 font-bold">尚未設定促銷商品</p>
+          </div>
+        </div>
+      )}
 
       {/* 輸入區 */}
-      <div className="p-6 bg-gray-900/80 backdrop-blur-md border-t border-gray-800">
-        <div className="flex flex-col gap-3">
-          <div className="relative">
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && sendMessage()}
-              placeholder="傳送訊息..."
-              className="w-full bg-gray-800 text-gray-100 text-sm rounded-2xl px-5 py-4 border-2 border-transparent focus:border-rose-500 outline-none transition-all placeholder:text-gray-600 font-medium"
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!input.trim()}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl shadow-lg shadow-rose-500/20 transition-all active:scale-90 disabled:opacity-50 disabled:bg-gray-700 disabled:shadow-none"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rotate-90" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-              </svg>
-            </button>
-          </div>
-          <p className="text-[9px] text-gray-600 font-bold uppercase tracking-widest text-center">Press enter to broadcast</p>
+      <div className="p-4 bg-gray-900/80 backdrop-blur-md border-t border-gray-800">
+        <div className="relative">
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && sendMessage()}
+            placeholder="傳送訊息..."
+            className="w-full bg-gray-800 text-gray-100 text-sm rounded-2xl px-5 py-3.5 border-2 border-transparent focus:border-rose-500 outline-none transition-all placeholder:text-gray-600 font-medium pr-12"
+          />
+          <button
+            onClick={sendMessage}
+            disabled={!input.trim()}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl shadow-lg transition-all active:scale-90 disabled:opacity-50 disabled:bg-gray-700"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rotate-90" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

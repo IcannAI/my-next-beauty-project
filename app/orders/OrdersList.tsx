@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
-import { ShoppingBag, Check } from 'lucide-react'
+import { ShoppingBag, Check, Ban } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
@@ -30,6 +30,29 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [cancelling, setCancelling] = useState<string | null>(null);
+
+  const handleAdminCancel = async (orderId: string) => {
+    if (!confirm('確定要取消此訂單？將會通知用戶並還原庫存。')) return;
+    setCancelling(orderId);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/cancel`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: '管理員取消異常訂單' }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || '取消失敗');
+        return;
+      }
+      window.location.reload();
+    } catch {
+      alert('取消失敗，請重試');
+    } finally {
+      setCancelling(null);
+    }
+  };
 
   const handleConfirm = async (orderId: string) => {
     if (!confirm('確認已收到商品？確認後可申請退款。')) return;
@@ -182,7 +205,8 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
                     inline-block px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase
                     ${o.status === 'COMPLETED' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
                       o.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}
+                        o.status === 'CANCELLED' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                          'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'}
                   `}>
                     {o.status}
                   </span>
@@ -200,6 +224,16 @@ export function OrdersList({ orders, isAdmin }: { orders: OrderWithRefund[], isA
                         {confirming === o.id ? '處理中...' : '確認收貨'}
                       </button>
                     </div>
+                  )}
+                  {isAdmin && o.status !== 'CANCELLED' && (
+                    <button
+                      onClick={() => handleAdminCancel(o.id)}
+                      disabled={cancelling === o.id}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-[10px] font-black rounded-full transition-colors disabled:opacity-50 mt-2"
+                    >
+                      <Ban className="w-3 h-3" />
+                      {cancelling === o.id ? '處理中...' : '取消訂單'}
+                    </button>
                   )}
                   {o.status === 'COMPLETED' && !o.refundRequest && !isAdmin && (
                     <p className="text-[10px] text-green-600 dark:text-green-400 font-bold mt-1">

@@ -20,6 +20,11 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
       kolProfile: {
         include: {
           user: true,
+          products: {
+            where: { stock: { gt: 0 } },
+            orderBy: { createdAt: 'desc' },
+            take: 10,
+          },
         },
       },
     },
@@ -45,7 +50,7 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
               <p className="text-sm font-black uppercase tracking-[0.3em] text-gray-500 italic">Connecting Video Stream...</p>
             </div>
           </div>
-          
+
           {/* Overlay info */}
           <div className="absolute top-8 left-8 flex items-center gap-3">
             <Badge className="bg-rose-500 text-white border-none px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase animate-pulse shadow-lg shadow-rose-500/20">
@@ -73,7 +78,7 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
               </p>
             </div>
           </div>
-          
+
           <div className="flex gap-4">
             <div className="text-right">
               <p className="text-xl font-black tracking-tighter italic">1.2k</p>
@@ -95,10 +100,19 @@ export default async function LiveStreamPage({ params }: { params: Promise<{ id:
 
       {/* Chat Client (Right) */}
       <div className="w-[400px] flex-shrink-0">
-        <LiveChatClient 
-          liveStreamId={id} 
-          currentUserId={user.id} 
-          currentUserName={user.name || 'Anonymous'} 
+        <LiveChatClient
+          liveStreamId={id}
+          currentUserId={user.id}
+          currentUserName={user.name || 'Anonymous'}
+          isOwner={isOwner}
+          isAdmin={isAdmin}
+          products={liveStream.kolProfile.products.map(p => ({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            imageUrl: p.imageUrl,
+            stock: p.stock,
+          }))}
         />
       </div>
     </main>

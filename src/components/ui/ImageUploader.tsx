@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { X } from 'lucide-react';
 
 interface Props {
     onUpload: (url: string) => void;
+    onRemove?: () => void;
     uploadEndpoint: string;
     currentImageUrl?: string | null;
     aspectRatio?: 'square' | 'product';
@@ -13,6 +15,7 @@ interface Props {
 
 export default function ImageUploader({
     onUpload,
+    onRemove,
     uploadEndpoint,
     currentImageUrl,
     aspectRatio = 'product',
@@ -27,7 +30,6 @@ export default function ImageUploader({
     const [progress, setProgress] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // 瀏覽器端壓縮圖片
     const compressImage = useCallback(
         (file: File, maxWidth: number): Promise<Blob> => {
             return new Promise((resolve, reject) => {
@@ -60,35 +62,28 @@ export default function ImageUploader({
         async (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0];
             if (!file) return;
-
             setError('');
 
-            // 格式驗證
             const allowed = ['image/jpeg', 'image/png', 'image/webp'];
             if (!allowed.includes(file.type)) {
                 setError('只支援 JPG、PNG、WebP 格式');
                 return;
             }
-
-            // 大小驗證
             if (file.size > maxSizeMB * 1024 * 1024) {
                 setError(`檔案大小不能超過 ${maxSizeMB}MB`);
                 return;
             }
 
-            // 預覽
             const objectUrl = URL.createObjectURL(file);
             setPreview(objectUrl);
             setUploading(true);
             setProgress(20);
 
             try {
-                // 壓縮
                 const maxWidth = aspectRatio === 'square' ? 400 : 800;
                 const compressed = await compressImage(file, maxWidth);
                 setProgress(50);
 
-                // 上傳
                 const formData = new FormData();
                 const compressedFile = new File(
                     [compressed],
@@ -101,7 +96,6 @@ export default function ImageUploader({
                     method: 'POST',
                     body: formData,
                 });
-
                 setProgress(90);
 
                 if (!res.ok) {
@@ -127,6 +121,14 @@ export default function ImageUploader({
         [compressImage, uploadEndpoint, onUpload, currentImageUrl, maxSizeMB, aspectRatio]
     );
 
+    const handleRemove = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setPreview(null);
+        setError('');
+        if (inputRef.current) inputRef.current.value = '';
+        onRemove?.();
+    };
+
     const containerClass =
         aspectRatio === 'square'
             ? 'w-32 h-32 rounded-full'
@@ -135,23 +137,38 @@ export default function ImageUploader({
     return (
         <div className="flex flex-col items-center gap-2">
             <div
-                className={`${containerClass} relative overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300 cursor-pointer hover:border-rose-400 transition-colors`}
-                onClick={() => inputRef.current?.click()}
+                className={`${containerClass} relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:border-rose-400 transition-colors`}
+                onClick={() => !uploading && inputRef.current?.click()}
             >
                 {preview ? (
-                    <img
-                        src={preview}
-                        alt="預覽"
-                        className="w-full h-full object-cover"
-                    />
+                    <>
+                        <img
+                            src={preview}
+                            alt="預覽"
+                            className="w-full h-full object-cover"
+                        />
+                        {!uploading && (
+                            <button
+                                onClick={handleRemove}
+                                className="absolute top-1.5 right-1.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white hover:bg-red-500 transition-colors"
+                                title="移除圖片"
+                            >
+                                <X className="h-3.5 w-3.5" />
+                            </button>
+                        )}
+                        {!uploading && (
+                            <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                                <span className="text-white text-sm font-bold">更換圖片</span>
+                            </div>
+                        )}
+                    </>
                 ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                         <span className="text-3xl">📷</span>
-                        <span className="text-xs mt-1">{label}</span>
+                        <span className="text-xs mt-1 font-medium">{label}</span>
                     </div>
                 )}
 
-                {/* 上傳進度遮罩 */}
                 {uploading && (
                     <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-2">
                         <div className="w-3/4 h-1.5 bg-gray-600 rounded-full overflow-hidden">
@@ -160,20 +177,13 @@ export default function ImageUploader({
                                 style={{ width: `${progress}%` }}
                             />
                         </div>
-                        <span className="text-white text-xs">{progress}%</span>
-                    </div>
-                )}
-
-                {/* Hover 提示 */}
-                {!uploading && preview && (
-                    <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
-                        <span className="text-white text-sm">更換圖片</span>
+                        <span className="text-white text-xs font-bold">{progress}%</span>
                     </div>
                 )}
             </div>
 
             {error && (
-                <p className="text-xs text-red-500">{error}</p>
+                <p className="text-xs text-red-500 font-medium">{error}</p>
             )}
 
             <input
@@ -184,7 +194,7 @@ export default function ImageUploader({
                 className="hidden"
             />
 
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 dark:text-gray-500">
                 支援 JPG、PNG、WebP，最大 {maxSizeMB}MB
             </p>
         </div>

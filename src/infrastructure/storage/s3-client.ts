@@ -34,7 +34,8 @@ export async function uploadEvidenceFile(
   await s3Client.send(command);
 
   // Return the public URL using R2 format
-  return `${endpoint}/${bucketName}/${key}`;
+  const publicUrl = process.env.R2_PUBLIC_URL;
+  return `${publicUrl}/${key}`;
 }
 export async function uploadProductImage(
   file: Buffer,
@@ -64,7 +65,8 @@ export async function uploadProductImage(
   });
 
   await s3Client.send(command);
-  return `${endpoint}/${bucketName}/${key}`;
+  const publicUrl = process.env.R2_PUBLIC_URL;
+  return `${publicUrl}/${key}`;
 }
 
 export async function uploadKolAvatar(
@@ -90,7 +92,8 @@ export async function uploadKolAvatar(
   });
 
   await s3Client.send(command);
-  return `${endpoint}/${bucketName}/${key}`;
+  const publicUrl = process.env.R2_PUBLIC_URL;
+  return `${publicUrl}/${key}`;
 }
 
 export { s3Client };

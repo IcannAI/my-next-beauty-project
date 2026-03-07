@@ -37,3 +37,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

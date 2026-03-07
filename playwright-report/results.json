@@ -1,0 +1,945 @@
+{
+  "config": {
+    "configFile": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/playwright.config.ts",
+    "rootDir": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/orders/**"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never",
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "playwright-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth/auth-security.spec.ts",
+      "file": "auth/auth-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TC-17: Unauthenticated → /orders redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1731,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.209Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-4f5d1ecccc26dc2da178",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Unauthenticated → /notifications redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1347,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.193Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-94c1bf62e7880af8ee7b",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Unauthenticated → /messages redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1483,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.205Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-f4b1560f493485b830dd",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Unauthenticated → /favorites redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1448,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.216Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-748b3a667b99fb68538c",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Unauthenticated → /dashboard/live redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 1639,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.203Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-b2ef8c13543555cdc087",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Unauthenticated → /dashboard/products redirects to /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 1370,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:51.207Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-5d490d89d14cb80a071a",
+          "file": "auth/auth-security.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Non-admin → /admin/users is blocked",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "timedOut",
+                  "duration": 30981,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"test@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:35:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.306Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-Non-admin-→-admin-users-is-blocked-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-Non-admin-→-admin-users-is-blocked-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-cb3636d0f132383b6dc7",
+          "file": "auth/auth-security.spec.ts",
+          "line": 34,
+          "column": 7
+        },
+        {
+          "title": "TC-17: Non-admin → /admin/refund is blocked",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "timedOut",
+                  "duration": 30931,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"test@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:35:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.311Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-Non-admin-→-admin-refund-is-blocked-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-Non-admin-→-admin-refund-is-blocked-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-71c8b918d3ddb00cbb41",
+          "file": "auth/auth-security.spec.ts",
+          "line": 34,
+          "column": 7
+        },
+        {
+          "title": "TC-17: KOL cannot access admin routes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "timedOut",
+                  "duration": 30953,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"kol@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:43:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.357Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-KOL-cannot-access-admin-routes-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-KOL-cannot-access-admin-routes-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-438570363ddcff21bc7a",
+          "file": "auth/auth-security.spec.ts",
+          "line": 42,
+          "column": 5
+        },
+        {
+          "title": "TC-17: Admin can access all dashboard routes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "timedOut",
+                  "duration": 30854,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"admin@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:50:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.385Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-A-ad4b5-access-all-dashboard-routes-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-17-A-ad4b5-access-all-dashboard-routes-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-c6c95ba7944ba49a9a9f",
+          "file": "auth/auth-security.spec.ts",
+          "line": 49,
+          "column": 5
+        },
+        {
+          "title": "TC-18: Session persists after page reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30622,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"test@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:61:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.614Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-Session-persists-after-page-reload-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-Session-persists-after-page-reload-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-c24172f6588b52b8baec",
+          "file": "auth/auth-security.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "TC-18: Session persists across multiple page navigations",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "timedOut",
+                  "duration": 30670,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"test@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:71:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:20:53.615Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-S-20868-s-multiple-page-navigations-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-S-20868-s-multiple-page-navigations-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-db2d0617fd12e33305ef",
+          "file": "auth/auth-security.spec.ts",
+          "line": 70,
+          "column": 5
+        },
+        {
+          "title": "TC-18: Admin session persists after reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 2,
+                  "status": "timedOut",
+                  "duration": 30169,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts",
+                        "column": 11,
+                        "line": 40
+                      },
+                      "message": "Error: loginAs(\"admin@example.com\") — 仍停在 /login，登入失敗。\n頁面錯誤訊息: (no visible error)\n\n請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\n並確認 seed 資料已存在：npx prisma db seed\n\n   at ../fixtures/auth.ts:40\n\n  38 |       .catch(() => '(no visible error)');\n  39 |\n> 40 |     throw new Error(\n     |           ^\n  41 |       `loginAs(\"${email}\") — 仍停在 /login，登入失敗。\\n` +\n  42 |       `頁面錯誤訊息: ${errMsg}\\n\\n` +\n  43 |       `請在 .env 設定正確帳密（ADMIN_EMAIL / KOL_EMAIL / USER_EMAIL 等），\\n` +\n    at loginAs (/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/fixtures/auth.ts:40:11)\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:80:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.962Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-Admin-session-persists-after-reload-chromium/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-18-Admin-session-persists-after-reload-chromium/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-ed860d07a5c6411425ec",
+          "file": "auth/auth-security.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "TC-26: Rate limiting is NOT implemented (documented)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5302,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "TC-26: Rate limiting NOT implemented. Statuses: [ \u001b[33m200\u001b[39m ]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.973Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-250c458e2afc84e065ea",
+          "file": "auth/auth-security.spec.ts",
+          "line": 89,
+          "column": 5
+        },
+        {
+          "title": "TC-27: POST without session is rejected (NextAuth CSRF)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 179,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.964Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-9a83b7573cdf82071630",
+          "file": "auth/auth-security.spec.ts",
+          "line": 102,
+          "column": 5
+        },
+        {
+          "title": "TC-27: Admin API without session returns 401/403/405",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 629,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[401, 403, 405]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[401, 403, 405]\u001b[39m\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:122:29",
+                    "location": {
+                      "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts",
+                      "column": 29,
+                      "line": 122
+                    },
+                    "snippet": "  120 |       headers: { 'Content-Type': 'application/json' },\n  121 |     });\n> 122 |     expect([401, 403, 405]).toContain(res.status());\n      |                             ^\n  123 |   }\n  124 | });\n  125 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts",
+                        "column": 29,
+                        "line": 122
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[401, 403, 405]\u001b[39m\n\n  120 |       headers: { 'Content-Type': 'application/json' },\n  121 |     });\n> 122 |     expect([401, 403, 405]).toContain(res.status());\n      |                             ^\n  123 |   }\n  124 | });\n  125 |\n    at /Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts:122:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.964Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/test-results/auth-auth-security-TC-27-A-a0985-session-returns-401-403-405-chromium/test-failed-1.png"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/aubreyhsieh/Desktop/my-next-beauty-project/tests/e2e/auth/auth-security.spec.ts",
+                    "column": 29,
+                    "line": 122
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-98096953c0e088023cb5",
+          "file": "auth/auth-security.spec.ts",
+          "line": 109,
+          "column": 5
+        },
+        {
+          "title": "TC-27: Cron endpoints reject missing Authorization header",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 251,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "TC-27: /api/cron/settle-live-revenue GET=401 POST=405\n"
+                    },
+                    {
+                      "text": "TC-27: /api/cron/refund-feedback-reminder GET=401 POST=405\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.974Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-402920a377801354bc92",
+          "file": "auth/auth-security.spec.ts",
+          "line": 126,
+          "column": 5
+        },
+        {
+          "title": "TC-27: Cron endpoints reject wrong CRON_SECRET",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 181,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-03-07T09:21:24.974Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "42676a1b34a8770bddb4-0fc498da90c51a978fe6",
+          "file": "auth/auth-security.spec.ts",
+          "line": 146,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-07T09:20:50.613Z",
+    "duration": 65202.061,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

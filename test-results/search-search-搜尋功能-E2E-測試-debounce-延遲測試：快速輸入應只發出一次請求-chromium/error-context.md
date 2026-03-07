@@ -1,0 +1,113 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+        - generic [ref=e40]:
+          - generic [ref=e41]: Test User
+          - button "切換主題" [ref=e43]:
+            - img [ref=e44]
+          - button "登出" [ref=e46]:
+            - img [ref=e47]
+            - text: 登出
+    - main [ref=e50]:
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - heading "全站搜尋" [level=1] [ref=e55]
+          - paragraph [ref=e56]: Search for KOLs, Live Streams, Products and more
+        - generic [ref=e57]:
+          - img [ref=e58]
+          - textbox "搜尋名稱、直播標題、產品..." [active] [ref=e61]: test
+        - generic [ref=e62]:
+          - tablist [ref=e63]:
+            - tab "全部" [selected] [ref=e64]
+            - tab "KOL" [ref=e65]
+            - tab "直播" [ref=e66]
+            - tab "產品" [ref=e67]
+            - tab "文章" [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - heading "KOLs" [level=2] [ref=e71]
+              - generic [ref=e73]:
+                - generic [ref=e74]: T
+                - generic [ref=e75]:
+                  - heading "Test User" [level=3] [ref=e76]
+                  - paragraph [ref=e77]: GlowSocial 美妝 KOL
+                - generic [ref=e78]:
+                  - button "追蹤" [ref=e79]
+                  - link "查看個人頁" [ref=e80] [cursor=pointer]:
+                    - /url: /kol/test-user-id
+                    - button "查看個人頁" [ref=e81]
+              - generic [ref=e83]:
+                - generic [ref=e84]: T
+                - generic [ref=e85]:
+                  - heading "Test KOL" [level=3] [ref=e86]
+                  - paragraph [ref=e87]: GlowSocial 美妝 KOL
+                - generic [ref=e88]:
+                  - button "追蹤" [ref=e89]
+                  - link "查看個人頁" [ref=e90] [cursor=pointer]:
+                    - /url: /kol/cmm3jiz2x0001x2spmk609w1z
+                    - button "查看個人頁" [ref=e91]
+            - generic [ref=e92]:
+              - heading "Articles" [level=2] [ref=e93]
+              - paragraph [ref=e95]: 即將推出 Coming Soon
+            - generic [ref=e96]:
+              - heading "Users" [level=2] [ref=e97]
+              - generic [ref=e100]:
+                - img [ref=e102]
+                - paragraph [ref=e106]: Test User
+              - generic [ref=e109]:
+                - img [ref=e111]
+                - paragraph [ref=e115]: Test KOL
+      - button [ref=e116]:
+        - img [ref=e117]
+      - generic [ref=e121]:
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - img [ref=e124]
+            - heading "購物車" [level=2] [ref=e127]
+          - button [ref=e128]:
+            - img [ref=e129]
+        - generic [ref=e133]:
+          - img [ref=e134]
+          - paragraph [ref=e138]: 購物車是空的
+          - button "去逛逛" [ref=e139]
+  - button "Open Next.js Dev Tools" [ref=e145] [cursor=pointer]:
+    - img [ref=e146]
+  - alert [ref=e149]
+```

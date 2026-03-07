@@ -1,0 +1,86 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+        - generic [ref=e40]:
+          - generic [ref=e41]: Test User
+          - button "切換主題" [ref=e43]:
+            - img [ref=e44]
+          - button "登出" [ref=e46]:
+            - img [ref=e47]
+            - text: 登出
+    - main [ref=e50]:
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - heading "全站搜尋" [level=1] [ref=e55]
+          - paragraph [ref=e56]: Search for KOLs, Live Streams, Products and more
+        - generic [ref=e57]:
+          - img [ref=e58]
+          - textbox "搜尋名稱、直播標題、產品..." [active] [ref=e61]: xyznonexistent123
+        - generic [ref=e62]:
+          - tablist [ref=e63]:
+            - tab "全部" [selected] [ref=e64]
+            - tab "KOL" [ref=e65]
+            - tab "直播" [ref=e66]
+            - tab "產品" [ref=e67]
+            - tab "文章" [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - heading "Articles" [level=2] [ref=e71]
+              - paragraph [ref=e73]: 即將推出 Coming Soon
+            - generic [ref=e74]:
+              - paragraph [ref=e75]: 找不到相關結果
+              - paragraph [ref=e76]: 試試其他的關鍵字搜尋
+      - button [ref=e77]:
+        - img [ref=e78]
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - img [ref=e85]
+            - heading "購物車" [level=2] [ref=e88]
+          - button [ref=e89]:
+            - img [ref=e90]
+        - generic [ref=e94]:
+          - img [ref=e95]
+          - paragraph [ref=e99]: 購物車是空的
+          - button "去逛逛" [ref=e100]
+  - button "Open Next.js Dev Tools" [ref=e106] [cursor=pointer]:
+    - img [ref=e107]
+  - alert [ref=e110]
+```

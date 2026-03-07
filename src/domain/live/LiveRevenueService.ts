@@ -1,7 +1,5 @@
-// src/domain/live/LiveRevenueService.ts
-
 export interface LiveStreamRevenueInput {
-  liveStreamId: string;
+  liveStreamId?: string; // optional — pure calculation does not require an id
   totalRevenue: number;
   commissionRate: number; // e.g. 0.1 = 10%
 }

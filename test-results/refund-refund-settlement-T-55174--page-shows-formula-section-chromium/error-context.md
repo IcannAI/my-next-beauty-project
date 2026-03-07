@@ -1,0 +1,105 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+          - link "直播" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/live
+            - img [ref=e40]
+            - text: 直播
+          - link "產品" [ref=e45] [cursor=pointer]:
+            - /url: /dashboard/products
+            - img [ref=e46]
+            - text: 產品
+          - link "分潤" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard/settlement
+            - img [ref=e50]
+            - text: 分潤
+          - link "用戶" [ref=e52] [cursor=pointer]:
+            - /url: /admin/users
+            - img [ref=e53]
+            - text: 用戶
+          - link "審核" [ref=e58] [cursor=pointer]:
+            - /url: /admin/refund
+            - img [ref=e59]
+            - text: 審核
+          - link "DD" [ref=e62] [cursor=pointer]:
+            - /url: https://app.datadoghq.com
+            - img [ref=e63]
+            - text: DD
+            - img [ref=e67]
+        - generic [ref=e72]:
+          - generic [ref=e73]: Admin
+          - button "切換主題" [ref=e75]:
+            - img [ref=e76]
+          - button "登出" [ref=e78]:
+            - img [ref=e79]
+            - text: 登出
+    - main [ref=e82]:
+      - main [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - heading "分潤結算紀錄" [level=1] [ref=e87]
+              - paragraph [ref=e88]: Earnings Overview & Settlement History
+            - generic [ref=e89]:
+              - img [ref=e91]
+              - generic [ref=e94]:
+                - paragraph [ref=e95]: 累積總收益
+                - paragraph [ref=e96]: NT$ 0
+          - generic [ref=e98]:
+            - img [ref=e100]
+            - paragraph [ref=e102]: 目前尚未有結算紀錄
+            - paragraph [ref=e103]: 快來開啟你的直播獲取收益吧！
+      - button [ref=e104]:
+        - img [ref=e105]
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - img [ref=e112]
+            - heading "購物車" [level=2] [ref=e115]
+          - button [ref=e116]:
+            - img [ref=e117]
+        - generic [ref=e121]:
+          - img [ref=e122]
+          - paragraph [ref=e126]: 購物車是空的
+          - button "去逛逛" [ref=e127]
+  - button "Open Next.js Dev Tools" [ref=e133] [cursor=pointer]:
+    - img [ref=e134]
+  - alert [ref=e137]
+```

@@ -1,0 +1,20 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "paths": {
+            "@/app/*": [
+                "./app/*"
+            ],
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "include": [
+        "tests/**/*.ts",
+        "src/**/*.ts",
+        "app/**/*.ts"
+    ]
+}

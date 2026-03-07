@@ -1,0 +1,93 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+          - link "直播" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/live
+            - img [ref=e40]
+            - text: 直播
+          - link "產品" [ref=e45] [cursor=pointer]:
+            - /url: /dashboard/products
+            - img [ref=e46]
+            - text: 產品
+          - link "分潤" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard/settlement
+            - img [ref=e50]
+            - text: 分潤
+        - generic [ref=e53]:
+          - generic [ref=e54]: Test KOL
+          - button "切換主題" [ref=e56]:
+            - img [ref=e57]
+          - button "登出" [ref=e59]:
+            - img [ref=e60]
+            - text: 登出
+    - main [ref=e63]:
+      - main [ref=e64]:
+        - generic [ref=e65]:
+          - link "返回工作室" [ref=e66] [cursor=pointer]:
+            - /url: /dashboard/live
+            - img [ref=e67]
+            - text: 返回工作室
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - img [ref=e72]
+              - heading "準備開始？" [level=1] [ref=e75]
+              - paragraph [ref=e76]: Set your title and go live instantly
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - text: 直播主題
+                - textbox "例如：春季新品大特賣 🌸" [ref=e79]
+              - button "開始直播" [disabled] [ref=e80]
+      - button [ref=e81]:
+        - img [ref=e82]
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - img [ref=e89]
+            - heading "購物車" [level=2] [ref=e92]
+          - button [ref=e93]:
+            - img [ref=e94]
+        - generic [ref=e98]:
+          - img [ref=e99]
+          - paragraph [ref=e103]: 購物車是空的
+          - button "去逛逛" [ref=e104]
+  - button "Open Next.js Dev Tools" [ref=e110] [cursor=pointer]:
+    - img [ref=e111]
+  - alert [ref=e114]
+```

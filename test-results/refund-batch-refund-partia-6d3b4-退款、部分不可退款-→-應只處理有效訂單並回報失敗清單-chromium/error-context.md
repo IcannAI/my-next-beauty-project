@@ -1,0 +1,154 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+        - generic [ref=e40]:
+          - generic [ref=e41]: Test User
+          - button "切換主題" [ref=e43]:
+            - img [ref=e44]
+          - button "登出" [ref=e46]:
+            - img [ref=e47]
+            - text: 登出
+    - main [ref=e50]:
+      - main [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "我的訂單" [level=1] [ref=e54]
+            - paragraph [ref=e55]: Purchase History & Refunds
+          - generic [ref=e58]:
+            - paragraph [ref=e59]: 總累積消費
+            - generic [ref=e60]:
+              - generic [ref=e61]: NT$ 14,597
+              - generic [ref=e62]: TWD
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]:
+                - paragraph [ref=e66]: 已選擇 0 筆
+                - paragraph [ref=e67]: NT$ 0
+              - button "批量申請退款" [disabled] [ref=e68]
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - checkbox [disabled] [ref=e71] [cursor=pointer]
+                - generic [ref=e73]:
+                  - generic [ref=e74]:
+                    - 'heading "訂單 #gnmdhad9" [level=3] [ref=e76]'
+                    - paragraph [ref=e77]: 2026/3/5 下午11:45:22
+                  - generic [ref=e78]:
+                    - paragraph [ref=e79]: NT$ 2,800
+                    - generic [ref=e80]: CANCELLED
+              - generic [ref=e81]:
+                - checkbox [disabled] [ref=e82] [cursor=pointer]
+                - generic [ref=e84]:
+                  - generic [ref=e85]:
+                    - 'heading "訂單 #2xw7r5es" [level=3] [ref=e87]'
+                    - paragraph [ref=e88]: 2026/3/5 下午11:45:21
+                  - generic [ref=e89]:
+                    - paragraph [ref=e90]: NT$ 3,000
+                    - generic [ref=e91]: PENDING
+                    - generic [ref=e92]:
+                      - paragraph [ref=e93]: 訂單處理中
+                      - button "確認收貨" [ref=e94]:
+                        - img [ref=e95]
+                        - text: 確認收貨
+              - generic [ref=e97]:
+                - checkbox [ref=e98] [cursor=pointer]
+                - generic [ref=e100]:
+                  - generic [ref=e101]:
+                    - 'heading "訂單 #reyjgy0z" [level=3] [ref=e103]'
+                    - paragraph [ref=e104]: 2026/2/28 下午11:56:29
+                  - generic [ref=e105]:
+                    - paragraph [ref=e106]: NT$ 2,800
+                    - generic [ref=e107]: COMPLETED
+                    - paragraph [ref=e108]: ✓ 已完成，可勾選申請退款
+              - generic [ref=e109]:
+                - checkbox [disabled] [ref=e110] [cursor=pointer]
+                - generic [ref=e111]:
+                  - generic [ref=e112]:
+                    - generic [ref=e113]:
+                      - 'heading "訂單 #kltxs14l" [level=3] [ref=e115]'
+                      - paragraph [ref=e116]: 2026/2/26 下午11:23:13
+                    - generic [ref=e117]:
+                      - paragraph [ref=e118]: NT$ 1,999
+                      - generic [ref=e119]: COMPLETED
+                  - paragraph [ref=e121]:
+                    - generic [ref=e123]: 退款狀態
+                    - generic [ref=e124]: PENDING
+              - generic [ref=e125]:
+                - checkbox [disabled] [ref=e126] [cursor=pointer]
+                - generic [ref=e127]:
+                  - generic [ref=e128]:
+                    - generic [ref=e129]:
+                      - 'heading "訂單 #zd3cu11p" [level=3] [ref=e131]'
+                      - paragraph [ref=e132]: 2026/2/26 下午11:23:13
+                    - generic [ref=e133]:
+                      - paragraph [ref=e134]: NT$ 1,999
+                      - generic [ref=e135]: REFUNDED
+                  - paragraph [ref=e137]:
+                    - generic [ref=e139]: 退款狀態
+                    - generic [ref=e140]: APPROVED
+              - generic [ref=e141]:
+                - checkbox [disabled] [ref=e142] [cursor=pointer]
+                - generic [ref=e143]:
+                  - generic [ref=e144]:
+                    - generic [ref=e145]:
+                      - 'heading "訂單 #djlesrl5" [level=3] [ref=e147]'
+                      - paragraph [ref=e148]: 2026/2/26 下午11:23:11
+                    - generic [ref=e149]:
+                      - paragraph [ref=e150]: NT$ 1,999
+                      - generic [ref=e151]: COMPLETED
+                  - paragraph [ref=e153]:
+                    - generic [ref=e155]: 退款狀態
+                    - generic [ref=e156]: PENDING
+      - button [ref=e157]:
+        - img [ref=e158]
+      - generic [ref=e162]:
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - img [ref=e165]
+            - heading "購物車" [level=2] [ref=e168]
+          - button [ref=e169]:
+            - img [ref=e170]
+        - generic [ref=e174]:
+          - img [ref=e175]
+          - paragraph [ref=e179]: 購物車是空的
+          - button "去逛逛" [ref=e180]
+  - button "Open Next.js Dev Tools" [ref=e186] [cursor=pointer]:
+    - img [ref=e187]
+  - alert [ref=e190]
+```

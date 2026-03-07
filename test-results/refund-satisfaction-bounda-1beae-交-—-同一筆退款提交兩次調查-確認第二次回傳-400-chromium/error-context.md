@@ -1,0 +1,898 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+        - generic [ref=e40]:
+          - generic [ref=e41]: Test User
+          - button "切換主題" [ref=e43]:
+            - img [ref=e44]
+          - button "登出" [ref=e46]:
+            - img [ref=e47]
+            - text: 登出
+    - main [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e55]:
+          - generic [ref=e56]: New Arrival
+          - heading "BEAUTY EXPERIENCE" [level=1] [ref=e57]
+          - paragraph [ref=e58]: 探索最頂尖的美容 KOL 直播，即時互動、限定優惠，為您帶來全新的購物體驗。
+          - generic [ref=e59]:
+            - button "立即探索" [ref=e60]
+            - button "了解更多" [ref=e61]
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - heading "進行中的 LIVE" [level=2] [ref=e65]
+              - paragraph [ref=e66]: Explore current live shopping events
+            - link "查看全部" [ref=e67] [cursor=pointer]:
+              - /url: /search
+              - text: 查看全部
+              - img [ref=e68]
+          - generic [ref=e70]:
+            - img [ref=e72]
+            - heading "目前沒有進行中的直播" [level=3] [ref=e75]
+            - paragraph [ref=e76]: 請稍後再回來看看，或關注您喜愛的 KOL。
+            - link "搜尋 KOL" [ref=e77] [cursor=pointer]:
+              - /url: /search
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - heading "熱門 美妝產品" [level=2] [ref=e82]
+              - paragraph [ref=e83]: Curated items by top KOLs
+            - link "查看更多" [ref=e84] [cursor=pointer]:
+              - /url: /search?tab=product
+              - text: 查看更多
+              - img [ref=e85]
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e91]: 🛍️
+                - generic [ref=e93]: Best Seller
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - paragraph [ref=e96]: by Test KOL
+                  - heading "Cle de Peau Radiant Fluid Foundation 粉底液" [level=3] [ref=e97]
+                - generic [ref=e98]:
+                  - generic [ref=e99]: NT$
+                  - generic [ref=e100]: 3,200
+              - generic [ref=e102]:
+                - link "詳情" [ref=e103] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0002gs096laee25h
+                - link "立即購買" [ref=e104] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0002gs096laee25h
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - generic [ref=e108]: 🛍️
+                - generic [ref=e110]: Best Seller
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - paragraph [ref=e113]: by Test KOL
+                  - heading "SUQQU Signature Color Eyes 眼影盤" [level=3] [ref=e114]
+                - generic [ref=e115]:
+                  - generic [ref=e116]: NT$
+                  - generic [ref=e117]: 2,500
+              - generic [ref=e119]:
+                - link "詳情" [ref=e120] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0003gs09isy3y6ev
+                - link "立即購買" [ref=e121] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0003gs09isy3y6ev
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - generic [ref=e125]: 🛍️
+                - generic [ref=e127]: Best Seller
+              - generic [ref=e128]:
+                - generic [ref=e129]:
+                  - paragraph [ref=e130]: by Test KOL
+                  - heading "LUNASOL Eye Coloration 眼影盤" [level=3] [ref=e131]
+                - generic [ref=e132]:
+                  - generic [ref=e133]: NT$
+                  - generic [ref=e134]: 2,200
+              - generic [ref=e136]:
+                - link "詳情" [ref=e137] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0004gs09t8y2r8y1
+                - link "立即購買" [ref=e138] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0004gs09t8y2r8y1
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - generic [ref=e142]: 🛍️
+                - generic [ref=e144]: Best Seller
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - paragraph [ref=e147]: by Test KOL
+                  - heading "RMK Creamy Foundation EX 粉底霜" [level=3] [ref=e148]
+                - generic [ref=e149]:
+                  - generic [ref=e150]: NT$
+                  - generic [ref=e151]: 1,800
+              - generic [ref=e153]:
+                - link "詳情" [ref=e154] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0005gs09sbys2du8
+                - link "立即購買" [ref=e155] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0005gs09sbys2du8
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - generic [ref=e159]: 🛍️
+                - generic [ref=e161]: Best Seller
+              - generic [ref=e162]:
+                - generic [ref=e163]:
+                  - paragraph [ref=e164]: by Test KOL
+                  - heading "Addiction The Eyeshadow 單色眼影" [level=3] [ref=e165]
+                - generic [ref=e166]:
+                  - generic [ref=e167]: NT$
+                  - generic [ref=e168]: 1,200
+              - generic [ref=e170]:
+                - link "詳情" [ref=e171] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0006gs09im6d9z4u
+                - link "立即購買" [ref=e172] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0006gs09im6d9z4u
+            - generic [ref=e173]:
+              - generic [ref=e174]:
+                - generic [ref=e176]: 🛍️
+                - generic [ref=e178]: Best Seller
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - paragraph [ref=e181]: by Test KOL
+                  - heading "Ipsa Metabolizer 調理液" [level=3] [ref=e182]
+                - generic [ref=e183]:
+                  - generic [ref=e184]: NT$
+                  - generic [ref=e185]: 2,000
+              - generic [ref=e187]:
+                - link "詳情" [ref=e188] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0007gs09i2z7g21r
+                - link "立即購買" [ref=e189] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0007gs09i2z7g21r
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e193]: 🛍️
+                - generic [ref=e195]: Best Seller
+              - generic [ref=e196]:
+                - generic [ref=e197]:
+                  - paragraph [ref=e198]: by Test KOL
+                  - heading "Kanebo Dew Lotion 化妝水" [level=3] [ref=e199]
+                - generic [ref=e200]:
+                  - generic [ref=e201]: NT$
+                  - generic [ref=e202]: 1,800
+              - generic [ref=e204]:
+                - link "詳情" [ref=e205] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ags09nef0q05x
+                - link "立即購買" [ref=e206] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ags09nef0q05x
+            - generic [ref=e207]:
+              - generic [ref=e208]:
+                - generic [ref=e210]: 🛍️
+                - generic [ref=e212]: Best Seller
+              - generic [ref=e213]:
+                - generic [ref=e214]:
+                  - paragraph [ref=e215]: by Test KOL
+                  - heading "Kosé Sekkisei Lotion 化妝水" [level=3] [ref=e216]
+                - generic [ref=e217]:
+                  - generic [ref=e218]: NT$
+                  - generic [ref=e219]: 1,500
+              - generic [ref=e221]:
+                - link "詳情" [ref=e222] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000bgs09kn7p0v5p
+                - link "立即購買" [ref=e223] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000bgs09kn7p0v5p
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - generic [ref=e227]: 🛍️
+                - generic [ref=e229]: Best Seller
+              - generic [ref=e230]:
+                - generic [ref=e231]:
+                  - paragraph [ref=e232]: by Test KOL
+                  - heading "MAQuillAGE Dramatic Powder UV 蜜粉" [level=3] [ref=e233]
+                - generic [ref=e234]:
+                  - generic [ref=e235]: NT$
+                  - generic [ref=e236]: 1,200
+              - generic [ref=e238]:
+                - link "詳情" [ref=e239] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000cgs09abdjq6dh
+                - link "立即購買" [ref=e240] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000cgs09abdjq6dh
+            - generic [ref=e241]:
+              - generic [ref=e242]:
+                - generic [ref=e244]: 🛍️
+                - generic [ref=e246]: Best Seller
+              - generic [ref=e247]:
+                - generic [ref=e248]:
+                  - paragraph [ref=e249]: by Test KOL
+                  - heading "Fancl Mild Cleansing Oil 卸妝油" [level=3] [ref=e250]
+                - generic [ref=e251]:
+                  - generic [ref=e252]: NT$
+                  - generic [ref=e253]: 1,000
+              - generic [ref=e255]:
+                - link "詳情" [ref=e256] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000dgs090sn7qgjm
+                - link "立即購買" [ref=e257] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000dgs090sn7qgjm
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - generic [ref=e261]: 🛍️
+                - generic [ref=e263]: Best Seller
+              - generic [ref=e264]:
+                - generic [ref=e265]:
+                  - paragraph [ref=e266]: by Test KOL
+                  - heading "Excel Skinny Rich Shadow 眼影盤" [level=3] [ref=e267]
+                - generic [ref=e268]:
+                  - generic [ref=e269]: NT$
+                  - generic [ref=e270]: "900"
+              - generic [ref=e272]:
+                - link "詳情" [ref=e273] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000egs09n8u0ceqj
+                - link "立即購買" [ref=e274] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000egs09n8u0ceqj
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - generic [ref=e278]: 🛍️
+                - generic [ref=e280]: Best Seller
+              - generic [ref=e281]:
+                - generic [ref=e282]:
+                  - paragraph [ref=e283]: by Test KOL
+                  - heading "Decorté Loose Powder 散粉" [level=3] [ref=e284]
+                - generic [ref=e285]:
+                  - generic [ref=e286]: NT$
+                  - generic [ref=e287]: 1,800
+              - generic [ref=e289]:
+                - link "詳情" [ref=e290] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000hgs0945rkk7s8
+                - link "立即購買" [ref=e291] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000hgs0945rkk7s8
+            - generic [ref=e292]:
+              - generic [ref=e293]:
+                - generic [ref=e295]: 🛍️
+                - generic [ref=e297]: Best Seller
+              - generic [ref=e298]:
+                - generic [ref=e299]:
+                  - paragraph [ref=e300]: by Test KOL
+                  - heading "&be Black Sponge 美妝蛋" [level=3] [ref=e301]
+                - generic [ref=e302]:
+                  - generic [ref=e303]: NT$
+                  - generic [ref=e304]: "400"
+              - generic [ref=e306]:
+                - link "詳情" [ref=e307] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000igs09fy57zfqv
+                - link "立即購買" [ref=e308] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000igs09fy57zfqv
+            - generic [ref=e309]:
+              - generic [ref=e310]:
+                - generic [ref=e312]: 🛍️
+                - generic [ref=e314]: Best Seller
+              - generic [ref=e315]:
+                - generic [ref=e316]:
+                  - paragraph [ref=e317]: by Test KOL
+                  - heading "Lululun Hydra-AZ Mask 面膜" [level=3] [ref=e318]
+                - generic [ref=e319]:
+                  - generic [ref=e320]: NT$
+                  - generic [ref=e321]: "600"
+              - generic [ref=e323]:
+                - link "詳情" [ref=e324] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000jgs09j059f6wr
+                - link "立即購買" [ref=e325] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000jgs09j059f6wr
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - generic [ref=e329]: 🛍️
+                - generic [ref=e331]: Best Seller
+              - generic [ref=e332]:
+                - generic [ref=e333]:
+                  - paragraph [ref=e334]: by Test KOL
+                  - heading "DUO The Cleansing Balm 卸妝膏" [level=3] [ref=e335]
+                - generic [ref=e336]:
+                  - generic [ref=e337]: NT$
+                  - generic [ref=e338]: 1,200
+              - generic [ref=e340]:
+                - link "詳情" [ref=e341] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000kgs09jym432lo
+                - link "立即購買" [ref=e342] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000kgs09jym432lo
+            - generic [ref=e343]:
+              - generic [ref=e344]:
+                - generic [ref=e346]: 🛍️
+                - generic [ref=e348]: Best Seller
+              - generic [ref=e349]:
+                - generic [ref=e350]:
+                  - paragraph [ref=e351]: by Test KOL
+                  - heading "Rosy Rosa Multi Foundation Puff 海綿撲" [level=3] [ref=e352]
+                - generic [ref=e353]:
+                  - generic [ref=e354]: NT$
+                  - generic [ref=e355]: "300"
+              - generic [ref=e357]:
+                - link "詳情" [ref=e358] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000lgs09v2mkj6jp
+                - link "立即購買" [ref=e359] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000lgs09v2mkj6jp
+            - generic [ref=e360]:
+              - generic [ref=e361]:
+                - generic [ref=e363]: 🛍️
+                - generic [ref=e365]: Best Seller
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - paragraph [ref=e368]: by Test KOL
+                  - heading "Sensai Lash Volumiser 38°C 睫毛膏" [level=3] [ref=e369]
+                - generic [ref=e370]:
+                  - generic [ref=e371]: NT$
+                  - generic [ref=e372]: 1,500
+              - generic [ref=e374]:
+                - link "詳情" [ref=e375] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ngs0955h9mu2a
+                - link "立即購買" [ref=e376] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ngs0955h9mu2a
+            - generic [ref=e377]:
+              - generic [ref=e378]:
+                - generic [ref=e380]: 🛍️
+                - generic [ref=e382]: Best Seller
+              - generic [ref=e383]:
+                - generic [ref=e384]:
+                  - paragraph [ref=e385]: by Test KOL
+                  - heading "Hada Labo Super Hydrator Lotion 化妝水" [level=3] [ref=e386]
+                - generic [ref=e387]:
+                  - generic [ref=e388]: NT$
+                  - generic [ref=e389]: "600"
+              - generic [ref=e391]:
+                - link "詳情" [ref=e392] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ogs0993wl69yc
+                - link "立即購買" [ref=e393] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ogs0993wl69yc
+            - generic [ref=e394]:
+              - generic [ref=e395]:
+                - generic [ref=e397]: 🛍️
+                - generic [ref=e399]: Best Seller
+              - generic [ref=e400]:
+                - generic [ref=e401]:
+                  - paragraph [ref=e402]: by Test KOL
+                  - heading "Shiseido Anessa Perfect UV Sunscreen 防曬乳" [level=3] [ref=e403]
+                - generic [ref=e404]:
+                  - generic [ref=e405]: NT$
+                  - generic [ref=e406]: "900"
+              - generic [ref=e408]:
+                - link "詳情" [ref=e409] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000pgs0915n9psnb
+                - link "立即購買" [ref=e410] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000pgs0915n9psnb
+            - generic [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e414]: 🛍️
+                - generic [ref=e416]: Best Seller
+              - generic [ref=e417]:
+                - generic [ref=e418]:
+                  - paragraph [ref=e419]: by Test KOL
+                  - heading "Shiseido Elixir Superior Day Care Revolution 日霜" [level=3] [ref=e420]
+                - generic [ref=e421]:
+                  - generic [ref=e422]: NT$
+                  - generic [ref=e423]: 1,800
+              - generic [ref=e425]:
+                - link "詳情" [ref=e426] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000qgs09cecs1d4x
+                - link "立即購買" [ref=e427] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000qgs09cecs1d4x
+            - generic [ref=e428]:
+              - generic [ref=e429]:
+                - generic [ref=e431]: 🛍️
+                - generic [ref=e433]: Best Seller
+              - generic [ref=e434]:
+                - generic [ref=e435]:
+                  - paragraph [ref=e436]: by Test KOL
+                  - heading "FAS The Black Day Cream 日霜" [level=3] [ref=e437]
+                - generic [ref=e438]:
+                  - generic [ref=e439]: NT$
+                  - generic [ref=e440]: 1,500
+              - generic [ref=e442]:
+                - link "詳情" [ref=e443] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000rgs09jerrkr3r
+                - link "立即購買" [ref=e444] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000rgs09jerrkr3r
+            - generic [ref=e445]:
+              - generic [ref=e446]:
+                - generic [ref=e448]: 🛍️
+                - generic [ref=e450]: Best Seller
+              - generic [ref=e451]:
+                - generic [ref=e452]:
+                  - paragraph [ref=e453]: by Test KOL
+                  - heading "Visee Glossy Rich Eyes 眼影" [level=3] [ref=e454]
+                - generic [ref=e455]:
+                  - generic [ref=e456]: NT$
+                  - generic [ref=e457]: "700"
+              - generic [ref=e459]:
+                - link "詳情" [ref=e460] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000sgs0922px7ymv
+                - link "立即購買" [ref=e461] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000sgs0922px7ymv
+            - generic [ref=e462]:
+              - generic [ref=e463]:
+                - generic [ref=e465]: 🛍️
+                - generic [ref=e467]: Best Seller
+              - generic [ref=e468]:
+                - generic [ref=e469]:
+                  - paragraph [ref=e470]: by Test KOL
+                  - heading "Esprique Select Eye Color 眼影" [level=3] [ref=e471]
+                - generic [ref=e472]:
+                  - generic [ref=e473]: NT$
+                  - generic [ref=e474]: "800"
+              - generic [ref=e476]:
+                - link "詳情" [ref=e477] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000tgs09zt6zg2d3
+                - link "立即購買" [ref=e478] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000tgs09zt6zg2d3
+            - generic [ref=e479]:
+              - generic [ref=e480]:
+                - generic [ref=e482]: 🛍️
+                - generic [ref=e484]: Best Seller
+              - generic [ref=e485]:
+                - generic [ref=e486]:
+                  - paragraph [ref=e487]: by Test KOL
+                  - heading "Integrate Air Feel Maker 妝前乳" [level=3] [ref=e488]
+                - generic [ref=e489]:
+                  - generic [ref=e490]: NT$
+                  - generic [ref=e491]: "900"
+              - generic [ref=e493]:
+                - link "詳情" [ref=e494] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ugs0912k9lwdg
+                - link "立即購買" [ref=e495] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ugs0912k9lwdg
+            - generic [ref=e496]:
+              - generic [ref=e497]:
+                - generic [ref=e499]: 🛍️
+                - generic [ref=e501]: Best Seller
+              - generic [ref=e502]:
+                - generic [ref=e503]:
+                  - paragraph [ref=e504]: by Test KOL
+                  - heading "Sofina Primavista Long Keep Base 妝前乳" [level=3] [ref=e505]
+                - generic [ref=e506]:
+                  - generic [ref=e507]: NT$
+                  - generic [ref=e508]: 1,200
+              - generic [ref=e510]:
+                - link "詳情" [ref=e511] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000vgs09zqkoe59t
+                - link "立即購買" [ref=e512] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000vgs09zqkoe59t
+            - generic [ref=e513]:
+              - generic [ref=e514]:
+                - generic [ref=e516]: 🛍️
+                - generic [ref=e518]: Best Seller
+              - generic [ref=e519]:
+                - generic [ref=e520]:
+                  - paragraph [ref=e521]: by Test KOL
+                  - heading "DHC Deep Cleansing Oil 卸妝油" [level=3] [ref=e522]
+                - generic [ref=e523]:
+                  - generic [ref=e524]: NT$
+                  - generic [ref=e525]: 1,000
+              - generic [ref=e527]:
+                - link "詳情" [ref=e528] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000wgs090v8fn1sh
+                - link "立即購買" [ref=e529] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000wgs090v8fn1sh
+            - generic [ref=e530]:
+              - generic [ref=e531]:
+                - generic [ref=e533]: 🛍️
+                - generic [ref=e535]: Best Seller
+              - generic [ref=e536]:
+                - generic [ref=e537]:
+                  - paragraph [ref=e538]: by Test KOL
+                  - heading "Orbis Clearful Lotion 化妝水" [level=3] [ref=e539]
+                - generic [ref=e540]:
+                  - generic [ref=e541]: NT$
+                  - generic [ref=e542]: "900"
+              - generic [ref=e544]:
+                - link "詳情" [ref=e545] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000xgs09m3bf0qgk
+                - link "立即購買" [ref=e546] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000xgs09m3bf0qgk
+            - generic [ref=e547]:
+              - generic [ref=e548]:
+                - generic [ref=e550]: 🛍️
+                - generic [ref=e552]: Best Seller
+              - generic [ref=e553]:
+                - generic [ref=e554]:
+                  - paragraph [ref=e555]: by Test KOL
+                  - heading "Three Dimensional Vision Eye Palette 眼影盤" [level=3] [ref=e556]
+                - generic [ref=e557]:
+                  - generic [ref=e558]: NT$
+                  - generic [ref=e559]: 2,200
+              - generic [ref=e561]:
+                - link "詳情" [ref=e562] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ygs09ei2jqnb5
+                - link "立即購買" [ref=e563] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ygs09ei2jqnb5
+            - generic [ref=e564]:
+              - generic [ref=e565]:
+                - generic [ref=e567]: 🛍️
+                - generic [ref=e569]: Best Seller
+              - generic [ref=e570]:
+                - generic [ref=e571]:
+                  - paragraph [ref=e572]: by Test KOL
+                  - heading "Cle de Peau Lipstick Cashmere 唇膏" [level=3] [ref=e573]
+                - generic [ref=e574]:
+                  - generic [ref=e575]: NT$
+                  - generic [ref=e576]: 1,800
+              - generic [ref=e578]:
+                - link "詳情" [ref=e579] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000zgs09gz41k7uw
+                - link "立即購買" [ref=e580] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000zgs09gz41k7uw
+            - generic [ref=e581]:
+              - generic [ref=e582]:
+                - generic [ref=e584]: 🛍️
+                - generic [ref=e586]: Best Seller
+              - generic [ref=e587]:
+                - generic [ref=e588]:
+                  - paragraph [ref=e589]: by Test KOL
+                  - heading "SUQQU Extra Glow Lipstick 唇膏" [level=3] [ref=e590]
+                - generic [ref=e591]:
+                  - generic [ref=e592]: NT$
+                  - generic [ref=e593]: 1,800
+              - generic [ref=e595]:
+                - link "詳情" [ref=e596] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0010gs09b9zqyd36
+                - link "立即購買" [ref=e597] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0010gs09b9zqyd36
+            - generic [ref=e598]:
+              - generic [ref=e599]:
+                - generic [ref=e601]: 🛍️
+                - generic [ref=e603]: Best Seller
+              - generic [ref=e604]:
+                - generic [ref=e605]:
+                  - paragraph [ref=e606]: by Test KOL
+                  - heading "LUNASOL Sheer Contrast Eyes 眼影盤" [level=3] [ref=e607]
+                - generic [ref=e608]:
+                  - generic [ref=e609]: NT$
+                  - generic [ref=e610]: 2,200
+              - generic [ref=e612]:
+                - link "詳情" [ref=e613] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0011gs09cekq6vzl
+                - link "立即購買" [ref=e614] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0011gs09cekq6vzl
+            - generic [ref=e615]:
+              - generic [ref=e616]:
+                - generic [ref=e618]: 🛍️
+                - generic [ref=e620]: Best Seller
+              - generic [ref=e621]:
+                - generic [ref=e622]:
+                  - paragraph [ref=e623]: by Test KOL
+                  - heading "RMK Color Foundation 粉底" [level=3] [ref=e624]
+                - generic [ref=e625]:
+                  - generic [ref=e626]: NT$
+                  - generic [ref=e627]: 1,800
+              - generic [ref=e629]:
+                - link "詳情" [ref=e630] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0012gs09oh5z0eiq
+                - link "立即購買" [ref=e631] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0012gs09oh5z0eiq
+            - generic [ref=e632]:
+              - generic [ref=e633]:
+                - generic [ref=e635]: 🛍️
+                - generic [ref=e637]: Best Seller
+              - generic [ref=e638]:
+                - generic [ref=e639]:
+                  - paragraph [ref=e640]: by Test KOL
+                  - heading "Addiction The Blush 腮紅" [level=3] [ref=e641]
+                - generic [ref=e642]:
+                  - generic [ref=e643]: NT$
+                  - generic [ref=e644]: 1,500
+              - generic [ref=e646]:
+                - link "詳情" [ref=e647] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0013gs09yz8blu6w
+                - link "立即購買" [ref=e648] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0013gs09yz8blu6w
+            - generic [ref=e649]:
+              - generic [ref=e650]:
+                - generic [ref=e652]: 🛍️
+                - generic [ref=e654]: Best Seller
+              - generic [ref=e655]:
+                - generic [ref=e656]:
+                  - paragraph [ref=e657]: by Test KOL
+                  - heading "Ipsa Creative Concealer 遮瑕膏" [level=3] [ref=e658]
+                - generic [ref=e659]:
+                  - generic [ref=e660]: NT$
+                  - generic [ref=e661]: 1,400
+              - generic [ref=e663]:
+                - link "詳情" [ref=e664] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0014gs09mhz811sa
+                - link "立即購買" [ref=e665] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0014gs09mhz811sa
+            - generic [ref=e666]:
+              - generic [ref=e667]:
+                - generic [ref=e669]: 🛍️
+                - generic [ref=e671]: Best Seller
+              - generic [ref=e672]:
+                - generic [ref=e673]:
+                  - paragraph [ref=e674]: by Test KOL
+                  - heading "Albion Elegant Make Loose Powder 散粉" [level=3] [ref=e675]
+                - generic [ref=e676]:
+                  - generic [ref=e677]: NT$
+                  - generic [ref=e678]: 2,000
+              - generic [ref=e680]:
+                - link "詳情" [ref=e681] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0015gs09n6hrp41y
+                - link "立即購買" [ref=e682] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0015gs09n6hrp41y
+            - generic [ref=e683]:
+              - generic [ref=e684]:
+                - generic [ref=e686]: 🛍️
+                - generic [ref=e688]: Best Seller
+              - generic [ref=e689]:
+                - generic [ref=e690]:
+                  - paragraph [ref=e691]: by Test KOL
+                  - heading "Allie Extra UV Perfect Gel 防曬膠" [level=3] [ref=e692]
+                - generic [ref=e693]:
+                  - generic [ref=e694]: NT$
+                  - generic [ref=e695]: "800"
+              - generic [ref=e697]:
+                - link "詳情" [ref=e698] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ggs09vg2hhz7k
+                - link "立即購買" [ref=e699] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000ggs09vg2hhz7k
+            - generic [ref=e700]:
+              - generic [ref=e701]:
+                - generic [ref=e703]: 🛍️
+                - generic [ref=e705]: Best Seller
+              - generic [ref=e706]:
+                - generic [ref=e707]:
+                  - paragraph [ref=e708]: by Test KOL
+                  - heading "Kate Designing Eyebrow 3D 眉筆" [level=3] [ref=e709]
+                - generic [ref=e710]:
+                  - generic [ref=e711]: NT$
+                  - generic [ref=e712]: "500"
+              - generic [ref=e714]:
+                - link "詳情" [ref=e715] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000fgs09ycrkr9xp
+                - link "立即購買" [ref=e716] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000fgs09ycrkr9xp
+            - generic [ref=e717]:
+              - generic [ref=e718]:
+                - generic [ref=e720]: 🛍️
+                - generic [ref=e722]: Best Seller
+              - generic [ref=e723]:
+                - generic [ref=e724]:
+                  - paragraph [ref=e725]: by Test KOL
+                  - heading "SK-II Facial Treatment Essence 精華水" [level=3] [ref=e726]
+                - generic [ref=e727]:
+                  - generic [ref=e728]: NT$
+                  - generic [ref=e729]: 3,200
+              - generic [ref=e731]:
+                - link "詳情" [ref=e732] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0001gs09pyxv7awb
+                - link "立即購買" [ref=e733] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0001gs09pyxv7awb
+            - generic [ref=e734]:
+              - generic [ref=e735]:
+                - img "Shiseido Ultimune Power Infusing Concentrate 精華液" [ref=e736]
+                - generic [ref=e738]: Best Seller
+              - generic [ref=e739]:
+                - generic [ref=e740]:
+                  - paragraph [ref=e741]: by Test KOL
+                  - heading "Shiseido Ultimune Power Infusing Concentrate 精華液" [level=3] [ref=e742]
+                - generic [ref=e743]:
+                  - generic [ref=e744]: NT$
+                  - generic [ref=e745]: 2,800
+              - generic [ref=e747]:
+                - link "詳情" [ref=e748] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0000gs0959f2w47h
+                - link "立即購買" [ref=e749] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0000gs0959f2w47h
+            - generic [ref=e750]:
+              - generic [ref=e751]:
+                - generic [ref=e753]: 🛍️
+                - generic [ref=e755]: Best Seller
+              - generic [ref=e756]:
+                - generic [ref=e757]:
+                  - paragraph [ref=e758]: by Test KOL
+                  - heading "Pola Wrinkle Shot Serum 精華" [level=3] [ref=e759]
+                - generic [ref=e760]:
+                  - generic [ref=e761]: NT$
+                  - generic [ref=e762]: 2,800
+              - generic [ref=e764]:
+                - link "詳情" [ref=e765] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0016gs09knp9jo8q
+                - link "立即購買" [ref=e766] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0016gs09knp9jo8q
+            - generic [ref=e767]:
+              - generic [ref=e768]:
+                - generic [ref=e770]: 🛍️
+                - generic [ref=e772]: Best Seller
+              - generic [ref=e773]:
+                - generic [ref=e774]:
+                  - paragraph [ref=e775]: by Test KOL
+                  - heading "Kanebo Lissage Cream 面霜" [level=3] [ref=e776]
+                - generic [ref=e777]:
+                  - generic [ref=e778]: NT$
+                  - generic [ref=e779]: 2,200
+              - generic [ref=e781]:
+                - link "詳情" [ref=e782] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0017gs090kx84tcv
+                - link "立即購買" [ref=e783] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0017gs090kx84tcv
+            - generic [ref=e784]:
+              - generic [ref=e785]:
+                - generic [ref=e787]: 🛍️
+                - generic [ref=e789]: Best Seller
+              - generic [ref=e790]:
+                - generic [ref=e791]:
+                  - paragraph [ref=e792]: by Test KOL
+                  - heading "Kosé Infinity Serum 精華" [level=3] [ref=e793]
+                - generic [ref=e794]:
+                  - generic [ref=e795]: NT$
+                  - generic [ref=e796]: 2,500
+              - generic [ref=e798]:
+                - link "詳情" [ref=e799] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0018gs096hwjdics
+                - link "立即購買" [ref=e800] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0018gs096hwjdics
+            - generic [ref=e801]:
+              - generic [ref=e802]:
+                - generic [ref=e804]: 🛍️
+                - generic [ref=e806]: Best Seller
+              - generic [ref=e807]:
+                - generic [ref=e808]:
+                  - paragraph [ref=e809]: by Test KOL
+                  - heading "MAQuillAGE Dramatic Rouge 唇膏" [level=3] [ref=e810]
+                - generic [ref=e811]:
+                  - generic [ref=e812]: NT$
+                  - generic [ref=e813]: 1,200
+              - generic [ref=e815]:
+                - link "詳情" [ref=e816] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0019gs09bp6akv7o
+                - link "立即購買" [ref=e817] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0019gs09bp6akv7o
+            - generic [ref=e818]:
+              - generic [ref=e819]:
+                - generic [ref=e821]: 🛍️
+                - generic [ref=e823]: Best Seller
+              - generic [ref=e824]:
+                - generic [ref=e825]:
+                  - paragraph [ref=e826]: by Test KOL
+                  - heading "Fancl Washing Powder 潔顏粉" [level=3] [ref=e827]
+                - generic [ref=e828]:
+                  - generic [ref=e829]: NT$
+                  - generic [ref=e830]: "800"
+              - generic [ref=e832]:
+                - link "詳情" [ref=e833] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001ags09wvszahpc
+                - link "立即購買" [ref=e834] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001ags09wvszahpc
+            - generic [ref=e835]:
+              - generic [ref=e836]:
+                - generic [ref=e838]: 🛍️
+                - generic [ref=e840]: Best Seller
+              - generic [ref=e841]:
+                - generic [ref=e842]:
+                  - paragraph [ref=e843]: by Test KOL
+                  - heading "Shiseido Synchro Skin Self-Refreshing Foundation 粉底" [level=3] [ref=e844]
+                - generic [ref=e845]:
+                  - generic [ref=e846]: NT$
+                  - generic [ref=e847]: 2,200
+              - generic [ref=e849]:
+                - link "詳情" [ref=e850] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001bgs09r9evxv4u
+                - link "立即購買" [ref=e851] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001bgs09r9evxv4u
+            - generic [ref=e852]:
+              - generic [ref=e853]:
+                - generic [ref=e855]: 🛍️
+                - generic [ref=e857]: Best Seller
+              - generic [ref=e858]:
+                - generic [ref=e859]:
+                  - paragraph [ref=e860]: by Test KOL
+                  - heading "SK-II Genifique Youth Activating Concentrate 精華" [level=3] [ref=e861]
+                - generic [ref=e862]:
+                  - generic [ref=e863]: NT$
+                  - generic [ref=e864]: 3,500
+              - generic [ref=e866]:
+                - link "詳情" [ref=e867] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001cgs0930jugy0j
+                - link "立即購買" [ref=e868] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci001cgs0930jugy0j
+            - generic [ref=e869]:
+              - generic [ref=e870]:
+                - generic [ref=e872]: 🛍️
+                - generic [ref=e874]: Best Seller
+              - generic [ref=e875]:
+                - generic [ref=e876]:
+                  - paragraph [ref=e877]: by Test KOL
+                  - heading "Decorté Rouge Decorte Cream Glow 唇膏" [level=3] [ref=e878]
+                - generic [ref=e879]:
+                  - generic [ref=e880]: NT$
+                  - generic [ref=e881]: 1,800
+              - generic [ref=e883]:
+                - link "詳情" [ref=e884] [cursor=pointer]:
+                  - /url: /products/cmm4rwocj001dgs09bpxuyql0
+                - link "立即購買" [ref=e885] [cursor=pointer]:
+                  - /url: /products/cmm4rwocj001dgs09bpxuyql0
+            - generic [ref=e886]:
+              - generic [ref=e887]:
+                - generic [ref=e889]: 🛍️
+                - generic [ref=e891]: Best Seller
+              - generic [ref=e892]:
+                - generic [ref=e893]:
+                  - paragraph [ref=e894]: by Test KOL
+                  - heading "Pola B.A Lotion 化妝水" [level=3] [ref=e895]
+                - generic [ref=e896]:
+                  - generic [ref=e897]: NT$
+                  - generic [ref=e898]: 3,000
+              - generic [ref=e900]:
+                - link "詳情" [ref=e901] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0009gs09yeyq1sj7
+                - link "立即購買" [ref=e902] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0009gs09yeyq1sj7
+            - generic [ref=e903]:
+              - generic [ref=e904]:
+                - generic [ref=e906]: 🛍️
+                - generic [ref=e908]: Best Seller
+              - generic [ref=e909]:
+                - generic [ref=e910]:
+                  - paragraph [ref=e911]: by Test KOL
+                  - heading "Kanebo Suisai Beauty Clear Powder 酵素潔顏粉" [level=3] [ref=e912]
+                - generic [ref=e913]:
+                  - generic [ref=e914]: NT$
+                  - generic [ref=e915]: "800"
+              - generic [ref=e917]:
+                - link "詳情" [ref=e918] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000mgs09jru843xw
+                - link "立即購買" [ref=e919] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci000mgs09jru843xw
+            - generic [ref=e920]:
+              - generic [ref=e921]:
+                - generic [ref=e923]: 🛍️
+                - generic [ref=e925]: Best Seller
+              - generic [ref=e926]:
+                - generic [ref=e927]:
+                  - paragraph [ref=e928]: by Test KOL
+                  - heading "Albion Excia Embeage Lotion 化妝水" [level=3] [ref=e929]
+                - generic [ref=e930]:
+                  - generic [ref=e931]: NT$
+                  - generic [ref=e932]: 2,800
+              - generic [ref=e934]:
+                - link "詳情" [ref=e935] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0008gs09zq4oyk0w
+                - link "立即購買" [ref=e936] [cursor=pointer]:
+                  - /url: /products/cmm4rwoci0008gs09zq4oyk0w
+      - button [ref=e937]:
+        - img [ref=e938]
+      - generic [ref=e942]:
+        - generic [ref=e943]:
+          - generic [ref=e944]:
+            - img [ref=e945]
+            - heading "購物車" [level=2] [ref=e948]
+          - button [ref=e949]:
+            - img [ref=e950]
+        - generic [ref=e954]:
+          - img [ref=e955]
+          - paragraph [ref=e959]: 購物車是空的
+          - button "去逛逛" [ref=e960]
+  - button "Open Next.js Dev Tools" [ref=e966] [cursor=pointer]:
+    - img [ref=e967]
+  - alert [ref=e970]
+```

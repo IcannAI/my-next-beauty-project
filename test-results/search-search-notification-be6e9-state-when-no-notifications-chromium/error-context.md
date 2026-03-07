@@ -1,0 +1,113 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "BEAUTYLIVE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: BEAUTYLIVE
+        - generic [ref=e12]:
+          - link "首頁" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img [ref=e14]
+            - text: 首頁
+          - link "搜尋" [ref=e17] [cursor=pointer]:
+            - /url: /search
+            - img [ref=e18]
+            - text: 搜尋
+          - link "直播" [ref=e21] [cursor=pointer]:
+            - /url: /live
+            - img [ref=e22]
+            - text: 直播
+          - link "訂單" [ref=e25] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e26]
+            - text: 訂單
+          - link "收藏" [ref=e29] [cursor=pointer]:
+            - /url: /favorites
+            - img [ref=e30]
+            - text: 收藏
+          - link "通知" [ref=e32] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e33]
+            - text: 通知
+          - link "私訊" [ref=e36] [cursor=pointer]:
+            - /url: /messages
+            - img [ref=e37]
+            - text: 私訊
+        - generic [ref=e40]:
+          - generic [ref=e41]: Test User
+          - button "切換主題" [ref=e43]:
+            - img [ref=e44]
+          - button "登出" [ref=e46]:
+            - img [ref=e47]
+            - text: 登出
+    - main [ref=e50]:
+      - main [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - generic [ref=e54]:
+              - heading "通知中心" [level=1] [ref=e55]: 通知中心
+              - paragraph [ref=e56]: Stay updated with your latest alerts
+            - generic [ref=e57]: 4 Total Alerts
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e61]
+              - generic [ref=e64]:
+                - generic [ref=e65]:
+                  - generic [ref=e66]: order cancelled
+                  - generic [ref=e67]:
+                    - img [ref=e68]
+                    - text: 2026/3/6 下午5:11:40
+                - heading "訂單已取消" [level=3] [ref=e71]
+                - paragraph [ref=e72]: "訂單 #gnmdhad9 已由管理員取消。原因：管理員取消異常訂單"
+            - generic [ref=e73]:
+              - img [ref=e75]
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - generic [ref=e82]: order created
+                  - generic [ref=e83]:
+                    - img [ref=e84]
+                    - text: 2026/2/26 下午11:23:13
+                - heading "訂單成立" [level=3] [ref=e87]
+                - paragraph [ref=e88]: "您已在直播中下單 (訂單 ID: cmm3m4r34000a6uhckltxs14l)，請盡快完成付款。"
+            - generic [ref=e89]:
+              - img [ref=e91]
+              - generic [ref=e95]:
+                - generic [ref=e96]:
+                  - generic [ref=e97]: order created
+                  - generic [ref=e98]:
+                    - img [ref=e99]
+                    - text: 2026/2/26 下午11:23:13
+                - heading "訂單成立" [level=3] [ref=e102]
+                - paragraph [ref=e103]: "您已在直播中下單 (訂單 ID: cmm3m4r2o00086uhczd3cu11p)，請盡快完成付款。"
+            - generic [ref=e104]:
+              - img [ref=e106]
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - generic [ref=e112]: order created
+                  - generic [ref=e113]:
+                    - img [ref=e114]
+                    - text: 2026/2/26 下午11:23:12
+                - heading "訂單成立" [level=3] [ref=e117]
+                - paragraph [ref=e118]: "您已在直播中下單 (訂單 ID: cmm3m4ps900026uhcdjlesrl5)，請盡快完成付款。"
+      - button [ref=e119]:
+        - img [ref=e120]
+      - generic [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - img [ref=e127]
+            - heading "購物車" [level=2] [ref=e130]
+          - button [ref=e131]:
+            - img [ref=e132]
+        - generic [ref=e136]:
+          - img [ref=e137]
+          - paragraph [ref=e141]: 購物車是空的
+          - button "去逛逛" [ref=e142]
+  - button "Open Next.js Dev Tools" [ref=e148] [cursor=pointer]:
+    - img [ref=e149]
+  - alert [ref=e152]
+```

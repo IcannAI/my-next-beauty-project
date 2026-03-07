@@ -18,6 +18,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
+      "@/app/*": [
+        "./app/*"
+      ],
       "@/*": [
         "./src/*"
       ],
@@ -40,7 +43,6 @@
   ],
   "exclude": [
     "node_modules",
-    "scripts",
-    "tests/integration"
+    "scripts"
   ]
 }

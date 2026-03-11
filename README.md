@@ -1,215 +1,284 @@
 # GlowSocial Beauty Commerce Platform
 
-![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=flat-square&logo=postgresql)
-![Playwright](https://img.shields.io/badge/Playwright-E2E-green?style=flat-square&logo=playwright)
-![Datadog](https://img.shields.io/badge/Datadog-Observability-purple?style=flat-square&logo=datadog)
+![Playwright](https://img.shields.io/badge/Playwright-E2E_120_tests-green?style=flat-square&logo=playwright)
+![Jest](https://img.shields.io/badge/Jest-Integration_17%2F17-orange?style=flat-square&logo=jest)
+![Datadog](https://img.shields.io/badge/Datadog-RUM%2BAPM-purple?style=flat-square&logo=datadog)
+![License](https://img.shields.io/badge/License-MIT%20%2B%20Commons%20Clause-red?style=flat-square)
 
-**Production-ready KOL live-streaming e-commerce platform** engineered for high concurrency, real-time engagement, and robust financial settlement.
+**Production-ready KOL live-streaming e-commerce platform** engineered for high concurrency,
+real-time engagement, and robust financial settlement.
+
+> **Portfolio Notice:** This project is published for demonstration purposes.
+> Code is readable and forkable; commercial use is prohibited. See [LICENSE](LICENSE).
+
+> **Status:** Core features complete · Integration tests 17/17 passing · CI/CD pipeline active
 
 ---
 
 ## 🏗 System Architecture
-
-The platform is built on a modern, event-driven architecture designed for scalability and observability.
 
 ```text
 [ Client Side ]                 [ Server Side / Cloud Infrastructure ]
       │
       ▼
 Next.js App Router ───────────▶ Next.js API Routes (Serverless)
-(SSR/SSG/ISR)       │                 │
-      │             │                 ▼
-      │             │         Prisma ORM (Type-safe)
-      │             │                 │
-      │             │                 ▼
-      │             │         PostgreSQL (Managed DB)
-      │             │
-      │             └────────▶ Pusher Channels (Real-time Chat/Events)
-      │             └────────▶ Cloudflare R2 (Evidence/Asset Storage)
-      │             └────────▶ Datadog (RUM + APM + Monitors)
+(SSR / ISR / Client Components)         │
+                                         ├──▶ Prisma ORM
+                                         │         └──▶ PostgreSQL (Neon Serverless)
+                                         ├──▶ Pusher Channels  (Real-time chat / notifications)
+                                         ├──▶ Cloudflare R2    (Refund evidence / product images)
+                                         └──▶ Datadog          (RUM + APM + Business KPI monitors)
       │
       ▼
-Vercel Cron Jobs ─────────────▶ Automated Settlement & Refund Reminders
+Vercel Cron Jobs ─────────────▶ Automated commission settlement + refund satisfaction reminders
 ```
+
+### Domain-Driven Design (DDD)
+
+The `src/` directory follows strict DDD layering to decouple business logic from infrastructure:
+
+| Layer | Path | Responsibility |
+| :--- | :--- | :--- |
+| **Domain** | `src/domain/` | Pure business rules, entities, repository interfaces. No framework dependencies. |
+| **Application** | `src/application/` | Use-case orchestration — coordinates domain objects and external services. |
+| **Infrastructure** | `src/infrastructure/` | Concrete implementations: Prisma, Cloudflare R2, Pusher, NextAuth. |
+| **Components** | `src/components/` | React UI — Atomic → Feature → Page hierarchy with Tailwind CSS + shadcn/ui. |
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer | Technology | Key Implementation |
+| Layer | Technology | Version | Notes |
+| :--- | :--- | :--- | :--- |
+| Framework | Next.js | 15.x | App Router, Server Actions, Edge Runtime |
+| Language | TypeScript | 5.x | Strict end-to-end typing (Frontend → DB) |
+| Auth | NextAuth.js | v4 | Credentials Provider + bcryptjs |
+| Database | PostgreSQL | 15 | Neon Serverless — auto-scales |
+| ORM | Prisma | latest | Type-safe schema + automated migrations |
+| Real-time | Pusher Channels | — | WebSocket chat, notifications, order status |
+| Storage | Cloudflare R2 | — | S3-compatible — refund evidence + product images |
+| State | Zustand | — | Client-side cart state |
+| Styling | Tailwind CSS + shadcn/ui | — | Utility-first + component library, dark mode |
+| E2E Testing | Playwright | latest | 120 tests across 6 spec files |
+| Integration | Jest + ts-jest | 30.x | 3 suites, 17/17 passing, CI-ready |
+| Deployment | Vercel | — | Preview + Production, Cron Jobs |
+| Observability | Datadog | — | RUM, APM, custom business KPI dashboard |
+
+---
+
+## 🚀 Core Functionality
+
+### 🔐 Authentication & Authorization
+- NextAuth.js v4 Credentials Provider with bcrypt password hashing
+- Three-role RBAC: `USER` / `KOL` / `ADMIN`
+- Route-level protection via `middleware.ts`
+- API Routes double-verification with `getServerSession`
+- Session persistence across page reloads
+
+### 🛍️ Product System
+- Full CRUD with soft-delete archive/restore (`isArchived`)
+- Multi-field fuzzy search — name, bio, description (ILIKE + OR conditions)
+- Product image upload to Cloudflare R2
+- Review system with infinite scroll, rating distribution, and duplicate prevention
+- 50-item seed dataset (`npx prisma db seed`)
+
+### 🛒 Orders & Checkout
+- Atomic checkout transaction (`prisma.$transaction` + `SELECT FOR UPDATE`)
+- Inventory locking — race condition protection against overselling
+- Server-side price tampering validation
+- Order status → Pusher real-time notification pipeline
+- Admin cancel with automatic inventory restore
+
+### 📺 Live Streaming
+- KOL start/end stream with automatic commission settlement trigger
+- Real-time product carousel (Pusher-powered)
+- Live chat via dedicated `live-{liveId}` Pusher channel
+- Inventory-aware "Buy Now" button
+
+### 💰 Refunds & Commission Settlement
+- Batch refund (up to 10 orders per request, reason ≥ 5 characters)
+- Multi-file evidence upload to R2 (up to 5 URLs)
+- **Commission clawback** — atomic `kolEarnings` decrement on refund approval
+- Admin approve/reject dashboard
+- Settlement idempotency — repeated Cron runs are safe
+- Vercel Cron auto-settlement: `POST /api/cron/settle-live-revenue`
+- 7-day satisfaction survey Cron: `POST /api/cron/refund-feedback-reminder`
+- KOL revenue ledger at `/dashboard/settlement`
+
+### 🔔 Search & Notifications
+- Search with 300ms debounce, minimum 2-character input, empty-state UI
+- Pusher real-time notification badge
+- Admin anomaly detection dashboard
+
+### 🎨 UI / UX
+- Dark mode (`ThemeProvider` + Tailwind `class` strategy)
+- Responsive desktop Navbar + mobile BottomTabBar
+- KOL Profile inline editor and public-facing profile page
+
+### 🤝 Social Features
+- Follow / Unfollow KOL
+- Favorite / Unfavorite products
+- Real-time private messaging (Pusher)
+
+### 📊 Observability
+- Datadog RUM — Core Web Vitals tracking
+- Datadog APM Monitors — pre-configured JSON definitions
+- API response time threshold alerts
+
+---
+
+## 🧪 Testing
+
+### E2E Tests (Playwright) — 120 test cases
+
+```bash
+# Requires dev server running
+npm run dev
+
+# Run all tests
+npx playwright test --reporter=list
+
+# Run a single spec
+npx playwright test tests/e2e/auth/auth-security.spec.ts
+```
+
+| Spec File | Test IDs | Coverage |
 | :--- | :--- | :--- |
-| **Framework** | **Next.js 16.1** | App Router, Server Actions, Edge Runtime optimization |
-| **Language** | **TypeScript** | Strict typing across the full stack (Frontend to DB) |
-| **Auth** | **NextAuth.js v4** | Credentials Provider + bcryptjs for secure hash storage |
-| **Database** | **PostgreSQL** | Relational data integrity for orders and commissions |
-| **ORM** | **Prisma** | Type-safe schema management and automated migrations |
-| **Real-time** | **Pusher** | WebSocket-based live chat and instant notifications |
-| **Storage** | **Cloudflare R2** | S3-compatible object storage for refund evidence |
-| **Testing** | **Playwright** | E2E testing with nyc coverage reporting |
-| **Observability**| **Datadog** | Full-stack APM, RUM, and custom business dashboards |
+| `live/live-streaming.spec.ts` | TC-01 ~ TC-05 | KOL stream lifecycle |
+| `refund/refund-settlement.spec.ts` | TC-06 ~ TC-11, TC-21 | Refund + settlement |
+| `search/search-notifications.spec.ts` | TC-12 ~ TC-14, TC-25 | Search + notifications |
+| `admin/observability.spec.ts` | TC-15 ~ TC-16, TC-28 ~ TC-29 | Datadog + observability |
+| `auth/auth-security.spec.ts` | TC-17, TC-18, TC-26, TC-27 | Auth + CSRF |
+| `orders/orders-mobile-e2e.spec.ts` | TC-19, TC-24, TC-30 | Orders + mobile layout |
 
----
+### Integration Tests (Jest) — 17/17 passing
 
-## 🏛 Domain-Driven Design (DDD)
+```bash
+npx jest --config jest.config.integration.js tests/integration/ --runInBand
+```
 
-The project follows a clean architecture pattern under the `src/` directory to decouple business logic from infrastructure.
-
-- **`domain/`**: Pure business rules, entities, and repository interfaces. Contains the core "truth" of the system (e.g., refund eligibility logic).
-- **`application/`**: Use case orchestration. Coordinates data flow between domain objects and external services.
-- **`infrastructure/`**: Implementation of external concerns: Database (Prisma), Storage (R2), Messaging (Pusher), and Auth.
-- **`components/`**: Atomic UI components and feature-based views built with React and Tailwind CSS.
-
----
-
-## 🚀 Core Functionality Modules
-
-### I. Live Streaming & Commerce (1-10)
-1. **Real-time HLS/Dash Integration**: Seamless video stream embedding.
-2. **Dynamic Product Pinning**: KOLs can highlight products during live sessions.
-3. **Synchronized Live Chat**: Low-latency interaction via Pusher.
-4. **Instant Checkout Flow**: Streamlined purchase path for pinned items.
-5. **KOL Storefronts**: SEO-optimized landing pages via SSR.
-6. **Real-time Inventory Locking**: Prevents overselling during high-traffic drops.
-7. **Multi-currency Engine**: Support for localized pricing.
-8. **Interactive Product Carousels**: Engaging browsing experience.
-9. **Timestamped Stream Replays**: Interactive product links in VOD.
-10. **Social Sharing Metadata**: OpenGraph optimization for live events.
-
-### II. Refund & Commission Settlement (11-20)
-11. **Batch Refund Submission**: Multi-order selection for unified processing.
-12. **Multi-file Evidence Upload**: Direct-to-R2 signed URL uploads.
-13. **Commission Clawback Logic**: Automated deduction of KOL earnings on refunds.
-14. **Multi-tier Commission Engine**: Configurable rates per KOL/Category.
-15. **Admin Dispute Dashboard**: Centralized workflow for refund approval.
-16. **Atomic Transaction Processing**: Ensures DB consistency during financial shifts.
-17. **Satisfaction Survey Automation**: Cron-triggered 7-day follow-ups.
-18. **Real-time Refund Tracking**: Status updates pushed to user via WebSocket.
-19. **KOL Revenue Ledger**: Transparent earning reports and payout history.
-20. **Tax Recalculation Service**: Adjusts VAT/Sales tax on partial refunds.
-
-### III. Search & Notifications (21-25)
-21. **Vector-based Semantic Search**: AI-powered product discovery.
-22. **Keyword Fallback Mechanism**: High-performance full-text search.
-23. **Price Drop Alerts**: Proactive notifications for favorited items.
-24. **Order Lifecycle Notifications**: SMS/Push updates via Pusher.
-25. **Personalized Search Ranking**: User-behavior driven results.
-
-### IV. Observability & SRE (26-30)
-26. **Frontend RUM Tracking**: Performance monitoring for Core Web Vitals.
-27. **Distributed Tracing (APM)**: End-to-end request visibility.
-28. **Business KPI Dashboards**: Real-time GMV and Refund Rate monitoring.
-29. **Proactive Alerting**: Automated Slack/PagerDuty alerts for 5xx spikes.
-30. **Unified Log Correlation**: Linking client errors to specific server traces.
-
----
-
-## 🧪 E2E Test Coverage (Playwright)
-
-The platform maintains a 100% success rate across 30 critical user journeys:
-1. `TC-01`: KOL starts live stream and pins product.
-2. `TC-02`: User joins live stream and interacts via chat.
-3. `TC-03`: Instant checkout flow from pinned product.
-4. `TC-04`: Inventory decrement on successful purchase.
-5. `TC-05`: KOL ends stream and triggers revenue settlement.
-6. `TC-06`: Batch refund submission with 10+ orders.
-7. `TC-07`: Multi-file evidence upload to R2 validation.
-8. `TC-08`: Admin approves refund; commission is clawed back.
-9. `TC-09`: Admin rejects refund; status is updated via Pusher.
-10. `TC-10`: Partial refund calculation and execution.
-11. `TC-11`: Vercel Cron triggers 7-day survey reminder.
-12. `TC-12`: Vector search returns relevant semantic results.
-13. `TC-13`: Keyword search fallback when vector service is down.
-14. `TC-14`: Real-time notification on order shipment.
-15. `TC-15`: Datadog RUM captures navigation latency.
-16. `TC-16`: APM trace captures database query bottlenecks.
-17. `TC-17`: Unauthorized access redirection to login.
-18. `TC-18`: Session persistence across page reloads.
-19. `TC-19`: Concurrent checkout race-condition handling.
-20. `TC-20`: Invalid refund evidence size rejection.
-21. `TC-21`: Payout ledger balance verification.
-22. `TC-22`: Search result zero-state monitoring.
-23. `TC-24`: Mobile responsive layout validation.
-24. `TC-25`: Error boundary triggering on API failure.
-25. `TC-26`: Rate limiting on search endpoints.
-26. `TC-27`: CSRF protection on sensitive actions.
-27. `TC-28`: Database migration rollback test.
-28. `TC-29`: Cache invalidation on product update.
-29. `TC-30`: End-to-end flow: Purchase -> Refund -> Payout adjustment.
+| Suite | Coverage |
+| :--- | :--- |
+| `settlement/settlement.test.ts` | Commission settlement idempotency |
+| `orders/order-transaction.test.ts` | Checkout atomic transaction integrity |
+| `refund/batch-refund-transaction.test.ts` | Batch refund + rollback verification |
 
 ---
 
 ## ⚙️ Environment Variables
 
-Copy `.env.example` to `.env` and fill in the following:
+Copy `.env.example` to `.env`:
 
 ```bash
 # Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/db
+DATABASE_URL=postgresql://user:pass@host:5432/db
+DIRECT_URL=postgresql://user:pass@host:5432/db   # for prisma migrate
 
 # Auth
-NEXTAUTH_SECRET=your_secret
+NEXTAUTH_SECRET=                  # openssl rand -base64 32
 NEXTAUTH_URL=http://localhost:3000
+AUTH_SECRET=
 
-# Pusher (Real-time)
+# Pusher
 PUSHER_APP_ID=
 PUSHER_KEY=
 PUSHER_SECRET=
 PUSHER_CLUSTER=
+NEXT_PUBLIC_PUSHER_KEY=
+NEXT_PUBLIC_PUSHER_CLUSTER=
 
-# Cloudflare R2 (Storage)
+# Cloudflare R2
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
 R2_BUCKET_NAME=
 R2_ENDPOINT=
+R2_PUBLIC_URL=https://pub-xxx.r2.dev   # ⚠️ Required for image display
 
-# Datadog (Observability)
+# Datadog (optional — required for observability features)
 DD_API_KEY=
 DD_APP_KEY=
 DD_CLIENT_TOKEN=
 DD_SITE=datadoghq.com
+NEXT_PUBLIC_DATADOG_APPLICATION_ID=
+NEXT_PUBLIC_DATADOG_CLIENT_TOKEN=
+
+# Vercel Cron (required for settlement + survey jobs)
+CRON_SECRET=                      # openssl rand -base64 32
+
+# E2E Test accounts (must exist in DB after prisma db seed)
+ADMIN_EMAIL=          # must match a seeded account in your DB
+ADMIN_PASSWORD=
+KOL_EMAIL=
+KOL_PASSWORD=
+USER_EMAIL=
+USER_PASSWORD=
 ```
 
 ---
 
 ## 🛠 Quick Start
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-2. **Setup Database**
-   ```bash
-   npx prisma db push
-   ```
-3. **Run Development Server**
-   ```bash
-   npm run dev
-   ```
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Set up environment variables
+cp .env.example .env
+# Fill in DATABASE_URL, NEXTAUTH_SECRET, Pusher keys, R2 credentials
+
+# 3. Push schema to database
+npx prisma db push
+
+# 4. Seed test data (50 products + 3 role accounts)
+npx prisma db seed
+
+# 5. Start development server
+npm run dev
+```
 
 ---
 
-## 📊 Datadog Deployment
+## 📊 Datadog Setup
 
-The platform includes pre-configured Datadog resources in `datadog/`.
+Pre-configured Datadog resources live in `datadog/`.
 
-### 1. Import Dashboard
 ```bash
+# Import dashboard
 curl -X POST "https://api.datadoghq.com/api/v1/dashboard" \
--H "Content-Type: application/json" \
--H "DD-API-KEY: ${DD_API_KEY}" \
--H "DD-APPLICATION-KEY: ${DD_APP_KEY}" \
--d @datadog/dashboard.json
+  -H "Content-Type: application/json" \
+  -H "DD-API-KEY: ${DD_API_KEY}" \
+  -H "DD-APPLICATION-KEY: ${DD_APP_KEY}" \
+  -d @datadog/dashboard.json
+
+# Import monitors
+curl -X POST "https://api.datadoghq.com/api/v1/monitor" \
+  -H "Content-Type: application/json" \
+  -H "DD-API-KEY: ${DD_API_KEY}" \
+  -H "DD-APPLICATION-KEY: ${DD_APP_KEY}" \
+  -d @datadog/monitor.json
 ```
 
-### 2. Import Monitors
-Use the Datadog API to import the definitions in `monitor.json` to enable proactive alerting for high latency and error rates.
-```bash
-# Example for a single monitor import
-curl -X POST "https://api.datadoghq.com/api/v1/monitor" \
--H "Content-Type: application/json" \
--H "DD-API-KEY: ${DD_API_KEY}" \
--H "DD-APPLICATION-KEY: ${DD_APP_KEY}" \
--d '{...monitor_json...}'
-```
+---
+
+## 📋 Roadmap
+
+| Priority | Item | Notes |
+| :--- | :--- | :--- |
+| 🟡 Medium | Rate Limiting | Vercel Edge Middleware + Upstash Redis |
+| 🟡 Medium | Partial Refund | Add `refundAmount` field to schema |
+| 🟢 Low | Vector Search | `pgvector` extension + embedding pipeline |
+| 🟢 Low | Multi-currency / Tax | VAT/sales tax recalculation on refunds |
+| 🟢 Low | CI matrix | Chromium + Firefox + WebKit + retry logic |
+
+---
+
+## 📄 License
+
+MIT + Commons Clause — free to read and fork; commercial use prohibited. See [LICENSE](LICENSE).
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, commit conventions, and PR guidelines.

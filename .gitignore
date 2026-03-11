@@ -1,9 +1,40 @@
+# AI tools
 .aider*
+
+# Environment variables — NEVER commit
 .env
-node_modules
+.env.local
+.env.test
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Build output
 .next/
+out/
+
+# TypeScript
 tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Debug / temp
 verify-report.txt
 *.bak
-.env.test
-next-env.d.ts
+*.log
+
+# Testing artifacts
+playwright-report/
+test-results/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Vercel
+.vercel
